@@ -1,0 +1,52 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <RootNamespace>Feedback_API</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Migrations\20191211201433_InitialEntities.cs" />
+    <Compile Remove="Migrations\20191211201433_InitialEntities.Designer.cs" />
+    <Compile Remove="Migrations\20191211204722_InitialEntities.cs" />
+    <Compile Remove="Migrations\20191211204722_InitialEntities.Designer.cs" />
+    <Compile Remove="Migrations\20191212093526_InitialEntities.cs" />
+    <Compile Remove="Migrations\20191212093526_InitialEntities.Designer.cs" />
+    <Compile Remove="Migrations\20191212131129_InitialEntities.cs" />
+    <Compile Remove="Migrations\20191212131129_InitialEntities.Designer.cs" />
+    <Compile Remove="Migrations\20191212131201_InitialEntities.cs" />
+    <Compile Remove="Migrations\20191212131201_InitialEntities.Designer.cs" />
+    <Compile Remove="Migrations\20191212132306_InitialEntities.cs" />
+    <Compile Remove="Migrations\20191212132306_InitialEntities.Designer.cs" />
+    <Compile Remove="Migrations\20191212134103_InitialEntities.cs" />
+    <Compile Remove="Migrations\20191212134103_InitialEntities.Designer.cs" />
+    <Compile Remove="Migrations\20191216103324_InitialEntities.cs" />
+    <Compile Remove="Migrations\20191216103324_InitialEntities.Designer.cs" />
+    <Compile Remove="Migrations\20191216104622_InitialEntities.cs" />
+    <Compile Remove="Migrations\20191216104622_InitialEntities.Designer.cs" />
+    <Compile Remove="Migrations\20191216111207_SeedingFix.cs" />
+    <Compile Remove="Migrations\20191216111207_SeedingFix.Designer.cs" />
+    <Compile Remove="Migrations\20191216113943_SeedingFix2.cs" />
+    <Compile Remove="Migrations\20191216113943_SeedingFix2.Designer.cs" />
+    <Compile Remove="Migrations\20191216114044_SeedingFix3.cs" />
+    <Compile Remove="Migrations\20191216114044_SeedingFix3.Designer.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="9.0.0" />
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="7.0.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="3.1.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="3.1.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="3.1.0" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.0" />
+    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="3.1.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="5.0.0-rc4" />
+  </ItemGroup>
+
+
+</Project>
