@@ -1,0 +1,38 @@
+﻿@page
+@model FeedbackWebApp.Pages.OverviewModel
+@{
+    ViewData["Title"] = "Overview";
+}
+
+<h1>Overview</h1>
+<div class="container">
+    @{ 
+        var obj = new Place();
+        
+    }
+    @for (var i = 0; i < 4; i++)
+    {
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <img src="https://via.placeholder.com/180" alt="Bild" style="float: left" />
+            <div style="float:left; margin-left: 5%">
+                <a asp-page="/PlaceSite" ><h3>name of the location</h3></a>
+                <h4>type of the location</h4>
+                <p>Opening time: </p>
+                <p>address: </p>
+                <a href="#">See on Google Maps</a>
+            </div>
+            <div class="rating" style="float:right; margin-right: 5%; margin-top: 2%; text-align: right">
+                <span class="glyphicon glyphicon-star iStar"></span>
+                <span class="glyphicon glyphicon-star iStar"></span>
+                <span class="glyphicon glyphicon-star iStar"></span>
+                <span class="glyphicon glyphicon-star-empty iStar"></span>
+                <span class="glyphicon glyphicon-star-empty iStar"></span>
+                <p>User rating: x / 5</p>
+            </div>
+        </div>
+    </div>
+    }
+
+</div>
+
