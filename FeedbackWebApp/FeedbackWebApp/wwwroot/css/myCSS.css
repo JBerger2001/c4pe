@@ -1,0 +1,25 @@
+﻿h1 {
+    text-align: center;
+}
+
+.loginDiv {
+    margin-left: auto;
+    margin-right: auto;
+    width: 30%;
+}
+
+.textBLogin {
+    width: 100%;
+}
+
+.btnLogin {
+    margin-left: auto;
+    margin-right: auto;
+    width: auto;
+}
+.rating .glyphicon{
+    font-size: 20px;
+}
+.iStar {
+    font-size: 18px;
+}
