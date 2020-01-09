@@ -1,6 +1,6 @@
 ﻿using System;
+using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
-using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace Feedback_API.Migrations
 {
@@ -13,7 +13,7 @@ namespace Feedback_API.Migrations
                 columns: table => new
                 {
                     ID = table.Column<long>(nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     Name = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
@@ -26,7 +26,7 @@ namespace Feedback_API.Migrations
                 columns: table => new
                 {
                     ID = table.Column<long>(nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     Username = table.Column<string>(nullable: true),
                     FirstName = table.Column<string>(nullable: true),
                     LastName = table.Column<string>(nullable: true),
@@ -44,7 +44,7 @@ namespace Feedback_API.Migrations
                 columns: table => new
                 {
                     ID = table.Column<long>(nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     Address = table.Column<string>(nullable: true),
                     Name = table.Column<string>(nullable: true),
                     IsVerified = table.Column<bool>(nullable: false),
@@ -66,7 +66,7 @@ namespace Feedback_API.Migrations
                 columns: table => new
                 {
                     ID = table.Column<long>(nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     PlaceID = table.Column<long>(nullable: false),
                     Day = table.Column<int>(nullable: false),
                     Open = table.Column<TimeSpan>(nullable: false),
@@ -88,7 +88,7 @@ namespace Feedback_API.Migrations
                 columns: table => new
                 {
                     ID = table.Column<long>(nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     UserID = table.Column<long>(nullable: false),
                     PlaceID = table.Column<long>(nullable: false),
                     Rating = table.Column<int>(nullable: false),
@@ -117,7 +117,7 @@ namespace Feedback_API.Migrations
                 columns: table => new
                 {
                     ID = table.Column<long>(nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     UserID = table.Column<long>(nullable: false),
                     ReviewID = table.Column<long>(nullable: false),
                     IsHelpful = table.Column<bool>(nullable: false)
@@ -164,12 +164,17 @@ namespace Feedback_API.Migrations
             migrationBuilder.InsertData(
                 table: "Places",
                 columns: new[] { "ID", "Address", "IsVerified", "Name", "PlaceTypeID" },
-                values: new object[,]
-                {
-                    { -1L, "3500 Krems an der Donau", true, "Coffeehut", -1L },
-                    { -2L, "3500 Krems an der Donau", true, "Footly", -2L },
-                    { -3L, "3500 Krems an der Donau", true, "Gusto Generic", -3L }
-                });
+                values: new object[] { -1L, "3500 Krems an der Donau", true, "Coffeehut", -1L });
+
+            migrationBuilder.InsertData(
+                table: "Places",
+                columns: new[] { "ID", "Address", "IsVerified", "Name", "PlaceTypeID" },
+                values: new object[] { -2L, "3500 Krems an der Donau", true, "Footly", -2L });
+
+            migrationBuilder.InsertData(
+                table: "Places",
+                columns: new[] { "ID", "Address", "IsVerified", "Name", "PlaceTypeID" },
+                values: new object[] { -3L, "3500 Krems an der Donau", true, "Gusto Generic", -3L });
 
             migrationBuilder.InsertData(
                 table: "OpeningTimes",
@@ -186,18 +191,19 @@ namespace Feedback_API.Migrations
                 columns: new[] { "ID", "PlaceID", "Rating", "Text", "Time", "UserID" },
                 values: new object[,]
                 {
-                    { -2L, -1L, 5, "nice", new DateTime(2019, 12, 16, 12, 42, 3, 394, DateTimeKind.Local).AddTicks(453), -1L },
-                    { -1L, -2L, 2, "meh", new DateTime(2019, 12, 16, 12, 42, 3, 391, DateTimeKind.Local).AddTicks(3300), -2L }
+                    { -2L, -1L, 5, "nice", new DateTime(2020, 1, 9, 10, 47, 33, 580, DateTimeKind.Local).AddTicks(2642), -1L },
+                    { -1L, -2L, 2, "meh", new DateTime(2020, 1, 9, 10, 47, 33, 577, DateTimeKind.Local).AddTicks(2983), -2L }
                 });
 
             migrationBuilder.InsertData(
                 table: "Reactions",
                 columns: new[] { "ID", "IsHelpful", "ReviewID", "UserID" },
-                values: new object[,]
-                {
-                    { -1L, false, -2L, -3L },
-                    { -2L, true, -1L, -2L }
-                });
+                values: new object[] { -1L, false, -2L, -3L });
+
+            migrationBuilder.InsertData(
+                table: "Reactions",
+                columns: new[] { "ID", "IsHelpful", "ReviewID", "UserID" },
+                values: new object[] { -2L, true, -1L, -2L });
 
             migrationBuilder.CreateIndex(
                 name: "IX_OpeningTimes_PlaceID",
