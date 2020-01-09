@@ -3,14 +3,16 @@ using System;
 using Feedback_API.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Feedback_API.Migrations
 {
     [DbContext(typeof(FeedbackContext))]
-    partial class FeedbackContextModelSnapshot : ModelSnapshot
+    [Migration("20200109101408_UpdatedEntityProperties")]
+    partial class UpdatedEntityProperties
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
