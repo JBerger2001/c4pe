@@ -44,27 +44,27 @@ namespace Feedback_API.Migrations
                     b.HasData(
                         new
                         {
-                            ID = -1L,
+                            ID = 1L,
                             Close = new TimeSpan(0, 20, 0, 0, 0),
                             Day = 0,
                             Open = new TimeSpan(0, 8, 0, 0, 0),
-                            PlaceID = -2L
+                            PlaceID = 2L
                         },
                         new
                         {
-                            ID = -2L,
+                            ID = 2L,
                             Close = new TimeSpan(0, 19, 0, 0, 0),
                             Day = 0,
                             Open = new TimeSpan(0, 9, 0, 0, 0),
-                            PlaceID = -3L
+                            PlaceID = 3L
                         },
                         new
                         {
-                            ID = -3L,
+                            ID = 3L,
                             Close = new TimeSpan(0, 22, 0, 0, 0),
                             Day = 0,
                             Open = new TimeSpan(0, 10, 0, 0, 0),
-                            PlaceID = -1L
+                            PlaceID = 1L
                         });
                 });
 
@@ -95,27 +95,27 @@ namespace Feedback_API.Migrations
                     b.HasData(
                         new
                         {
-                            ID = -1L,
+                            ID = 1L,
                             Address = "3500 Krems an der Donau",
                             IsVerified = true,
                             Name = "Coffeehut",
-                            PlaceTypeID = -1L
+                            PlaceTypeID = 1L
                         },
                         new
                         {
-                            ID = -2L,
+                            ID = 2L,
                             Address = "3500 Krems an der Donau",
                             IsVerified = true,
                             Name = "Footly",
-                            PlaceTypeID = -2L
+                            PlaceTypeID = 2L
                         },
                         new
                         {
-                            ID = -3L,
+                            ID = 3L,
                             Address = "3500 Krems an der Donau",
                             IsVerified = true,
                             Name = "Gusto Generic",
-                            PlaceTypeID = -3L
+                            PlaceTypeID = 3L
                         });
                 });
 
@@ -135,17 +135,17 @@ namespace Feedback_API.Migrations
                     b.HasData(
                         new
                         {
-                            ID = -1L,
+                            ID = 1L,
                             Name = "Café"
                         },
                         new
                         {
-                            ID = -2L,
+                            ID = 2L,
                             Name = "Shoe Store"
                         },
                         new
                         {
-                            ID = -3L,
+                            ID = 3L,
                             Name = "Fast Food Restaurant"
                         });
                 });
@@ -176,17 +176,17 @@ namespace Feedback_API.Migrations
                     b.HasData(
                         new
                         {
-                            ID = -1L,
+                            ID = 1L,
                             IsHelpful = false,
-                            ReviewID = -2L,
-                            UserID = -3L
+                            ReviewID = 2L,
+                            UserID = 3L
                         },
                         new
                         {
-                            ID = -2L,
+                            ID = 2L,
                             IsHelpful = true,
-                            ReviewID = -1L,
-                            UserID = -2L
+                            ReviewID = 1L,
+                            UserID = 2L
                         });
                 });
 
@@ -222,21 +222,21 @@ namespace Feedback_API.Migrations
                     b.HasData(
                         new
                         {
-                            ID = -1L,
-                            PlaceID = -2L,
+                            ID = 1L,
+                            PlaceID = 2L,
                             Rating = 2,
                             Text = "meh",
-                            Time = new DateTime(2020, 1, 9, 10, 47, 33, 577, DateTimeKind.Local).AddTicks(2983),
-                            UserID = -2L
+                            Time = new DateTime(2020, 1, 9, 10, 55, 21, 832, DateTimeKind.Local).AddTicks(8812),
+                            UserID = 2L
                         },
                         new
                         {
-                            ID = -2L,
-                            PlaceID = -1L,
+                            ID = 2L,
+                            PlaceID = 1L,
                             Rating = 5,
                             Text = "nice",
-                            Time = new DateTime(2020, 1, 9, 10, 47, 33, 580, DateTimeKind.Local).AddTicks(2642),
-                            UserID = -1L
+                            Time = new DateTime(2020, 1, 9, 10, 55, 21, 836, DateTimeKind.Local).AddTicks(1651),
+                            UserID = 1L
                         });
                 });
 
@@ -271,7 +271,7 @@ namespace Feedback_API.Migrations
                     b.HasData(
                         new
                         {
-                            ID = -1L,
+                            ID = 1L,
                             Address = "3500 Krems an der Donau",
                             FirstName = "Peter",
                             IsVerified = false,
@@ -280,7 +280,7 @@ namespace Feedback_API.Migrations
                         },
                         new
                         {
-                            ID = -2L,
+                            ID = 2L,
                             Address = "3500 Krems an der Donau",
                             FirstName = "John",
                             IsVerified = false,
@@ -289,7 +289,7 @@ namespace Feedback_API.Migrations
                         },
                         new
                         {
-                            ID = -3L,
+                            ID = 3L,
                             Address = "3500 Krems an der Donau",
                             FirstName = "Heinz",
                             IsVerified = false,
@@ -298,7 +298,7 @@ namespace Feedback_API.Migrations
                         },
                         new
                         {
-                            ID = -4L,
+                            ID = 4L,
                             Address = "3500 Krems an der Donau",
                             FirstName = "Olaf",
                             IsVerified = false,
@@ -307,7 +307,7 @@ namespace Feedback_API.Migrations
                         },
                         new
                         {
-                            ID = -5L,
+                            ID = 5L,
                             Address = "3500 Krems an der Donau",
                             FirstName = "Hans",
                             IsVerified = false,

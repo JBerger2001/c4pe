@@ -144,9 +144,9 @@ namespace Feedback_API.Migrations
                 columns: new[] { "ID", "Name" },
                 values: new object[,]
                 {
-                    { -1L, "Café" },
-                    { -2L, "Shoe Store" },
-                    { -3L, "Fast Food Restaurant" }
+                    { 1L, "Café" },
+                    { 2L, "Shoe Store" },
+                    { 3L, "Fast Food Restaurant" }
                 });
 
             migrationBuilder.InsertData(
@@ -154,36 +154,36 @@ namespace Feedback_API.Migrations
                 columns: new[] { "ID", "Address", "Description", "FirstName", "IsVerified", "LastName", "Username" },
                 values: new object[,]
                 {
-                    { -1L, "3500 Krems an der Donau", null, "Peter", false, "Gustav", "pete" },
-                    { -2L, "3500 Krems an der Donau", null, "John", false, "Gustav", "MrJohn" },
-                    { -3L, "3500 Krems an der Donau", null, "Heinz", false, "Gustav", "Ketchup" },
-                    { -4L, "3500 Krems an der Donau", null, "Olaf", false, "Gustav", "Olaf" },
-                    { -5L, "3500 Krems an der Donau", null, "Hans", false, "Gustav", "hansi12" }
+                    { 1L, "3500 Krems an der Donau", null, "Peter", false, "Gustav", "pete" },
+                    { 2L, "3500 Krems an der Donau", null, "John", false, "Gustav", "MrJohn" },
+                    { 3L, "3500 Krems an der Donau", null, "Heinz", false, "Gustav", "Ketchup" },
+                    { 4L, "3500 Krems an der Donau", null, "Olaf", false, "Gustav", "Olaf" },
+                    { 5L, "3500 Krems an der Donau", null, "Hans", false, "Gustav", "hansi12" }
                 });
 
             migrationBuilder.InsertData(
                 table: "Places",
                 columns: new[] { "ID", "Address", "IsVerified", "Name", "PlaceTypeID" },
-                values: new object[] { -1L, "3500 Krems an der Donau", true, "Coffeehut", -1L });
+                values: new object[] { 1L, "3500 Krems an der Donau", true, "Coffeehut", 1L });
 
             migrationBuilder.InsertData(
                 table: "Places",
                 columns: new[] { "ID", "Address", "IsVerified", "Name", "PlaceTypeID" },
-                values: new object[] { -2L, "3500 Krems an der Donau", true, "Footly", -2L });
+                values: new object[] { 2L, "3500 Krems an der Donau", true, "Footly", 2L });
 
             migrationBuilder.InsertData(
                 table: "Places",
                 columns: new[] { "ID", "Address", "IsVerified", "Name", "PlaceTypeID" },
-                values: new object[] { -3L, "3500 Krems an der Donau", true, "Gusto Generic", -3L });
+                values: new object[] { 3L, "3500 Krems an der Donau", true, "Gusto Generic", 3L });
 
             migrationBuilder.InsertData(
                 table: "OpeningTimes",
                 columns: new[] { "ID", "Close", "Day", "Open", "PlaceID" },
                 values: new object[,]
                 {
-                    { -3L, new TimeSpan(0, 22, 0, 0, 0), 0, new TimeSpan(0, 10, 0, 0, 0), -1L },
-                    { -1L, new TimeSpan(0, 20, 0, 0, 0), 0, new TimeSpan(0, 8, 0, 0, 0), -2L },
-                    { -2L, new TimeSpan(0, 19, 0, 0, 0), 0, new TimeSpan(0, 9, 0, 0, 0), -3L }
+                    { 3L, new TimeSpan(0, 22, 0, 0, 0), 0, new TimeSpan(0, 10, 0, 0, 0), 1L },
+                    { 1L, new TimeSpan(0, 20, 0, 0, 0), 0, new TimeSpan(0, 8, 0, 0, 0), 2L },
+                    { 2L, new TimeSpan(0, 19, 0, 0, 0), 0, new TimeSpan(0, 9, 0, 0, 0), 3L }
                 });
 
             migrationBuilder.InsertData(
@@ -191,19 +191,19 @@ namespace Feedback_API.Migrations
                 columns: new[] { "ID", "PlaceID", "Rating", "Text", "Time", "UserID" },
                 values: new object[,]
                 {
-                    { -2L, -1L, 5, "nice", new DateTime(2020, 1, 9, 10, 47, 33, 580, DateTimeKind.Local).AddTicks(2642), -1L },
-                    { -1L, -2L, 2, "meh", new DateTime(2020, 1, 9, 10, 47, 33, 577, DateTimeKind.Local).AddTicks(2983), -2L }
+                    { 2L, 1L, 5, "nice", new DateTime(2020, 1, 9, 10, 55, 21, 836, DateTimeKind.Local).AddTicks(1651), 1L },
+                    { 1L, 2L, 2, "meh", new DateTime(2020, 1, 9, 10, 55, 21, 832, DateTimeKind.Local).AddTicks(8812), 2L }
                 });
 
             migrationBuilder.InsertData(
                 table: "Reactions",
                 columns: new[] { "ID", "IsHelpful", "ReviewID", "UserID" },
-                values: new object[] { -1L, false, -2L, -3L });
+                values: new object[] { 1L, false, 2L, 3L });
 
             migrationBuilder.InsertData(
                 table: "Reactions",
                 columns: new[] { "ID", "IsHelpful", "ReviewID", "UserID" },
-                values: new object[] { -2L, true, -1L, -2L });
+                values: new object[] { 2L, true, 1L, 2L });
 
             migrationBuilder.CreateIndex(
                 name: "IX_OpeningTimes_PlaceID",

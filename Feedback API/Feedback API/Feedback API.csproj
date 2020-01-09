@@ -31,6 +31,8 @@
     <Compile Remove="Migrations\20191216114044_SeedingFix3.Designer.cs" />
     <Compile Remove="Migrations\20191216114203_InitialEntities.cs" />
     <Compile Remove="Migrations\20191216114203_InitialEntities.Designer.cs" />
+    <Compile Remove="Migrations\20200109094734_InitialEntities.cs" />
+    <Compile Remove="Migrations\20200109094734_InitialEntities.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>
