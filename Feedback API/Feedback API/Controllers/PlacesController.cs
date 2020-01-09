@@ -26,6 +26,7 @@ namespace Feedback_API.Controllers
             _mapper = mapper;
         }
 
+        #region PLACES
         // GET: api/Places
         [HttpGet]
         public async Task<ActionResult<IEnumerable<PlaceResponse>>> GetPlaces()
@@ -52,58 +53,6 @@ namespace Feedback_API.Controllers
             }
 
             return _mapper.Map<PlaceResponse>(place);
-        }
-
-        // GET: api/Places/5/openingtimes
-        [HttpGet("{id}/OpeningTimes")]
-        public async Task<ActionResult<IEnumerable<OpeningTimeResponse>>> GetOpeningTimes(long id)
-        {
-            var place = await _context.Places
-                            .Include(p => p.OpeningTimes)
-                            .FirstOrDefaultAsync(p => p.ID == id);
-
-            if (place == null)
-            {
-                return NotFound();
-            }
-
-            return _mapper.Map<List<OpeningTimeResponse>>(place.OpeningTimes);
-        }
-
-        // GET: api/Places/5/Reviews
-        [HttpGet("{id}/Reviews")]
-        public async Task<ActionResult<IEnumerable<ReviewResponse>>> GetReviews(long id)
-        {
-            var place = await _context.Places
-                            .Include(p => p.Reviews)
-                            .FirstOrDefaultAsync(p => p.ID == id);
-
-            if (place == null)
-            {
-                return NotFound();
-            }
-
-            var reviews = place.Reviews;
-            foreach (var review in reviews)
-            {
-                review.User = await _context.Users.FindAsync(review.UserID);
-            }
-
-            return _mapper.Map<List<ReviewResponse>>(place.Reviews);
-        }
-
-        // GET: api/Places/5/Reviews/1
-        [HttpGet("{placeId}/Reviews/{reviewId}")]
-        public async Task<ActionResult<ReviewResponse>> GetReview(long placeId, long reviewId)
-        {
-            var review = await _context.Reviews.FirstOrDefaultAsync(r => r.ID == reviewId && r.PlaceID == placeId);
-
-            if (review == null)
-            {
-                return NotFound();
-            }
-
-            return _mapper.Map<ReviewResponse>(review);
         }
 
         // PUT: api/Places/5
@@ -156,8 +105,6 @@ namespace Feedback_API.Controllers
         }
 
         // POST: api/Places
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
-        // more details see https://aka.ms/RazorPagesCRUD.
         [HttpPost]
         public async Task<ActionResult<PlaceResponse>> PostPlace(PlaceRequest placeRequest)
         {
@@ -188,25 +135,6 @@ namespace Feedback_API.Controllers
             return CreatedAtAction(nameof(GetPlace), new { id = place.ID }, placeResponse);
         }
 
-        // POST: api/Places/5/Reviews
-        [HttpPost("{placeId}/Reviews")]
-        public async Task<ActionResult<ReviewResponse>> PostReview(long placeId, ReviewRequest placeRequest)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            var review = _mapper.Map<Review>(placeRequest);
-            review.PlaceID = placeId;
-
-            _context.Reviews.Add(review);
-            await _context.SaveChangesAsync();
-
-            var reviewResponse = _mapper.Map<ReviewResponse>(review);
-
-            return CreatedAtAction(nameof(GetReview), new { placeId, reviewId = review.ID }, reviewResponse);
-        }
         // DELETE: api/Places/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeletePlace(long id)
@@ -227,5 +155,109 @@ namespace Feedback_API.Controllers
         {
             return _context.Places.Any(e => e.ID == id);
         }
+#endregion
+
+        #region OPENING_TIMES
+
+        // GET: api/Places/5/openingtimes
+        [HttpGet("{id}/OpeningTimes")]
+        public async Task<ActionResult<IEnumerable<OpeningTimeResponse>>> GetOpeningTimes(long id)
+        {
+            var place = await _context.Places
+                            .Include(p => p.OpeningTimes)
+                            .FirstOrDefaultAsync(p => p.ID == id);
+
+            if (place == null)
+            {
+                return NotFound();
+            }
+
+            return _mapper.Map<List<OpeningTimeResponse>>(place.OpeningTimes);
+        }
+
+        // POST: api/Places/5/OpeningTimes
+        [HttpPost("{placeId}/OpeningTimes")]
+        public async Task<ActionResult<OpeningTimeResponse>> PostOpeningTime(long placeId, OpeningTimeRequest openingTimeRequest)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var openingTime = _mapper.Map<OpeningTime>(openingTimeRequest);
+            openingTime.PlaceID = placeId;
+            _context.OpeningTimes.Add(openingTime);
+            await _context.SaveChangesAsync();
+
+            var placeResponse = _mapper.Map<OpeningTimeResponse>(openingTime);
+
+            return CreatedAtAction(nameof(GetPlace), new { id = openingTime.ID }, placeResponse);
+        }
+
+        // PUT
+
+        // DELETE
+
+        #endregion
+
+        #region REVIEWS
+        // GET: api/Places/5/Reviews
+        [HttpGet("{id}/Reviews")]
+        public async Task<ActionResult<IEnumerable<ReviewResponse>>> GetReviews(long id)
+        {
+            var place = await _context.Places
+                            .Include(p => p.Reviews)
+                            .FirstOrDefaultAsync(p => p.ID == id);
+
+            if (place == null)
+            {
+                return NotFound();
+            }
+
+            var reviews = place.Reviews;
+            foreach (var review in reviews)
+            {
+                review.User = await _context.Users.FindAsync(review.UserID);
+            }
+
+            return _mapper.Map<List<ReviewResponse>>(place.Reviews);
+        }
+
+        // GET: api/Places/5/Reviews/1
+        [HttpGet("{placeId}/Reviews/{reviewId}")]
+        public async Task<ActionResult<ReviewResponse>> GetReview(long placeId, long reviewId)
+        {
+            var review = await _context.Reviews.FirstOrDefaultAsync(r => r.ID == reviewId && r.PlaceID == placeId);
+
+            if (review == null)
+            {
+                return NotFound();
+            }
+
+            return _mapper.Map<ReviewResponse>(review);
+        }
+
+
+        // POST: api/Places/5/Reviews
+        [HttpPost("{placeId}/Reviews")]
+        public async Task<ActionResult<ReviewResponse>> PostReview(long placeId, ReviewRequest placeRequest)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var review = _mapper.Map<Review>(placeRequest);
+            review.PlaceID = placeId;
+
+            _context.Reviews.Add(review);
+            await _context.SaveChangesAsync();
+
+            var reviewResponse = _mapper.Map<ReviewResponse>(review);
+
+            return CreatedAtAction(nameof(GetReview), new { placeId, reviewId = review.ID }, reviewResponse);
+        }
+
+        #endregion
     }
 }
