@@ -16,6 +16,7 @@ namespace Feedback_API.MappingProfiles
                 .ForMember(dest => dest.OpeningTimes, opt =>
                     opt.MapFrom(src => src.OpeningTimes.Select(ot => new OpeningTimeResponse()
                     {
+                        ID = ot.ID,
                         Day = ot.Day,
                         Open = ot.Open.ToString(),
                         Close = ot.Close.ToString()
