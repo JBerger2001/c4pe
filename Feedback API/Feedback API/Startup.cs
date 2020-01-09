@@ -30,17 +30,14 @@ namespace Feedback_API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            /*
-            services.AddDbContext<FeedbackContext>(options =>
-                options.UseInMemoryDatabase("Feedback"));
-            */
-
             var connectionString = Configuration["ConnectionString"];
-            services.AddDbContext<FeedbackContext>(opt => opt.UseNpgsql(connectionString));
+            services.AddDbContext<FeedbackContext>(opt => opt.UseMySql(connectionString));
 
             services.AddAutoMapper(typeof(Startup));
 
-            services.AddControllers();
+            services.AddControllers()
+                    .AddJsonOptions(options =>
+                        options.JsonSerializerOptions.Converters.Add(new TimeSpanToStringConverter()));
 
             services.AddSwaggerGen(x =>
             {

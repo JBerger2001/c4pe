@@ -29,6 +29,8 @@
     <Compile Remove="Migrations\20191216113943_SeedingFix2.Designer.cs" />
     <Compile Remove="Migrations\20191216114044_SeedingFix3.cs" />
     <Compile Remove="Migrations\20191216114044_SeedingFix3.Designer.cs" />
+    <Compile Remove="Migrations\20191216114203_InitialEntities.cs" />
+    <Compile Remove="Migrations\20191216114203_InitialEntities.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -45,6 +47,7 @@
     <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="3.1.0" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.0" />
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="3.1.0" />
+    <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="3.1.0" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="5.0.0-rc4" />
   </ItemGroup>
 
