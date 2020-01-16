@@ -35,6 +35,7 @@ namespace Feedback_API.Controllers
                             .Include(p => p.PlaceType)
                             .Include(p => p.OpeningTimes)
                             .ToListAsync();
+
             return _mapper.Map<List<PlaceResponse>>(places);
         }
 

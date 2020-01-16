@@ -33,6 +33,12 @@
     <Compile Remove="Migrations\20191216114203_InitialEntities.Designer.cs" />
     <Compile Remove="Migrations\20200109094734_InitialEntities.cs" />
     <Compile Remove="Migrations\20200109094734_InitialEntities.Designer.cs" />
+    <Compile Remove="Migrations\20200109095522_InitialEntities.cs" />
+    <Compile Remove="Migrations\20200109095522_InitialEntities.Designer.cs" />
+    <Compile Remove="Migrations\20200109101408_UpdatedEntityProperties.cs" />
+    <Compile Remove="Migrations\20200109101408_UpdatedEntityProperties.Designer.cs" />
+    <Compile Remove="Migrations\20200112195722_LowercaseTableNames.cs" />
+    <Compile Remove="Migrations\20200112195722_LowercaseTableNames.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

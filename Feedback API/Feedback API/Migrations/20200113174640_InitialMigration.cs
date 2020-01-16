@@ -4,30 +4,30 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Feedback_API.Migrations
 {
-    public partial class InitialEntities : Migration
+    public partial class InitialMigration : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "PlaceTypes",
+                name: "placetypes",
                 columns: table => new
                 {
                     ID = table.Column<long>(nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    Name = table.Column<string>(nullable: true)
+                    Name = table.Column<string>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_PlaceTypes", x => x.ID);
+                    table.PrimaryKey("PK_placetypes", x => x.ID);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Users",
+                name: "users",
                 columns: table => new
                 {
                     ID = table.Column<long>(nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    Username = table.Column<string>(nullable: true),
+                    Username = table.Column<string>(nullable: false),
                     FirstName = table.Column<string>(nullable: true),
                     LastName = table.Column<string>(nullable: true),
                     Description = table.Column<string>(nullable: true),
@@ -36,7 +36,7 @@ namespace Feedback_API.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Users", x => x.ID);
+                    table.PrimaryKey("PK_users", x => x.ID);
                 });
 
             migrationBuilder.CreateTable(
@@ -45,8 +45,8 @@ namespace Feedback_API.Migrations
                 {
                     ID = table.Column<long>(nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    Address = table.Column<string>(nullable: true),
-                    Name = table.Column<string>(nullable: true),
+                    Address = table.Column<string>(nullable: false),
+                    Name = table.Column<string>(nullable: false),
                     IsVerified = table.Column<bool>(nullable: false),
                     PlaceTypeID = table.Column<long>(nullable: false)
                 },
@@ -54,15 +54,15 @@ namespace Feedback_API.Migrations
                 {
                     table.PrimaryKey("PK_Places", x => x.ID);
                     table.ForeignKey(
-                        name: "FK_Places_PlaceTypes_PlaceTypeID",
+                        name: "FK_Places_placetypes_PlaceTypeID",
                         column: x => x.PlaceTypeID,
-                        principalTable: "PlaceTypes",
+                        principalTable: "placetypes",
                         principalColumn: "ID",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "OpeningTimes",
+                name: "openingtimes",
                 columns: table => new
                 {
                     ID = table.Column<long>(nullable: false)
@@ -74,9 +74,9 @@ namespace Feedback_API.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_OpeningTimes", x => x.ID);
+                    table.PrimaryKey("PK_openingtimes", x => x.ID);
                     table.ForeignKey(
-                        name: "FK_OpeningTimes_Places_PlaceID",
+                        name: "FK_openingtimes_Places_PlaceID",
                         column: x => x.PlaceID,
                         principalTable: "Places",
                         principalColumn: "ID",
@@ -84,7 +84,7 @@ namespace Feedback_API.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Reviews",
+                name: "reviews",
                 columns: table => new
                 {
                     ID = table.Column<long>(nullable: false)
@@ -97,23 +97,23 @@ namespace Feedback_API.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Reviews", x => x.ID);
+                    table.PrimaryKey("PK_reviews", x => x.ID);
                     table.ForeignKey(
-                        name: "FK_Reviews_Places_PlaceID",
+                        name: "FK_reviews_Places_PlaceID",
                         column: x => x.PlaceID,
                         principalTable: "Places",
                         principalColumn: "ID",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Reviews_Users_UserID",
+                        name: "FK_reviews_users_UserID",
                         column: x => x.UserID,
-                        principalTable: "Users",
+                        principalTable: "users",
                         principalColumn: "ID",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Reactions",
+                name: "reactions",
                 columns: table => new
                 {
                     ID = table.Column<long>(nullable: false)
@@ -124,23 +124,23 @@ namespace Feedback_API.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Reactions", x => x.ID);
+                    table.PrimaryKey("PK_reactions", x => x.ID);
                     table.ForeignKey(
-                        name: "FK_Reactions_Reviews_ReviewID",
+                        name: "FK_reactions_reviews_ReviewID",
                         column: x => x.ReviewID,
-                        principalTable: "Reviews",
+                        principalTable: "reviews",
                         principalColumn: "ID",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Reactions_Users_UserID",
+                        name: "FK_reactions_users_UserID",
                         column: x => x.UserID,
-                        principalTable: "Users",
+                        principalTable: "users",
                         principalColumn: "ID",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.InsertData(
-                table: "PlaceTypes",
+                table: "placetypes",
                 columns: new[] { "ID", "Name" },
                 values: new object[,]
                 {
@@ -150,7 +150,7 @@ namespace Feedback_API.Migrations
                 });
 
             migrationBuilder.InsertData(
-                table: "Users",
+                table: "users",
                 columns: new[] { "ID", "Address", "Description", "FirstName", "IsVerified", "LastName", "Username" },
                 values: new object[,]
                 {
@@ -177,7 +177,7 @@ namespace Feedback_API.Migrations
                 values: new object[] { 3L, "3500 Krems an der Donau", true, "Gusto Generic", 3L });
 
             migrationBuilder.InsertData(
-                table: "OpeningTimes",
+                table: "openingtimes",
                 columns: new[] { "ID", "Close", "Day", "Open", "PlaceID" },
                 values: new object[,]
                 {
@@ -187,27 +187,27 @@ namespace Feedback_API.Migrations
                 });
 
             migrationBuilder.InsertData(
-                table: "Reviews",
+                table: "reviews",
                 columns: new[] { "ID", "PlaceID", "Rating", "Text", "Time", "UserID" },
                 values: new object[,]
                 {
-                    { 2L, 1L, 5, "nice", new DateTime(2020, 1, 9, 10, 55, 21, 836, DateTimeKind.Local).AddTicks(1651), 1L },
-                    { 1L, 2L, 2, "meh", new DateTime(2020, 1, 9, 10, 55, 21, 832, DateTimeKind.Local).AddTicks(8812), 2L }
+                    { 2L, 1L, 5, "nice", new DateTime(2020, 1, 13, 18, 46, 39, 601, DateTimeKind.Local).AddTicks(2789), 1L },
+                    { 1L, 2L, 2, "meh", new DateTime(2020, 1, 13, 18, 46, 39, 598, DateTimeKind.Local).AddTicks(2526), 2L }
                 });
 
             migrationBuilder.InsertData(
-                table: "Reactions",
+                table: "reactions",
                 columns: new[] { "ID", "IsHelpful", "ReviewID", "UserID" },
                 values: new object[] { 1L, false, 2L, 3L });
 
             migrationBuilder.InsertData(
-                table: "Reactions",
+                table: "reactions",
                 columns: new[] { "ID", "IsHelpful", "ReviewID", "UserID" },
                 values: new object[] { 2L, true, 1L, 2L });
 
             migrationBuilder.CreateIndex(
-                name: "IX_OpeningTimes_PlaceID",
-                table: "OpeningTimes",
+                name: "IX_openingtimes_PlaceID",
+                table: "openingtimes",
                 column: "PlaceID");
 
             migrationBuilder.CreateIndex(
@@ -216,45 +216,45 @@ namespace Feedback_API.Migrations
                 column: "PlaceTypeID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Reactions_ReviewID",
-                table: "Reactions",
+                name: "IX_reactions_ReviewID",
+                table: "reactions",
                 column: "ReviewID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Reactions_UserID",
-                table: "Reactions",
+                name: "IX_reactions_UserID",
+                table: "reactions",
                 column: "UserID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Reviews_PlaceID",
-                table: "Reviews",
+                name: "IX_reviews_PlaceID",
+                table: "reviews",
                 column: "PlaceID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Reviews_UserID",
-                table: "Reviews",
+                name: "IX_reviews_UserID",
+                table: "reviews",
                 column: "UserID");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "OpeningTimes");
+                name: "openingtimes");
 
             migrationBuilder.DropTable(
-                name: "Reactions");
+                name: "reactions");
 
             migrationBuilder.DropTable(
-                name: "Reviews");
+                name: "reviews");
 
             migrationBuilder.DropTable(
                 name: "Places");
 
             migrationBuilder.DropTable(
-                name: "Users");
+                name: "users");
 
             migrationBuilder.DropTable(
-                name: "PlaceTypes");
+                name: "placetypes");
         }
     }
 }
