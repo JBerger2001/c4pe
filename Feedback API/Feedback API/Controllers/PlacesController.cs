@@ -117,12 +117,12 @@ namespace Feedback_API.Controllers
             var place = _mapper.Map<Place>(placeRequest);
             //place.PlaceType = await _context.PlaceTypes.FirstOrDefaultAsync(pt => pt.Name == placeDTO.Type.Name);
             //place.PlaceTypeID = place.PlaceType?.ID ?? 0;
-/*
-            if (place.PlaceType == null)
-            {
-                return BadRequest();
-            }
-*/
+            /*
+                        if (place.PlaceType == null)
+                        {
+                            return BadRequest();
+                        }
+            */
             _context.Places.Add(place);
             await _context.SaveChangesAsync();
 
@@ -156,7 +156,9 @@ namespace Feedback_API.Controllers
         {
             return _context.Places.Any(e => e.ID == id);
         }
-#endregion
+
+  
+        #endregion
 
         #region OPENING_TIMES
 
@@ -195,11 +197,66 @@ namespace Feedback_API.Controllers
             return CreatedAtAction(nameof(GetPlace), new { id = openingTime.ID }, placeResponse);
         }
 
-        // PUT
+        // PUT: api/Places/5/OpeningTimes
+        [HttpPut("{placeId}/OpeningTimes/{openingTimeId}")]
+        
+        public async Task<ActionResult<OpeningTimeResponse>> PutOpeningTime(long placeId, long openingTimeId, OpeningTimeRequest openingTimeRequest)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var openingTime = _mapper.Map<OpeningTime>(openingTimeRequest);
+            openingTime.ID = openingTimeId;
+            openingTime.PlaceID = placeId;
+            _context.Entry(openingTime).State = EntityState.Modified;
+            await _context.SaveChangesAsync();
+
+            var placeResponse = _mapper.Map<OpeningTimeResponse>(openingTime);
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!PlaceExists(placeId))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return NoContent();
+        }
 
         // DELETE
+        [HttpDelete("{placeId}/OpeningTimes/{openingTimeId}")]
 
+        public async Task<IActionResult> DeleteOpeningTime(long placeId, long openingTimeId)
+        {
+            var place = await _context.Places.FindAsync(placeId);
+            var openingTime = await _context.OpeningTimes.FindAsync(openingTimeId);
+            if (place == null || openingTime == null)
+            {
+                return NotFound();
+            }
+
+            _context.OpeningTimes.Remove(openingTime);
+            await _context.SaveChangesAsync();
+
+            return NoContent();
+        }
         #endregion
+
+        private bool OpeningTimeExists(long id)
+        {
+            return _context.OpeningTimes.Any(e => e.ID == id);
+        }
 
         #region REVIEWS
         // GET: api/Places/5/Reviews
@@ -259,6 +316,65 @@ namespace Feedback_API.Controllers
             return CreatedAtAction(nameof(GetReview), new { placeId, reviewId = review.ID }, reviewResponse);
         }
 
+        [HttpPut("{placeId}/Reviews/{reviewId}")]
+
+        public async Task<ActionResult<ReviewResponse>> PutReview(long placeId, long reviewId, ReviewRequest reviewRequest)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var review = _mapper.Map<OpeningTime>(reviewRequest);
+            review.ID = reviewId;
+            review.PlaceID = placeId;
+            _context.Entry(review).State = EntityState.Modified;
+            await _context.SaveChangesAsync();
+
+            var reviewResponse = _mapper.Map<ReviewResponse>(review);
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!ReviewsExists(placeId))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return NoContent();
+        }
+
+        //DELETE: api/Reviews/5/Reviews
+        [HttpDelete("{placeId}/Reviews/{reviewId}")]
+
+        public async Task<IActionResult> DeleteReview(long placeId, long reviewId)
+        {
+            var place = await _context.Places.FindAsync(placeId);
+            var review = await _context.Reviews.FindAsync(reviewId);
+            if (place == null || review == null)
+            {
+                return NotFound();
+            }
+
+            _context.Reviews.Remove(review);
+            await _context.SaveChangesAsync();
+
+            return NoContent();
+        }
+
         #endregion
+
+        private bool ReviewsExists(long id)
+        {
+            return _context.Reviews.Any(e => e.ID == id);
+        }
     }
 }
