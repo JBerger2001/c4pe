@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 
 namespace Feedback_API.Models.Domain
 {
+    [Table("reactions")]
     public class Reaction
     {
         public long ID { get; set; }

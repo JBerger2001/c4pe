@@ -39,7 +39,7 @@ namespace Feedback_API.Migrations
 
                     b.HasIndex("PlaceID");
 
-                    b.ToTable("OpeningTimes");
+                    b.ToTable("openingtimes");
 
                     b.HasData(
                         new
@@ -133,7 +133,7 @@ namespace Feedback_API.Migrations
 
                     b.HasKey("ID");
 
-                    b.ToTable("PlaceTypes");
+                    b.ToTable("placetypes");
 
                     b.HasData(
                         new
@@ -174,7 +174,7 @@ namespace Feedback_API.Migrations
 
                     b.HasIndex("UserID");
 
-                    b.ToTable("Reactions");
+                    b.ToTable("reactions");
 
                     b.HasData(
                         new
@@ -220,7 +220,7 @@ namespace Feedback_API.Migrations
 
                     b.HasIndex("UserID");
 
-                    b.ToTable("Reviews");
+                    b.ToTable("reviews");
 
                     b.HasData(
                         new
@@ -229,7 +229,7 @@ namespace Feedback_API.Migrations
                             PlaceID = 2L,
                             Rating = 2,
                             Text = "meh",
-                            Time = new DateTime(2020, 1, 9, 11, 14, 7, 704, DateTimeKind.Local).AddTicks(3781),
+                            Time = new DateTime(2020, 1, 13, 18, 46, 39, 598, DateTimeKind.Local).AddTicks(2526),
                             UserID = 2L
                         },
                         new
@@ -238,7 +238,7 @@ namespace Feedback_API.Migrations
                             PlaceID = 1L,
                             Rating = 5,
                             Text = "nice",
-                            Time = new DateTime(2020, 1, 9, 11, 14, 7, 707, DateTimeKind.Local).AddTicks(5033),
+                            Time = new DateTime(2020, 1, 13, 18, 46, 39, 601, DateTimeKind.Local).AddTicks(2789),
                             UserID = 1L
                         });
                 });
@@ -270,7 +270,7 @@ namespace Feedback_API.Migrations
 
                     b.HasKey("ID");
 
-                    b.ToTable("Users");
+                    b.ToTable("users");
 
                     b.HasData(
                         new
