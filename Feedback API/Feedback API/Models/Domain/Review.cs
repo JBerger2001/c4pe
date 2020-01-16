@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 namespace Feedback_API.Models.Domain
 {
+    [Table("reviews")]
     public class Review
     {
         public long ID { get; set; }

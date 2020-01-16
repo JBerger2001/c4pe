@@ -9,8 +9,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Feedback_API.Migrations
 {
     [DbContext(typeof(FeedbackContext))]
-    [Migration("20200109095522_InitialEntities")]
-    partial class InitialEntities
+    [Migration("20200113174640_InitialMigration")]
+    partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -41,7 +41,7 @@ namespace Feedback_API.Migrations
 
                     b.HasIndex("PlaceID");
 
-                    b.ToTable("OpeningTimes");
+                    b.ToTable("openingtimes");
 
                     b.HasData(
                         new
@@ -77,12 +77,14 @@ namespace Feedback_API.Migrations
                         .HasColumnType("bigint");
 
                     b.Property<string>("Address")
+                        .IsRequired()
                         .HasColumnType("longtext CHARACTER SET utf8mb4");
 
                     b.Property<bool>("IsVerified")
                         .HasColumnType("tinyint(1)");
 
                     b.Property<string>("Name")
+                        .IsRequired()
                         .HasColumnType("longtext CHARACTER SET utf8mb4");
 
                     b.Property<long>("PlaceTypeID")
@@ -128,11 +130,12 @@ namespace Feedback_API.Migrations
                         .HasColumnType("bigint");
 
                     b.Property<string>("Name")
+                        .IsRequired()
                         .HasColumnType("longtext CHARACTER SET utf8mb4");
 
                     b.HasKey("ID");
 
-                    b.ToTable("PlaceTypes");
+                    b.ToTable("placetypes");
 
                     b.HasData(
                         new
@@ -173,7 +176,7 @@ namespace Feedback_API.Migrations
 
                     b.HasIndex("UserID");
 
-                    b.ToTable("Reactions");
+                    b.ToTable("reactions");
 
                     b.HasData(
                         new
@@ -219,7 +222,7 @@ namespace Feedback_API.Migrations
 
                     b.HasIndex("UserID");
 
-                    b.ToTable("Reviews");
+                    b.ToTable("reviews");
 
                     b.HasData(
                         new
@@ -228,7 +231,7 @@ namespace Feedback_API.Migrations
                             PlaceID = 2L,
                             Rating = 2,
                             Text = "meh",
-                            Time = new DateTime(2020, 1, 9, 10, 55, 21, 832, DateTimeKind.Local).AddTicks(8812),
+                            Time = new DateTime(2020, 1, 13, 18, 46, 39, 598, DateTimeKind.Local).AddTicks(2526),
                             UserID = 2L
                         },
                         new
@@ -237,7 +240,7 @@ namespace Feedback_API.Migrations
                             PlaceID = 1L,
                             Rating = 5,
                             Text = "nice",
-                            Time = new DateTime(2020, 1, 9, 10, 55, 21, 836, DateTimeKind.Local).AddTicks(1651),
+                            Time = new DateTime(2020, 1, 13, 18, 46, 39, 601, DateTimeKind.Local).AddTicks(2789),
                             UserID = 1L
                         });
                 });
@@ -264,11 +267,12 @@ namespace Feedback_API.Migrations
                         .HasColumnType("longtext CHARACTER SET utf8mb4");
 
                     b.Property<string>("Username")
+                        .IsRequired()
                         .HasColumnType("longtext CHARACTER SET utf8mb4");
 
                     b.HasKey("ID");
 
-                    b.ToTable("Users");
+                    b.ToTable("users");
 
                     b.HasData(
                         new
