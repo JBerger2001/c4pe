@@ -25,14 +25,21 @@ namespace Feedback_API
             Configuration = configuration;
         }
 
+        readonly string AllowAllOrigins = "AllowAllOrigins";
         public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddCors(c =>
+            services.AddCors(options =>
             {
-                c.AddPolicy("AllowOrigin", options => options.AllowAnyOrigin());
+                options.AddPolicy(AllowAllOrigins,
+                builder =>
+                {
+                    builder.AllowAnyOrigin()
+                        .AllowAnyMethod()
+                        .AllowAnyHeader();
+                });
             });
 
             var connectionString = Configuration["ConnectionString"];
@@ -67,9 +74,9 @@ namespace Feedback_API
 
             //app.UseHttpsRedirection();
 
-            app.UseCors(options => options.AllowAnyOrigin());
-
             app.UseRouting();
+
+            app.UseCors(AllowAllOrigins);
 
             app.UseAuthorization();
 
