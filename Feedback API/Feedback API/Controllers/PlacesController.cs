@@ -189,6 +189,11 @@ namespace Feedback_API.Controllers
                 return BadRequest(ModelState);
             }
 
+            if(!IsValidRange(placeId, openingTimeRequest))
+            {
+                return BadRequest("Opening time overlaps with an existing one.");
+            }
+
             var openingTime = _mapper.Map<OpeningTime>(openingTimeRequest);
             openingTime.PlaceID = placeId;
             _context.OpeningTimes.Add(openingTime);
@@ -209,6 +214,11 @@ namespace Feedback_API.Controllers
                 return BadRequest(ModelState);
             }
 
+            if(!IsValidRange(placeId, openingTimeRequest, openingTimeId))
+            {
+                return BadRequest("Opening time overlaps with an existing one.");
+            }
+
             var openingTime = _mapper.Map<OpeningTime>(openingTimeRequest);
             openingTime.ID = openingTimeId;
             openingTime.PlaceID = placeId;
@@ -223,7 +233,7 @@ namespace Feedback_API.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!PlaceExists(placeId))
+                if (!OpeningTimeExists(placeId, openingTimeId))
                 {
                     return NotFound();
                 }
@@ -253,12 +263,21 @@ namespace Feedback_API.Controllers
 
             return NoContent();
         }
-        #endregion
-
-        private bool OpeningTimeExists(long id)
+        private bool OpeningTimeExists(long placeId, long openingTimeId)
         {
-            return _context.OpeningTimes.Any(e => e.ID == id);
+            return _context.OpeningTimes.Any(o => o.ID == openingTimeId && o.PlaceID == placeId);
         }
+
+        private bool IsValidRange(long placeId, OpeningTimeRequest ot, long? openingTimeId = null)
+        {
+            return !_context.OpeningTimes.Any(o =>
+                o.PlaceID == placeId
+                && (openingTimeId.HasValue) ? o.ID != openingTimeId.Value : true
+                && o.Day == ot.Day
+                && o.Open < ot.Close
+                && o.Close > ot.Open); 
+        }
+        #endregion
 
         #region REVIEWS
         // GET: api/Places/5/Reviews
@@ -341,7 +360,7 @@ namespace Feedback_API.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!ReviewsExists(placeId))
+                if (!ReviewExists(reviewId))
                 {
                     return NotFound();
                 }
@@ -372,11 +391,10 @@ namespace Feedback_API.Controllers
             return NoContent();
         }
 
-        #endregion
-
-        private bool ReviewsExists(long id)
+        private bool ReviewExists(long id)
         {
             return _context.Reviews.Any(e => e.ID == id);
         }
+        #endregion
     }
 }
