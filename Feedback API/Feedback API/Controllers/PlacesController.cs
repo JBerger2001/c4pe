@@ -10,11 +10,13 @@ using AutoMapper;
 using Feedback_API.Models.Responses;
 using Feedback_API.Models.Requests;
 using Feedback_API.Models.Domain;
+using Microsoft.AspNetCore.Cors;
 
 namespace Feedback_API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [EnableCors("AllowOrigin")]
     public class PlacesController : ControllerBase
     {
         private readonly FeedbackContext _context;

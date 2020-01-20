@@ -30,6 +30,11 @@ namespace Feedback_API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddCors(c =>
+            {
+                c.AddPolicy("AllowOrigin", options => options.AllowAnyOrigin());
+            });
+
             var connectionString = Configuration["ConnectionString"];
             services.AddDbContext<FeedbackContext>(opt => opt.UseMySql(connectionString));
 
@@ -61,6 +66,8 @@ namespace Feedback_API
             app.UseSwaggerUI(options => options.SwaggerEndpoint(swaggerConfig.UIEndpoint, swaggerConfig.Description));
 
             //app.UseHttpsRedirection();
+
+            app.UseCors(options => options.AllowAnyOrigin());
 
             app.UseRouting();
 
