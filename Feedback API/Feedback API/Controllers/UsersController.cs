@@ -10,6 +10,7 @@ using AutoMapper;
 using Feedback_API.Models.Responses;
 using Feedback_API.Models.Domain;
 using Microsoft.AspNetCore.Cors;
+using Feedback_API.Models.Requests;
 
 namespace Feedback_API.Controllers
 {
@@ -53,19 +54,14 @@ namespace Feedback_API.Controllers
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see https://aka.ms/RazorPagesCRUD.
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutUser(long id, UserResponse userDTO)
+        public async Task<IActionResult> PutUser(long id, UserRequest userDTO)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            if (id != userDTO.ID)
-            {
-                return BadRequest();
-            }
-
-            var user = await _context.Users.FirstOrDefaultAsync(u => u.ID == userDTO.ID);
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.ID == id);
             _mapper.Map(userDTO, user);
             _context.Entry(user).State = EntityState.Modified;
 
@@ -92,7 +88,7 @@ namespace Feedback_API.Controllers
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see https://aka.ms/RazorPagesCRUD.
         [HttpPost]
-        public async Task<ActionResult<UserResponse>> PostUser(UserResponse userDTO)
+        public async Task<ActionResult<UserResponse>> PostUser(UserRequest userDTO)
         {
             if (!ModelState.IsValid)
             {
