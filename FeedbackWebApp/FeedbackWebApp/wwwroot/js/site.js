@@ -2,8 +2,19 @@
 // for details on configuring this project to bundle and minify static web assets.
 
 // Write your Javascript code.
-function SendSignUpData() {
+document.getElementById("Overview").addEventListener('click', loadPlaces);
 
+function loadPlaces() {
+    var url = "http://77.244.251.110/api/Places";
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', url);
+    //xhr.setRequestHeader("Content-Type", "application/json");
+    xhr.send();
+    xhr.onload = function () {
+        //arr = xhr.response;
+        alert(xhr.response);
+    }
+    //arr.forEach(item => console.log(item));
 }
 function LogIn() {
     location.href = location.href + '/Overview';
