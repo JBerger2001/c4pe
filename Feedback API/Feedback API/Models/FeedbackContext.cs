@@ -27,7 +27,7 @@ namespace Feedback_API.Models
 
             modelBuilder.Entity<User>().HasData(new User[]
             {
-                new User { ID = 1, Address = "3500 Krems an der Donau", FirstName = "Peter", LastName = "Gustav", Username = "pete", Password = "..."},
+                new User { ID = 1, Address = "3500 Krems an der Donau", FirstName = "Kirito", LastName = "Johnson", Username = "pete", Password = "..."},
                 new User { ID = 2, Address = "3500 Krems an der Donau", FirstName = "John", LastName = "Gustav", Username = "MrJohn", Password = "..."},
                 new User { ID = 3, Address = "3500 Krems an der Donau", FirstName = "Heinz", LastName = "Gustav", Username = "Ketchup", Password = "..."},
                 new User { ID = 4, Address = "3500 Krems an der Donau", FirstName = "Olaf", LastName = "Gustav", Username = "Olaf", Password = "..."},
