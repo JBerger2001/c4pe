@@ -16,7 +16,6 @@ namespace Feedback_API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [EnableCors("AllowOrigin")]
     public class UsersController : ControllerBase
     {
         private readonly FeedbackContext _context;

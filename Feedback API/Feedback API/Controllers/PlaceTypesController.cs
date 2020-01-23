@@ -15,7 +15,6 @@ namespace Feedback_API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [EnableCors("AllowOrigin")]
     public class PlaceTypesController : ControllerBase
     {
         private readonly FeedbackContext _context;
