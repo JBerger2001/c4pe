@@ -2,7 +2,8 @@
 // for details on configuring this project to bundle and minify static web assets.
 
 // Write your Javascript code.
-document.getElementById("Overview").addEventListener('click', loadPlaces);
+
+//document.getElementById("Overview").addEventListener('click', loadPlaces);
 
 function loadPlaces() {
     var url = "http://77.244.251.110/api/Places";

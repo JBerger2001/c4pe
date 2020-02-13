@@ -7,22 +7,28 @@
 <h1>Overview</h1>
 <div class="container">
     @{ 
-        var obj = new Place();
-        
+        List<Place> places = new List<Place>();
+        HttpRequests req = new HttpRequests();
+        places = await req.GetProductsAsync("http://77.244.251.110/api/Places");
+        Place newP = new Place() { Address="3483 Feuersbrunn, Weinstrasse 11", Name="Gasthaus zum goldenen Kreuz", IsVerified=true, Type= "Restaurant",
+            OpenTimes = new openingTimes() { day = new TimeSpan(), open = new TimeSpan(10, 0, 0), close = new TimeSpan(18, 0, 0) } };
+        //await req.CreateProductAsync(newP);
     }
-    @for (var i = 0; i < 4; i++)
+    @foreach(Place p in places)
     {
     <div class="panel panel-default">
         <div class="panel-body">
             <img src="https://via.placeholder.com/180" alt="Bild" style="float: left" />
             <div style="float:left; margin-left: 5%">
-                <a asp-page="/PlaceSite" ><h3>name of the location</h3></a>
-                <h4>type of the location</h4>
+                <a asp-page="/PlaceSite" onclick="@req.PlaceId=p.Id"><h3>@p.Name</h3></a>
+                <h4>@p.Type</h4>
                 <p>Opening time: </p>
-                <p>address: </p>
+                @*    @p.OpenTimes.day.Days , opens at @p.OpenTimes.open, closes at @p.OpenTimes.close*@
+                <p>address: @p.Address</p>
                 <a href="#">See on Google Maps</a>
             </div>
             <div class="rating" style="float:right; margin-right: 5%; margin-top: 2%; text-align: right">
+
                 <span class="glyphicon glyphicon-star iStar"></span>
                 <span class="glyphicon glyphicon-star iStar"></span>
                 <span class="glyphicon glyphicon-star iStar"></span>
