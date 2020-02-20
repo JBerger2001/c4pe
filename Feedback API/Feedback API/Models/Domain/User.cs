@@ -15,8 +15,8 @@ namespace Feedback_API.Models.Domain
         public string Username { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
-        [NotMapped]
-        public string Password { get; set; }
+        public byte[] PasswordHash { get; set; }
+        public byte[] PasswordSalt { get; set; }
         public string Description { get; set; }
         public string Address { get; set; }
         public bool IsVerified { get; set; }
