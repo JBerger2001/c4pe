@@ -92,7 +92,7 @@ namespace Feedback_API.Migrations
 
                     b.HasIndex("PlaceTypeID");
 
-                    b.ToTable("Places");
+                    b.ToTable("places");
 
                     b.HasData(
                         new
@@ -229,7 +229,7 @@ namespace Feedback_API.Migrations
                             PlaceID = 2L,
                             Rating = 2,
                             Text = "meh",
-                            Time = new DateTime(2020, 1, 13, 18, 46, 39, 598, DateTimeKind.Local).AddTicks(2526),
+                            Time = new DateTime(2020, 2, 20, 14, 9, 17, 277, DateTimeKind.Local).AddTicks(515),
                             UserID = 2L
                         },
                         new
@@ -238,7 +238,7 @@ namespace Feedback_API.Migrations
                             PlaceID = 1L,
                             Rating = 5,
                             Text = "nice",
-                            Time = new DateTime(2020, 1, 13, 18, 46, 39, 601, DateTimeKind.Local).AddTicks(2789),
+                            Time = new DateTime(2020, 2, 20, 14, 9, 17, 279, DateTimeKind.Local).AddTicks(9471),
                             UserID = 1L
                         });
                 });
@@ -264,6 +264,12 @@ namespace Feedback_API.Migrations
                     b.Property<string>("LastName")
                         .HasColumnType("longtext CHARACTER SET utf8mb4");
 
+                    b.Property<byte[]>("PasswordHash")
+                        .HasColumnType("longblob");
+
+                    b.Property<byte[]>("PasswordSalt")
+                        .HasColumnType("longblob");
+
                     b.Property<string>("Username")
                         .IsRequired()
                         .HasColumnType("longtext CHARACTER SET utf8mb4");
@@ -280,6 +286,8 @@ namespace Feedback_API.Migrations
                             FirstName = "Peter",
                             IsVerified = false,
                             LastName = "Gustav",
+                            PasswordHash = new byte[] { 0 },
+                            PasswordSalt = new byte[] { 0 },
                             Username = "pete"
                         },
                         new
@@ -289,6 +297,8 @@ namespace Feedback_API.Migrations
                             FirstName = "John",
                             IsVerified = false,
                             LastName = "Gustav",
+                            PasswordHash = new byte[] { 0 },
+                            PasswordSalt = new byte[] { 0 },
                             Username = "MrJohn"
                         },
                         new
@@ -298,6 +308,8 @@ namespace Feedback_API.Migrations
                             FirstName = "Heinz",
                             IsVerified = false,
                             LastName = "Gustav",
+                            PasswordHash = new byte[] { 0 },
+                            PasswordSalt = new byte[] { 0 },
                             Username = "Ketchup"
                         },
                         new
@@ -307,6 +319,8 @@ namespace Feedback_API.Migrations
                             FirstName = "Olaf",
                             IsVerified = false,
                             LastName = "Gustav",
+                            PasswordHash = new byte[] { 0 },
+                            PasswordSalt = new byte[] { 0 },
                             Username = "Olaf"
                         },
                         new
@@ -316,6 +330,8 @@ namespace Feedback_API.Migrations
                             FirstName = "Hans",
                             IsVerified = false,
                             LastName = "Gustav",
+                            PasswordHash = new byte[] { 0 },
+                            PasswordSalt = new byte[] { 0 },
                             Username = "hansi12"
                         });
                 });

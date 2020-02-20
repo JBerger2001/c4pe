@@ -27,11 +27,11 @@ namespace Feedback_API.Models
 
             modelBuilder.Entity<User>().HasData(new User[]
             {
-                new User { ID = 0, Address = "3500 Krems an der Donau", FirstName = "Hans", LastName = "Gustav", Username = "hansi12", PasswordHash = new byte[]{0}, PasswordSalt = new byte[]{0}},
                 new User { ID = 1, Address = "3500 Krems an der Donau", FirstName = "Peter", LastName = "Gustav", Username = "pete", PasswordHash = new byte[]{0}, PasswordSalt = new byte[]{0}},
                 new User { ID = 2, Address = "3500 Krems an der Donau", FirstName = "John", LastName = "Gustav", Username = "MrJohn", PasswordHash = new byte[]{0}, PasswordSalt = new byte[]{0}},
                 new User { ID = 3, Address = "3500 Krems an der Donau", FirstName = "Heinz", LastName = "Gustav", Username = "Ketchup", PasswordHash = new byte[]{0}, PasswordSalt = new byte[]{0}},
-                new User { ID = 4, Address = "3500 Krems an der Donau", FirstName = "Olaf", LastName = "Gustav", Username = "Olaf", PasswordHash = new byte[]{0}, PasswordSalt = new byte[]{0}}
+                new User { ID = 4, Address = "3500 Krems an der Donau", FirstName = "Olaf", LastName = "Gustav", Username = "Olaf", PasswordHash = new byte[]{0}, PasswordSalt = new byte[]{0}},
+                new User { ID = 5, Address = "3500 Krems an der Donau", FirstName = "Hans", LastName = "Gustav", Username = "hansi12", PasswordHash = new byte[]{0}, PasswordSalt = new byte[]{0}}
             });
 
             modelBuilder.Entity<PlaceType>().HasData(new PlaceType[]

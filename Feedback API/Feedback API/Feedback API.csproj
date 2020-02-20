@@ -39,6 +39,8 @@
     <Compile Remove="Migrations\20200109101408_UpdatedEntityProperties.Designer.cs" />
     <Compile Remove="Migrations\20200112195722_LowercaseTableNames.cs" />
     <Compile Remove="Migrations\20200112195722_LowercaseTableNames.Designer.cs" />
+    <Compile Remove="Migrations\20200113174640_InitialMigration.cs" />
+    <Compile Remove="Migrations\20200113174640_InitialMigration.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

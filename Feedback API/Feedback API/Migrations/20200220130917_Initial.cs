@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Feedback_API.Migrations
 {
-    public partial class InitialMigration : Migration
+    public partial class Initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -30,6 +30,8 @@ namespace Feedback_API.Migrations
                     Username = table.Column<string>(nullable: false),
                     FirstName = table.Column<string>(nullable: true),
                     LastName = table.Column<string>(nullable: true),
+                    PasswordHash = table.Column<byte[]>(nullable: true),
+                    PasswordSalt = table.Column<byte[]>(nullable: true),
                     Description = table.Column<string>(nullable: true),
                     Address = table.Column<string>(nullable: true),
                     IsVerified = table.Column<bool>(nullable: false)
@@ -40,7 +42,7 @@ namespace Feedback_API.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Places",
+                name: "places",
                 columns: table => new
                 {
                     ID = table.Column<long>(nullable: false)
@@ -52,9 +54,9 @@ namespace Feedback_API.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Places", x => x.ID);
+                    table.PrimaryKey("PK_places", x => x.ID);
                     table.ForeignKey(
-                        name: "FK_Places_placetypes_PlaceTypeID",
+                        name: "FK_places_placetypes_PlaceTypeID",
                         column: x => x.PlaceTypeID,
                         principalTable: "placetypes",
                         principalColumn: "ID",
@@ -76,9 +78,9 @@ namespace Feedback_API.Migrations
                 {
                     table.PrimaryKey("PK_openingtimes", x => x.ID);
                     table.ForeignKey(
-                        name: "FK_openingtimes_Places_PlaceID",
+                        name: "FK_openingtimes_places_PlaceID",
                         column: x => x.PlaceID,
-                        principalTable: "Places",
+                        principalTable: "places",
                         principalColumn: "ID",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -99,9 +101,9 @@ namespace Feedback_API.Migrations
                 {
                     table.PrimaryKey("PK_reviews", x => x.ID);
                     table.ForeignKey(
-                        name: "FK_reviews_Places_PlaceID",
+                        name: "FK_reviews_places_PlaceID",
                         column: x => x.PlaceID,
-                        principalTable: "Places",
+                        principalTable: "places",
                         principalColumn: "ID",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
@@ -151,28 +153,28 @@ namespace Feedback_API.Migrations
 
             migrationBuilder.InsertData(
                 table: "users",
-                columns: new[] { "ID", "Address", "Description", "FirstName", "IsVerified", "LastName", "Username" },
+                columns: new[] { "ID", "Address", "Description", "FirstName", "IsVerified", "LastName", "PasswordHash", "PasswordSalt", "Username" },
                 values: new object[,]
                 {
-                    { 1L, "3500 Krems an der Donau", null, "Peter", false, "Gustav", "pete" },
-                    { 2L, "3500 Krems an der Donau", null, "John", false, "Gustav", "MrJohn" },
-                    { 3L, "3500 Krems an der Donau", null, "Heinz", false, "Gustav", "Ketchup" },
-                    { 4L, "3500 Krems an der Donau", null, "Olaf", false, "Gustav", "Olaf" },
-                    { 5L, "3500 Krems an der Donau", null, "Hans", false, "Gustav", "hansi12" }
+                    { 1L, "3500 Krems an der Donau", null, "Peter", false, "Gustav", new byte[] { 0 }, new byte[] { 0 }, "pete" },
+                    { 2L, "3500 Krems an der Donau", null, "John", false, "Gustav", new byte[] { 0 }, new byte[] { 0 }, "MrJohn" },
+                    { 3L, "3500 Krems an der Donau", null, "Heinz", false, "Gustav", new byte[] { 0 }, new byte[] { 0 }, "Ketchup" },
+                    { 4L, "3500 Krems an der Donau", null, "Olaf", false, "Gustav", new byte[] { 0 }, new byte[] { 0 }, "Olaf" },
+                    { 5L, "3500 Krems an der Donau", null, "Hans", false, "Gustav", new byte[] { 0 }, new byte[] { 0 }, "hansi12" }
                 });
 
             migrationBuilder.InsertData(
-                table: "Places",
+                table: "places",
                 columns: new[] { "ID", "Address", "IsVerified", "Name", "PlaceTypeID" },
                 values: new object[] { 1L, "3500 Krems an der Donau", true, "Coffeehut", 1L });
 
             migrationBuilder.InsertData(
-                table: "Places",
+                table: "places",
                 columns: new[] { "ID", "Address", "IsVerified", "Name", "PlaceTypeID" },
                 values: new object[] { 2L, "3500 Krems an der Donau", true, "Footly", 2L });
 
             migrationBuilder.InsertData(
-                table: "Places",
+                table: "places",
                 columns: new[] { "ID", "Address", "IsVerified", "Name", "PlaceTypeID" },
                 values: new object[] { 3L, "3500 Krems an der Donau", true, "Gusto Generic", 3L });
 
@@ -191,8 +193,8 @@ namespace Feedback_API.Migrations
                 columns: new[] { "ID", "PlaceID", "Rating", "Text", "Time", "UserID" },
                 values: new object[,]
                 {
-                    { 2L, 1L, 5, "nice", new DateTime(2020, 1, 13, 18, 46, 39, 601, DateTimeKind.Local).AddTicks(2789), 1L },
-                    { 1L, 2L, 2, "meh", new DateTime(2020, 1, 13, 18, 46, 39, 598, DateTimeKind.Local).AddTicks(2526), 2L }
+                    { 2L, 1L, 5, "nice", new DateTime(2020, 2, 20, 14, 9, 17, 279, DateTimeKind.Local).AddTicks(9471), 1L },
+                    { 1L, 2L, 2, "meh", new DateTime(2020, 2, 20, 14, 9, 17, 277, DateTimeKind.Local).AddTicks(515), 2L }
                 });
 
             migrationBuilder.InsertData(
@@ -211,8 +213,8 @@ namespace Feedback_API.Migrations
                 column: "PlaceID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Places_PlaceTypeID",
-                table: "Places",
+                name: "IX_places_PlaceTypeID",
+                table: "places",
                 column: "PlaceTypeID");
 
             migrationBuilder.CreateIndex(
@@ -248,7 +250,7 @@ namespace Feedback_API.Migrations
                 name: "reviews");
 
             migrationBuilder.DropTable(
-                name: "Places");
+                name: "places");
 
             migrationBuilder.DropTable(
                 name: "users");
