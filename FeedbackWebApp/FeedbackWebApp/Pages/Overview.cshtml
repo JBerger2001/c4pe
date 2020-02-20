@@ -20,7 +20,7 @@
         <div class="panel-body">
             <img src="https://via.placeholder.com/180" alt="Bild" style="float: left" />
             <div style="float:left; margin-left: 5%">
-                <a asp-page="/PlaceSite" onclick="@req.PlaceId=p.Id"><h3>@p.Name</h3></a>
+                <a asp-page="/PlaceSite"><h3>@p.Name</h3></a>
                 <h4>@p.Type</h4>
                 <p>Opening time: </p>
                 @*    @p.OpenTimes.day.Days , opens at @p.OpenTimes.open, closes at @p.OpenTimes.close*@
