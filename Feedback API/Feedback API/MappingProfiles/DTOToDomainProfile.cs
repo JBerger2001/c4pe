@@ -29,7 +29,7 @@ namespace Feedback_API.MappingProfiles
             CreateMap<OpeningTimeRequest, OpeningTime>();
 
             CreateMap<UserResponse, User>();
-            CreateMap<UserRequest, User>();
+            CreateMap<UserRegisterRequest, User>();
 
             CreateMap<ReviewResponse, Review>();
             CreateMap<ReviewRequest, Review>();

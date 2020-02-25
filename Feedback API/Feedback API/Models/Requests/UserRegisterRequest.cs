@@ -7,16 +7,14 @@ using System.Threading.Tasks;
 
 namespace Feedback_API.Models.Domain
 {
-    [Table("users")]
-    public class User
+    public class UserRegisterRequest
     {
-        public long ID { get; set; }
         [Required]
         public string Username { get; set; }
+        [Required]
+        public string Password { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
-        public byte[] PasswordHash { get; set; }
-        public byte[] PasswordSalt { get; set; }
         public string Description { get; set; }
         public string Street { get; set; }
         public string City { get; set; }
