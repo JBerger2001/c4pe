@@ -11,19 +11,30 @@ using Feedback_API.Models.Responses;
 using Feedback_API.Models.Domain;
 using Microsoft.AspNetCore.Cors;
 using Feedback_API.Models.Requests;
+using Feedback_API.Services;
+using Microsoft.Extensions.Configuration;
+using System.IdentityModel.Tokens.Jwt;
+using System.Text;
+using Microsoft.IdentityModel.Tokens;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Feedback_API.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/users")]
     [ApiController]
     public class UsersController : ControllerBase
     {
         private readonly FeedbackContext _context;
+        private readonly IAuthService _authService;
+        private readonly IConfiguration _config;
         private readonly IMapper _mapper;
 
-        public UsersController(FeedbackContext context, IMapper mapper)
+        public UsersController(FeedbackContext context, IAuthService authService, IConfiguration config, IMapper mapper)
         {
             _context = context;
+            _authService = authService;
+            _config = config;
             _mapper = mapper;
         }
 
@@ -53,7 +64,7 @@ namespace Feedback_API.Controllers
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see https://aka.ms/RazorPagesCRUD.
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutUser(long id, UserRequest userDTO)
+        public async Task<IActionResult> PutUser(long id, UserUpdateRequest userDTO)
         {
             if (!ModelState.IsValid)
             {
@@ -83,6 +94,7 @@ namespace Feedback_API.Controllers
             return NoContent();
         }
 
+        /*
         // POST: api/Users
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see https://aka.ms/RazorPagesCRUD.
@@ -100,10 +112,61 @@ namespace Feedback_API.Controllers
 
             return CreatedAtAction(nameof(GetUser), new { id = user.ID }, userDTO);
         }
+        */
+
+        // POST: api/Users/register
+        [HttpPost("register")]
+        public async Task<IActionResult> Register(UserRegisterRequest userRegisterRequest)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest("Invalid ModelState");
+            }
+
+            userRegisterRequest.Username = userRegisterRequest.Username.ToLower();
+
+            if (await _authService.UserExists(userRegisterRequest.Username))
+            {
+                return BadRequest("Username is already taken");
+            }
+
+            var newUser = _mapper.Map<User>(userRegisterRequest);
+            await _authService.Register(newUser, userRegisterRequest.Password);
+
+            return StatusCode(201);
+        }
+
+        [HttpPost("login")]
+        public async Task<IActionResult> Login(UserLoginRequest userLoginRequest)
+        {
+            var user = await _authService.Login(userLoginRequest.Username.ToLower(), userLoginRequest.Password);
+            if (user == null)
+            {
+                return Unauthorized();
+            }
+
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var key = Encoding.ASCII.GetBytes(_config.GetSection("AppSettings:Token").Value);
+            var tokenDescriptor = new SecurityTokenDescriptor
+            {
+                Subject = new ClaimsIdentity(new Claim[]{
+                    new Claim(ClaimTypes.NameIdentifier, user.ID.ToString()),
+                    new Claim(ClaimTypes.Name, user.Username)
+                }),
+                Expires = DateTime.Now.AddDays(1),
+                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha512Signature)
+            };
+
+            var token = tokenHandler.CreateToken(tokenDescriptor);
+            var tokenString = tokenHandler.WriteToken(token);
+
+            return Ok(new { tokenString });
+        }
 
         // DELETE: api/Users/5
+        [Authorize]
         [HttpDelete("{id}")]
-        public async Task<ActionResult<User>> DeleteUser(long id)
+        public async Task<IActionResult> DeleteUser(long id)
         {
             var user = await _context.Users.FindAsync(id);
             if (user == null)
@@ -114,7 +177,7 @@ namespace Feedback_API.Controllers
             _context.Users.Remove(user);
             await _context.SaveChangesAsync();
 
-            return user;
+            return NoContent();
         }
 
         private bool UserExists(long id)
