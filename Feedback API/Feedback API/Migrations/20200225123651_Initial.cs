@@ -33,7 +33,10 @@ namespace Feedback_API.Migrations
                     PasswordHash = table.Column<byte[]>(nullable: true),
                     PasswordSalt = table.Column<byte[]>(nullable: true),
                     Description = table.Column<string>(nullable: true),
-                    Address = table.Column<string>(nullable: true),
+                    Street = table.Column<string>(nullable: true),
+                    City = table.Column<string>(nullable: true),
+                    ZipCode = table.Column<string>(nullable: true),
+                    Country = table.Column<string>(nullable: true),
                     IsVerified = table.Column<bool>(nullable: false)
                 },
                 constraints: table =>
@@ -153,14 +156,14 @@ namespace Feedback_API.Migrations
 
             migrationBuilder.InsertData(
                 table: "users",
-                columns: new[] { "ID", "Address", "Description", "FirstName", "IsVerified", "LastName", "PasswordHash", "PasswordSalt", "Username" },
+                columns: new[] { "ID", "City", "Country", "Description", "FirstName", "IsVerified", "LastName", "PasswordHash", "PasswordSalt", "Street", "Username", "ZipCode" },
                 values: new object[,]
                 {
-                    { 1L, "3500 Krems an der Donau", null, "Peter", false, "Gustav", new byte[] { 0 }, new byte[] { 0 }, "pete" },
-                    { 2L, "3500 Krems an der Donau", null, "John", false, "Gustav", new byte[] { 0 }, new byte[] { 0 }, "MrJohn" },
-                    { 3L, "3500 Krems an der Donau", null, "Heinz", false, "Gustav", new byte[] { 0 }, new byte[] { 0 }, "Ketchup" },
-                    { 4L, "3500 Krems an der Donau", null, "Olaf", false, "Gustav", new byte[] { 0 }, new byte[] { 0 }, "Olaf" },
-                    { 5L, "3500 Krems an der Donau", null, "Hans", false, "Gustav", new byte[] { 0 }, new byte[] { 0 }, "hansi12" }
+                    { 1L, "Krems an der Donau", "AT", null, "Peter", false, "Gustav", new byte[] { 0 }, new byte[] { 0 }, "Example Street 1", "pete", "3500" },
+                    { 2L, "Krems an der Donau", "AT", null, "John", false, "Gustav", new byte[] { 0 }, new byte[] { 0 }, "Example Street 2", "MrJohn", "3500" },
+                    { 3L, "Krems an der Donau", "AT", null, "Heinz", false, "Gustav", new byte[] { 0 }, new byte[] { 0 }, "Example Street 3", "Ketchup", "3500" },
+                    { 4L, "Krems an der Donau", "AT", null, "Olaf", false, "Gustav", new byte[] { 0 }, new byte[] { 0 }, "Example Street 4", "Olaf", "3500" },
+                    { 5L, "Krems an der Donau", "AT", null, "Hans", false, "Gustav", new byte[] { 0 }, new byte[] { 0 }, "Example Street 5", "hansi12", "3500" }
                 });
 
             migrationBuilder.InsertData(
@@ -193,8 +196,8 @@ namespace Feedback_API.Migrations
                 columns: new[] { "ID", "PlaceID", "Rating", "Text", "Time", "UserID" },
                 values: new object[,]
                 {
-                    { 2L, 1L, 5, "nice", new DateTime(2020, 2, 20, 14, 9, 17, 279, DateTimeKind.Local).AddTicks(9471), 1L },
-                    { 1L, 2L, 2, "meh", new DateTime(2020, 2, 20, 14, 9, 17, 277, DateTimeKind.Local).AddTicks(515), 2L }
+                    { 2L, 1L, 5, "nice", new DateTime(2020, 2, 25, 13, 36, 50, 648, DateTimeKind.Local).AddTicks(3428), 1L },
+                    { 1L, 2L, 2, "meh", new DateTime(2020, 2, 25, 13, 36, 50, 644, DateTimeKind.Local).AddTicks(5262), 2L }
                 });
 
             migrationBuilder.InsertData(

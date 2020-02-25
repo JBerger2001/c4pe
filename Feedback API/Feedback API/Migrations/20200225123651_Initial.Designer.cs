@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Feedback_API.Migrations
 {
     [DbContext(typeof(FeedbackContext))]
-    [Migration("20200220130917_Initial")]
+    [Migration("20200225123651_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -231,7 +231,7 @@ namespace Feedback_API.Migrations
                             PlaceID = 2L,
                             Rating = 2,
                             Text = "meh",
-                            Time = new DateTime(2020, 2, 20, 14, 9, 17, 277, DateTimeKind.Local).AddTicks(515),
+                            Time = new DateTime(2020, 2, 25, 13, 36, 50, 644, DateTimeKind.Local).AddTicks(5262),
                             UserID = 2L
                         },
                         new
@@ -240,7 +240,7 @@ namespace Feedback_API.Migrations
                             PlaceID = 1L,
                             Rating = 5,
                             Text = "nice",
-                            Time = new DateTime(2020, 2, 20, 14, 9, 17, 279, DateTimeKind.Local).AddTicks(9471),
+                            Time = new DateTime(2020, 2, 25, 13, 36, 50, 648, DateTimeKind.Local).AddTicks(3428),
                             UserID = 1L
                         });
                 });
@@ -251,7 +251,10 @@ namespace Feedback_API.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint");
 
-                    b.Property<string>("Address")
+                    b.Property<string>("City")
+                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+
+                    b.Property<string>("Country")
                         .HasColumnType("longtext CHARACTER SET utf8mb4");
 
                     b.Property<string>("Description")
@@ -272,8 +275,14 @@ namespace Feedback_API.Migrations
                     b.Property<byte[]>("PasswordSalt")
                         .HasColumnType("longblob");
 
+                    b.Property<string>("Street")
+                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+
                     b.Property<string>("Username")
                         .IsRequired()
+                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+
+                    b.Property<string>("ZipCode")
                         .HasColumnType("longtext CHARACTER SET utf8mb4");
 
                     b.HasKey("ID");
@@ -284,57 +293,72 @@ namespace Feedback_API.Migrations
                         new
                         {
                             ID = 1L,
-                            Address = "3500 Krems an der Donau",
+                            City = "Krems an der Donau",
+                            Country = "AT",
                             FirstName = "Peter",
                             IsVerified = false,
                             LastName = "Gustav",
                             PasswordHash = new byte[] { 0 },
                             PasswordSalt = new byte[] { 0 },
-                            Username = "pete"
+                            Street = "Example Street 1",
+                            Username = "pete",
+                            ZipCode = "3500"
                         },
                         new
                         {
                             ID = 2L,
-                            Address = "3500 Krems an der Donau",
+                            City = "Krems an der Donau",
+                            Country = "AT",
                             FirstName = "John",
                             IsVerified = false,
                             LastName = "Gustav",
                             PasswordHash = new byte[] { 0 },
                             PasswordSalt = new byte[] { 0 },
-                            Username = "MrJohn"
+                            Street = "Example Street 2",
+                            Username = "MrJohn",
+                            ZipCode = "3500"
                         },
                         new
                         {
                             ID = 3L,
-                            Address = "3500 Krems an der Donau",
+                            City = "Krems an der Donau",
+                            Country = "AT",
                             FirstName = "Heinz",
                             IsVerified = false,
                             LastName = "Gustav",
                             PasswordHash = new byte[] { 0 },
                             PasswordSalt = new byte[] { 0 },
-                            Username = "Ketchup"
+                            Street = "Example Street 3",
+                            Username = "Ketchup",
+                            ZipCode = "3500"
                         },
                         new
                         {
                             ID = 4L,
-                            Address = "3500 Krems an der Donau",
+                            City = "Krems an der Donau",
+                            Country = "AT",
                             FirstName = "Olaf",
                             IsVerified = false,
                             LastName = "Gustav",
                             PasswordHash = new byte[] { 0 },
                             PasswordSalt = new byte[] { 0 },
-                            Username = "Olaf"
+                            Street = "Example Street 4",
+                            Username = "Olaf",
+                            ZipCode = "3500"
                         },
                         new
                         {
                             ID = 5L,
-                            Address = "3500 Krems an der Donau",
+                            City = "Krems an der Donau",
+                            Country = "AT",
                             FirstName = "Hans",
                             IsVerified = false,
                             LastName = "Gustav",
                             PasswordHash = new byte[] { 0 },
                             PasswordSalt = new byte[] { 0 },
-                            Username = "hansi12"
+                            Street = "Example Street 5",
+                            Username = "hansi12",
+                            ZipCode = "3500"
                         });
                 });
 
