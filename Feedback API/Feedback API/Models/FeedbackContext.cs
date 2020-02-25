@@ -27,11 +27,11 @@ namespace Feedback_API.Models
 
             modelBuilder.Entity<User>().HasData(new User[]
             {
-                new User { ID = 1, Address = "3500 Krems an der Donau", FirstName = "Peter", LastName = "Gustav", Username = "pete", PasswordHash = new byte[]{0}, PasswordSalt = new byte[]{0}},
-                new User { ID = 2, Address = "3500 Krems an der Donau", FirstName = "John", LastName = "Gustav", Username = "MrJohn", PasswordHash = new byte[]{0}, PasswordSalt = new byte[]{0}},
-                new User { ID = 3, Address = "3500 Krems an der Donau", FirstName = "Heinz", LastName = "Gustav", Username = "Ketchup", PasswordHash = new byte[]{0}, PasswordSalt = new byte[]{0}},
-                new User { ID = 4, Address = "3500 Krems an der Donau", FirstName = "Olaf", LastName = "Gustav", Username = "Olaf", PasswordHash = new byte[]{0}, PasswordSalt = new byte[]{0}},
-                new User { ID = 5, Address = "3500 Krems an der Donau", FirstName = "Hans", LastName = "Gustav", Username = "hansi12", PasswordHash = new byte[]{0}, PasswordSalt = new byte[]{0}}
+                new User { ID = 1, ZipCode = "3500", City = "Krems an der Donau", Street = "Example Street 1", Country = "AT", FirstName = "Peter", LastName = "Gustav", Username = "pete", PasswordHash = new byte[]{0}, PasswordSalt = new byte[]{0}},
+                new User { ID = 2, ZipCode = "3500", City = "Krems an der Donau", Street = "Example Street 2", Country = "AT", FirstName = "John", LastName = "Gustav", Username = "MrJohn", PasswordHash = new byte[]{0}, PasswordSalt = new byte[]{0}},
+                new User { ID = 3, ZipCode = "3500", City = "Krems an der Donau", Street = "Example Street 3", Country = "AT", FirstName = "Heinz", LastName = "Gustav", Username = "Ketchup", PasswordHash = new byte[]{0}, PasswordSalt = new byte[]{0}},
+                new User { ID = 4, ZipCode = "3500", City = "Krems an der Donau", Street = "Example Street 4", Country = "AT", FirstName = "Olaf", LastName = "Gustav", Username = "Olaf", PasswordHash = new byte[]{0}, PasswordSalt = new byte[]{0}},
+                new User { ID = 5, ZipCode = "3500", City = "Krems an der Donau", Street = "Example Street 5", Country = "AT", FirstName = "Hans", LastName = "Gustav", Username = "hansi12", PasswordHash = new byte[]{0}, PasswordSalt = new byte[]{0}}
             });
 
             modelBuilder.Entity<PlaceType>().HasData(new PlaceType[]
