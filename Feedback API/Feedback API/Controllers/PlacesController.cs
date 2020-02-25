@@ -14,7 +14,7 @@ using Microsoft.AspNetCore.Cors;
 
 namespace Feedback_API.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/places")]
     [ApiController]
     public class PlacesController : ControllerBase
     {

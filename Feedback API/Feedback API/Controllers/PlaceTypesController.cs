@@ -13,7 +13,7 @@ using Microsoft.AspNetCore.Cors;
 
 namespace Feedback_API.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/placetypes")]
     [ApiController]
     public class PlaceTypesController : ControllerBase
     {
@@ -107,7 +107,7 @@ namespace Feedback_API.Controllers
 
         // DELETE: api/PlaceTypes/5
         [HttpDelete("{id}")]
-        public async Task<ActionResult<PlaceType>> DeletePlaceType(long id)
+        public async Task<IActionResult> DeletePlaceType(long id)
         {
             var placeType = await _context.PlaceTypes.FindAsync(id);
             if (placeType == null)
@@ -118,7 +118,7 @@ namespace Feedback_API.Controllers
             _context.PlaceTypes.Remove(placeType);
             await _context.SaveChangesAsync();
 
-            return placeType;
+            return NoContent();
         }
 
         private bool PlaceTypeExists(long id)
