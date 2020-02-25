@@ -35,6 +35,7 @@ namespace Feedback_API.Controllers
             var places = await _context.Places
                             .Include(p => p.PlaceType)
                             .Include(p => p.OpeningTimes)
+                            .Include(p => p.Reviews)
                             .ToListAsync();
 
             return _mapper.Map<List<PlaceResponse>>(places);
@@ -47,6 +48,7 @@ namespace Feedback_API.Controllers
             var place = await _context.Places
                             .Include(p => p.PlaceType)
                             .Include(p => p.OpeningTimes)
+                            .Include(p => p.Reviews)
                             .FirstOrDefaultAsync(i => i.ID == id);
 
             if (place == null)
@@ -318,14 +320,20 @@ namespace Feedback_API.Controllers
 
         // POST: api/Places/5/Reviews
         [HttpPost("{placeId}/Reviews")]
-        public async Task<ActionResult<ReviewResponse>> PostReview(long placeId, ReviewRequest placeRequest)
+        public async Task<ActionResult<ReviewResponse>> PostReview(long placeId, ReviewRequest reviewRequest)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            var review = _mapper.Map<Review>(placeRequest);
+            var userAlreadyReviewed = await _context.Reviews.AnyAsync(r => r.PlaceID == placeId && r.UserID == reviewRequest.UserID);
+            if (userAlreadyReviewed)
+            {
+                return BadRequest("This user already reviewed this place");
+            }
+
+            var review = _mapper.Map<Review>(reviewRequest);
             review.PlaceID = placeId;
 
             _context.Reviews.Add(review);

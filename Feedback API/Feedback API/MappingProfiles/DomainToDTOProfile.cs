@@ -14,13 +14,23 @@ namespace Feedback_API.MappingProfiles
         {
             CreateMap<Place, PlaceResponse>()
                 .ForMember(dest => dest.OpeningTimes, opt =>
+                {
                     opt.MapFrom(src => src.OpeningTimes.Select(ot => new OpeningTimeResponse()
                     {
                         ID = ot.ID,
                         Day = ot.Day,
                         Open = ot.Open.ToString(),
                         Close = ot.Close.ToString()
-                    }).ToList()))
+                    }).ToList());
+                })
+                .ForMember(dest => dest.Rating, opt =>
+                {
+                    opt.MapFrom(src => (src.Reviews.Count == 0) ? 0 : src.Reviews.Average(r => r.Rating));
+                })
+                .ForMember(dest => dest.RatingCount, opt =>
+                {
+                    opt.MapFrom(src => src.Reviews.Count);
+                })
                 .ForSourceMember(src => src.Reviews, opt => opt.DoNotValidate());
 
             CreateMap<OpeningTime, OpeningTimeResponse>();
