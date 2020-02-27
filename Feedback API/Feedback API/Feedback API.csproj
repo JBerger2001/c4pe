@@ -45,6 +45,10 @@
     <Compile Remove="Migrations\20200220130917_Initial.Designer.cs" />
     <Compile Remove="Migrations\20200225122616_SplitAddressProperty.cs" />
     <Compile Remove="Migrations\20200225122616_SplitAddressProperty.Designer.cs" />
+    <Compile Remove="Migrations\20200225123651_Initial.cs" />
+    <Compile Remove="Migrations\20200225123651_Initial.Designer.cs" />
+    <Compile Remove="Migrations\20200227132817_initial.cs" />
+    <Compile Remove="Migrations\20200227132817_initial.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

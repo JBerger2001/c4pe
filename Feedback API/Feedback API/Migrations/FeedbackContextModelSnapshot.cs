@@ -229,7 +229,7 @@ namespace Feedback_API.Migrations
                             PlaceID = 2L,
                             Rating = 2,
                             Text = "meh",
-                            Time = new DateTime(2020, 2, 25, 13, 36, 50, 644, DateTimeKind.Local).AddTicks(5262),
+                            Time = new DateTime(2020, 2, 27, 14, 29, 39, 842, DateTimeKind.Local).AddTicks(5742),
                             UserID = 2L
                         },
                         new
@@ -238,7 +238,7 @@ namespace Feedback_API.Migrations
                             PlaceID = 1L,
                             Rating = 5,
                             Text = "nice",
-                            Time = new DateTime(2020, 2, 25, 13, 36, 50, 648, DateTimeKind.Local).AddTicks(3428),
+                            Time = new DateTime(2020, 2, 27, 14, 29, 39, 845, DateTimeKind.Local).AddTicks(5482),
                             UserID = 1L
                         });
                 });

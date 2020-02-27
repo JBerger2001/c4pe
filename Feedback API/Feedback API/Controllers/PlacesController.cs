@@ -11,6 +11,7 @@ using Feedback_API.Models.Responses;
 using Feedback_API.Models.Requests;
 using Feedback_API.Models.Domain;
 using Microsoft.AspNetCore.Cors;
+using Feedback_API.Parameters;
 
 namespace Feedback_API.Controllers
 {
@@ -30,12 +31,14 @@ namespace Feedback_API.Controllers
         #region PLACES
         // GET: api/Places
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<PlaceResponse>>> GetPlaces()
+        public async Task<ActionResult<IEnumerable<PlaceResponse>>> GetPlaces([FromQuery]PlacesParameter placesParameter)
         {
             var places = await _context.Places
                             .Include(p => p.PlaceType)
                             .Include(p => p.OpeningTimes)
                             .Include(p => p.Reviews)
+                            .Skip((placesParameter.PageNumber-1)*placesParameter.PageSize)
+                            .Take(placesParameter.PageSize)
                             .ToListAsync();
 
             return _mapper.Map<List<PlaceResponse>>(places);

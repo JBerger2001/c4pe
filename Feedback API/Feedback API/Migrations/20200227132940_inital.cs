@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Feedback_API.Migrations
 {
-    public partial class Initial : Migration
+    public partial class inital : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -196,8 +196,8 @@ namespace Feedback_API.Migrations
                 columns: new[] { "ID", "PlaceID", "Rating", "Text", "Time", "UserID" },
                 values: new object[,]
                 {
-                    { 2L, 1L, 5, "nice", new DateTime(2020, 2, 25, 13, 36, 50, 648, DateTimeKind.Local).AddTicks(3428), 1L },
-                    { 1L, 2L, 2, "meh", new DateTime(2020, 2, 25, 13, 36, 50, 644, DateTimeKind.Local).AddTicks(5262), 2L }
+                    { 2L, 1L, 5, "nice", new DateTime(2020, 2, 27, 14, 29, 39, 845, DateTimeKind.Local).AddTicks(5482), 1L },
+                    { 1L, 2L, 2, "meh", new DateTime(2020, 2, 27, 14, 29, 39, 842, DateTimeKind.Local).AddTicks(5742), 2L }
                 });
 
             migrationBuilder.InsertData(
