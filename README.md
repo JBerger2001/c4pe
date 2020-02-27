@@ -14,8 +14,18 @@ Grant the user 'feedback' all permissions on the feedback database:
 
 `GRANT ALL PRIVILEGES ON FeedbackDB.* TO 'feedback'@'localhost';`
 
-Additionally you need to save the MariaDB connection string in the environment variable `FeedbackDB_ConnectionString`:
+Additionally you need to add the secret JWT token and the MariaDB connection string in appsettings.json:
 
-`Server=localhost;Database=FeedbackDB;Uid=feedback;Pwd=<password>;`
+```
+{
+  "AppSettings": {
+    "Token": "<your token here>"
+  },
+  "ConnectionStrings": {
+    "FeedbackDB": "Server=localhost;Database=FeedbackDB;Uid=feedback;Pwd=<password>;"
+  }
+  ...
+}
+```
 
 When the project is run it will create the database if it doesn't exist yet.
