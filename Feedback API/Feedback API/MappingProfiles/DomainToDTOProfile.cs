@@ -27,7 +27,7 @@ namespace Feedback_API.MappingProfiles
                 {
                     opt.MapFrom(src => (src.Reviews.Count == 0) ? 0 : src.Reviews.Average(r => r.Rating));
                 })
-                .ForMember(dest => dest.RatingCount, opt =>
+                .ForMember(dest => dest.ReviewCount, opt =>
                 {
                     opt.MapFrom(src => src.Reviews.Count);
                 })

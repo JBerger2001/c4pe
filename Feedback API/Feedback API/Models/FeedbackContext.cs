@@ -43,9 +43,9 @@ namespace Feedback_API.Models
 
             modelBuilder.Entity<Place>().HasData(new Place[]
             {
-                new Place { ID = 1, Name = "Coffeehut", Address = "3500 Krems an der Donau", PlaceTypeID = 1, IsVerified = true },
-                new Place { ID = 2, Name = "Footly", Address = "3500 Krems an der Donau", PlaceTypeID = 2, IsVerified = true },
-                new Place { ID = 3, Name = "Gusto Generic", Address = "3500 Krems an der Donau", PlaceTypeID = 3, IsVerified = true },
+                new Place { ID = 1, Name = "Coffeehut", ZipCode = "3500", City = "Krems an der Donau", Street = "City Street 1", Country = "AT", PlaceTypeID = 1, IsVerified = true },
+                new Place { ID = 2, Name = "Footly", ZipCode = "3500", City = "Krems an der Donau", Street = "City Street 2", Country = "AT", PlaceTypeID = 2, IsVerified = true },
+                new Place { ID = 3, Name = "Gusto Generic", ZipCode = "3500", City = "Krems an der Donau", Street = "City Street 3", Country = "AT", PlaceTypeID = 3, IsVerified = true },
             });
 
             modelBuilder.Entity<OpeningTime>().HasData(new OpeningTime[]
@@ -59,6 +59,7 @@ namespace Feedback_API.Models
             {
                 new Review { ID = 1, PlaceID = 2, UserID = 2, Rating = 2, Time = DateTime.Now, Text = "meh" },
                 new Review { ID = 2, PlaceID = 1, UserID = 1, Rating = 5, Time = DateTime.Now, Text = "nice" },
+                new Review { ID = 3, PlaceID = 1, UserID = 2, Rating = 4, Time = DateTime.Now, Text = "pretty good" },
             });
 
             modelBuilder.Entity<Reaction>().HasData(new Reaction[]
