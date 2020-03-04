@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Feedback_API.Migrations
 {
-    public partial class inital : Migration
+    public partial class Initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -50,7 +50,10 @@ namespace Feedback_API.Migrations
                 {
                     ID = table.Column<long>(nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    Address = table.Column<string>(nullable: false),
+                    Street = table.Column<string>(nullable: false),
+                    City = table.Column<string>(nullable: true),
+                    ZipCode = table.Column<string>(nullable: true),
+                    Country = table.Column<string>(nullable: true),
                     Name = table.Column<string>(nullable: false),
                     IsVerified = table.Column<bool>(nullable: false),
                     PlaceTypeID = table.Column<long>(nullable: false)
@@ -168,18 +171,18 @@ namespace Feedback_API.Migrations
 
             migrationBuilder.InsertData(
                 table: "places",
-                columns: new[] { "ID", "Address", "IsVerified", "Name", "PlaceTypeID" },
-                values: new object[] { 1L, "3500 Krems an der Donau", true, "Coffeehut", 1L });
+                columns: new[] { "ID", "City", "Country", "IsVerified", "Name", "PlaceTypeID", "Street", "ZipCode" },
+                values: new object[] { 1L, "Krems an der Donau", "AT", true, "Coffeehut", 1L, "City Street 1", "3500" });
 
             migrationBuilder.InsertData(
                 table: "places",
-                columns: new[] { "ID", "Address", "IsVerified", "Name", "PlaceTypeID" },
-                values: new object[] { 2L, "3500 Krems an der Donau", true, "Footly", 2L });
+                columns: new[] { "ID", "City", "Country", "IsVerified", "Name", "PlaceTypeID", "Street", "ZipCode" },
+                values: new object[] { 2L, "Krems an der Donau", "AT", true, "Footly", 2L, "City Street 2", "3500" });
 
             migrationBuilder.InsertData(
                 table: "places",
-                columns: new[] { "ID", "Address", "IsVerified", "Name", "PlaceTypeID" },
-                values: new object[] { 3L, "3500 Krems an der Donau", true, "Gusto Generic", 3L });
+                columns: new[] { "ID", "City", "Country", "IsVerified", "Name", "PlaceTypeID", "Street", "ZipCode" },
+                values: new object[] { 3L, "Krems an der Donau", "AT", true, "Gusto Generic", 3L, "City Street 3", "3500" });
 
             migrationBuilder.InsertData(
                 table: "openingtimes",
@@ -196,8 +199,9 @@ namespace Feedback_API.Migrations
                 columns: new[] { "ID", "PlaceID", "Rating", "Text", "Time", "UserID" },
                 values: new object[,]
                 {
-                    { 2L, 1L, 5, "nice", new DateTime(2020, 2, 27, 14, 29, 39, 845, DateTimeKind.Local).AddTicks(5482), 1L },
-                    { 1L, 2L, 2, "meh", new DateTime(2020, 2, 27, 14, 29, 39, 842, DateTimeKind.Local).AddTicks(5742), 2L }
+                    { 2L, 1L, 5, "nice", new DateTime(2020, 3, 4, 17, 36, 18, 350, DateTimeKind.Local).AddTicks(2076), 1L },
+                    { 3L, 1L, 4, "pretty good", new DateTime(2020, 3, 4, 17, 36, 18, 350, DateTimeKind.Local).AddTicks(2165), 2L },
+                    { 1L, 2L, 2, "meh", new DateTime(2020, 3, 4, 17, 36, 18, 345, DateTimeKind.Local).AddTicks(5757), 2L }
                 });
 
             migrationBuilder.InsertData(

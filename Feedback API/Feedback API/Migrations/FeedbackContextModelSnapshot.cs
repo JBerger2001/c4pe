@@ -74,8 +74,10 @@ namespace Feedback_API.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint");
 
-                    b.Property<string>("Address")
-                        .IsRequired()
+                    b.Property<string>("City")
+                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+
+                    b.Property<string>("Country")
                         .HasColumnType("longtext CHARACTER SET utf8mb4");
 
                     b.Property<bool>("IsVerified")
@@ -88,6 +90,13 @@ namespace Feedback_API.Migrations
                     b.Property<long>("PlaceTypeID")
                         .HasColumnType("bigint");
 
+                    b.Property<string>("Street")
+                        .IsRequired()
+                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+
+                    b.Property<string>("ZipCode")
+                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+
                     b.HasKey("ID");
 
                     b.HasIndex("PlaceTypeID");
@@ -98,26 +107,35 @@ namespace Feedback_API.Migrations
                         new
                         {
                             ID = 1L,
-                            Address = "3500 Krems an der Donau",
+                            City = "Krems an der Donau",
+                            Country = "AT",
                             IsVerified = true,
                             Name = "Coffeehut",
-                            PlaceTypeID = 1L
+                            PlaceTypeID = 1L,
+                            Street = "City Street 1",
+                            ZipCode = "3500"
                         },
                         new
                         {
                             ID = 2L,
-                            Address = "3500 Krems an der Donau",
+                            City = "Krems an der Donau",
+                            Country = "AT",
                             IsVerified = true,
                             Name = "Footly",
-                            PlaceTypeID = 2L
+                            PlaceTypeID = 2L,
+                            Street = "City Street 2",
+                            ZipCode = "3500"
                         },
                         new
                         {
                             ID = 3L,
-                            Address = "3500 Krems an der Donau",
+                            City = "Krems an der Donau",
+                            Country = "AT",
                             IsVerified = true,
                             Name = "Gusto Generic",
-                            PlaceTypeID = 3L
+                            PlaceTypeID = 3L,
+                            Street = "City Street 3",
+                            ZipCode = "3500"
                         });
                 });
 
@@ -229,7 +247,7 @@ namespace Feedback_API.Migrations
                             PlaceID = 2L,
                             Rating = 2,
                             Text = "meh",
-                            Time = new DateTime(2020, 2, 27, 14, 29, 39, 842, DateTimeKind.Local).AddTicks(5742),
+                            Time = new DateTime(2020, 3, 4, 17, 36, 18, 345, DateTimeKind.Local).AddTicks(5757),
                             UserID = 2L
                         },
                         new
@@ -238,8 +256,17 @@ namespace Feedback_API.Migrations
                             PlaceID = 1L,
                             Rating = 5,
                             Text = "nice",
-                            Time = new DateTime(2020, 2, 27, 14, 29, 39, 845, DateTimeKind.Local).AddTicks(5482),
+                            Time = new DateTime(2020, 3, 4, 17, 36, 18, 350, DateTimeKind.Local).AddTicks(2076),
                             UserID = 1L
+                        },
+                        new
+                        {
+                            ID = 3L,
+                            PlaceID = 1L,
+                            Rating = 4,
+                            Text = "pretty good",
+                            Time = new DateTime(2020, 3, 4, 17, 36, 18, 350, DateTimeKind.Local).AddTicks(2165),
+                            UserID = 2L
                         });
                 });
 

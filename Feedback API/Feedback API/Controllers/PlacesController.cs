@@ -12,6 +12,7 @@ using Feedback_API.Models.Requests;
 using Feedback_API.Models.Domain;
 using Microsoft.AspNetCore.Cors;
 using Feedback_API.Parameters;
+using Newtonsoft.Json;
 
 namespace Feedback_API.Controllers
 {
@@ -31,15 +32,17 @@ namespace Feedback_API.Controllers
         #region PLACES
         // GET: api/Places
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<PlaceResponse>>> GetPlaces([FromQuery]PlacesParameter placesParameter)
+        public async Task<ActionResult<IEnumerable<PlaceResponse>>> GetPlaces([FromQuery]PlacesParameters placesParameter)
         {
-            var places = await _context.Places
+            var places = PagedList<Place>.ToPagedList(await _context.Places
                             .Include(p => p.PlaceType)
                             .Include(p => p.OpeningTimes)
                             .Include(p => p.Reviews)
-                            .Skip((placesParameter.PageNumber-1)*placesParameter.PageSize)
-                            .Take(placesParameter.PageSize)
-                            .ToListAsync();
+                            .ToListAsync(),
+                            placesParameter.PageNumber,
+                            placesParameter.PageSize);
+
+            Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(places.Metadata));
 
             return _mapper.Map<List<PlaceResponse>>(places);
         }
@@ -170,7 +173,7 @@ namespace Feedback_API.Controllers
 
         // GET: api/Places/5/openingtimes
         [HttpGet("{id}/OpeningTimes")]
-        public async Task<ActionResult<IEnumerable<OpeningTimeResponse>>> GetOpeningTimes(long id)
+        public async Task<ActionResult<IEnumerable<OpeningTimeResponse>>> GetOpeningTimes([FromQuery]OpeningTimeParameters parameters, long id)
         {
             var place = await _context.Places
                             .Include(p => p.OpeningTimes)
@@ -181,7 +184,13 @@ namespace Feedback_API.Controllers
                 return NotFound();
             }
 
-            return _mapper.Map<List<OpeningTimeResponse>>(place.OpeningTimes);
+            var openingTimes = PagedList<OpeningTime>.ToPagedList(place.OpeningTimes, parameters.PageNumber, parameters.PageSize);
+
+            Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(openingTimes.Metadata));
+
+            var openingTimesFiltered = openingTimes.Where(ot => ot.Day == parameters.Day);
+
+            return _mapper.Map<List<OpeningTimeResponse>>(openingTimes);
         }
 
         // POST: api/Places/5/OpeningTimes
@@ -286,7 +295,7 @@ namespace Feedback_API.Controllers
         #region REVIEWS
         // GET: api/Places/5/Reviews
         [HttpGet("{id}/Reviews")]
-        public async Task<ActionResult<IEnumerable<ReviewResponse>>> GetReviews(long id)
+        public async Task<ActionResult<IEnumerable<ReviewResponse>>> GetReviews([FromQuery]ReviewParameters parameters, long id)
         {
             var place = await _context.Places
                             .Include(p => p.Reviews)
@@ -297,13 +306,15 @@ namespace Feedback_API.Controllers
                 return NotFound();
             }
 
-            var reviews = place.Reviews;
+            var reviews = PagedList<Review>.ToPagedList(place.Reviews, parameters.PageNumber, parameters.PageSize);
             foreach (var review in reviews)
             {
                 review.User = await _context.Users.FindAsync(review.UserID);
             }
 
-            return _mapper.Map<List<ReviewResponse>>(place.Reviews);
+            Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(reviews.Metadata));
+
+            return _mapper.Map<List<ReviewResponse>>(reviews);
         }
 
         // GET: api/Places/5/Reviews/1

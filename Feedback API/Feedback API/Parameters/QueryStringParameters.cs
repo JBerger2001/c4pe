@@ -5,13 +5,14 @@ using System.Threading.Tasks;
 
 namespace Feedback_API.Parameters
 {
-    public class PlacesParameter
+    public abstract class QueryStringParameters
     {
         const int maxPageSize = 50;
         public int PageNumber { get; set; } = 1;
 
         private int _pageSize = 10;
-        public int PageSize 
+
+        public int PageSize
         {
             get
             {
@@ -20,7 +21,7 @@ namespace Feedback_API.Parameters
             set
             {
                 _pageSize = (value > maxPageSize) ? maxPageSize : value;
-            } 
+            }
         }
     }
 }
