@@ -7,14 +7,16 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace FeedbackWebApp.Pages
 {
-    public class OverviewModel : PageModel
+    public class AddPlaceModel : PageModel
     {
-        public List<Place> places { get; set; } = new List<Place>();
-
+        
         public void OnGet()
         {
-            //HttpRequests req = new HttpRequests();
-            //places = await req.GetPlacesAsync();
+
+        }
+        public void OnPost()
+        {
+
         }
     }
 }

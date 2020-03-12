@@ -7,13 +7,9 @@
 <div class="loginDiv">
     <h1>SignUp</h1>
     <form action="/" method="post">
-        <label>E-Mail address:*</label>
-        <br />
-        <input class="textBLogin" type="text" name="email" value="" />
-        <br />
         <label>Username:*</label>
         <br />
-        <input class="textBLogin" type="text" name="nUsername" value="" />
+        <input class="textBLogin" type="text" name="username" value="" />
         <br />
         <label>Firstname:*</label>
         <br />
@@ -32,8 +28,9 @@
         <input class="textBLogin" type="text" name="pwdC" value="" />
         <br />
         <input type="checkbox" name="check" />
-        <p name="check" style="display:inline-block" >I agree and have read the <a>privacy policy</a></p>
+        <p name="check" style="display:inline-block">I agree and have read the <a>privacy policy</a></p>
         <br />
-        <button class="btnLogin" onclick="SendSignUpData">Sign Up</button>
+
     </form>
+    <button class="btnLogin" onclick="LogIn()">Sign Up</button>
 </div>

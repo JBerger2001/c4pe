@@ -5,18 +5,29 @@
 
 //document.getElementById("Overview").addEventListener('click', loadPlaces);
 
-function loadPlaces() {
-    var url = "http://77.244.251.110/api/Places";
-    var xhr = new XMLHttpRequest();
-    xhr.open('GET', url);
-    //xhr.setRequestHeader("Content-Type", "application/json");
-    xhr.send();
-    xhr.onload = function () {
-        //arr = xhr.response;
-        alert(xhr.response);
-    }
-    //arr.forEach(item => console.log(item));
-}
+var user = 'unknown';
+
 function LogIn() {
-    location.href = location.href + '/Overview';
+    user = 'Franzi';    // Benutzername
+    window.location.replace("http://localhost:58115/Overview");
+}
+function LogInGuest() {
+    user = 'unknown';
+    window.location.replace("http://localhost:58115/Overview");
+}
+
+function CheckUser() {
+    if (user == "Franzi") {
+        document.getElementById("btnAddPlace").style.visibility = 'visible';
+    }
+    else if(user=="unknown"){
+        document.getElementById("btnAddPlace").style.visibility = 'hidden';
+    }
+}
+function AddPlace(){
+    window.location.replace("http://localhost:58115/AddPlace");
+}
+function CreateNewPlace() {
+    window.location.replace("http://localhost:58115/Overview");
+    alert("New place created!")
 }

@@ -8,10 +8,14 @@ namespace FeedbackWebApp
     public class Place
     {
         public long Id { get; set; }
-        public string Name { get; set; }
         public string Address { get; set; }
-        public openingTimes OpenTimes { get; set; }
-        public string Type { get; set; }
+        public string Name { get; set; }
         public bool IsVerified { get; set; }
+        public float Rating { get; set; }
+        public int ReviewCount { get; set; }
+        public PlaceType PlaceType { get; set; }
+        public List<openingTimes> OpeningTimes { get; set; }
+
+
     }
 }

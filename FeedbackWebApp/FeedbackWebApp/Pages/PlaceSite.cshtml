@@ -1,18 +1,19 @@
 ﻿@page
 @model FeedbackWebApp.Pages.PlaceSiteModel
 @{
-    var place2 = new Place()
-    {
-        Id = 23754,
-        Name = "Franzis Burger",
-        Address = "Dorfstrasse 23, 3483 Wagram",
-        Type = "Restaurant and Fast Food",
-        IsVerified = false,
-        OpenTimes = new openingTimes() { day = new TimeSpan(), open = new TimeSpan(10, 0, 0), close = new TimeSpan(18, 0, 0) }
-    };
+    //var place = new Place()
+    //{
+    //    Id = 23754,
+    //    Name = "Franzis Burger",
+    //    Address = "Dorfstrasse 23, 3483 Wagram",
+    //    Type = "Restaurant and Fast Food",
+    //    IsVerified = false,
+    //    OpenTimes = new openingTimes() { day = new TimeSpan(), open = new TimeSpan(10, 0, 0), close = new TimeSpan(18, 0, 0) }
+    //};
     HttpRequests req = new HttpRequests();
-    Place place = await req.GetProductAsync("http://77.244.251.110/api/Places/" + req.PlaceId);
+    Place place = await req.GetPlaceAsync(2);
     ViewData["Title"] = @place.Name;
+    
 }
 
 <div class="container">
@@ -20,8 +21,12 @@
         <img src="https://via.placeholder.com/300x200" alt="Bild" style="float: left" />
         <div style="margin-left: 50px">
             <h3>@place.Name</h3>
-            <h4>@place.Type</h4>
-            <p>Opening time: @place.OpenTimes.day.Days , opens at @place.OpenTimes.open, closes at @place.OpenTimes.close</p>
+            <h4>@place.PlaceType.Name</h4>
+            <p>Opening times: </p>
+            @foreach(openingTimes o in place.OpeningTimes)
+            {
+                <p>@o.day: open from @o.open  to @o.close</p>
+            }
             <p>Address: @place.Address</p>
         </div>
     </div>

@@ -1,0 +1,72 @@
+﻿@page
+@model FeedbackWebApp.Pages.AddPlaceModel
+@{
+    ViewData["Title"] = "Add new Place";
+    HttpRequests req = new HttpRequests();
+    List<PlaceType> types = new List<PlaceType>();
+    types = await req.GetPlaceTypesAsync();
+}
+
+<div class="loginDiv">
+    <h2>Add new Place</h2>
+    <form action="/" method="post">
+        <label class="labelMargin">Name of the place: </label>
+        <br />
+        <input class="textBLogin" type="text" name="placeName" value="" />
+        <br />
+        <label class="labelMargin">Address: </label>
+        <br />
+        <input class="textBLogin" type="text" name="placeAddress" value="" />
+        <br />
+        <label class="labelMargin">Type of place: </label>
+        <select class="textBLogin" name="placetypes">
+            @foreach (PlaceType t in types)
+            {
+                <option name="@t.Id">@t.Name</option>
+            }
+        </select>
+        <br />
+        <label class="labelMargin">Opening Times: </label>
+        <br />
+        <label>Monday: </label>
+        <div class="times">
+            <label>open: </label><input name="MoOpen" type="time" /> <label>close: </label><input name="MoClose" type="time" />
+        </div>
+        <br />
+        <label>Tuesday: </label>
+        <div class="times">
+            <label>open: </label><input name="TuOpen" type="time" /> <label>close: </label><input name="TuClose" type="time" />
+        </div>
+        <br />
+        <label>Wednesday: </label>
+        <div class="times">
+            <label>open: </label><input name="WeOpen" type="time" /> <label>close: </label><input name="WeClose" type="time" />
+        </div>
+        <br />
+        <label>Thursday: </label>
+        <div class="times">
+            <label>open: </label><input name="ThOpen" type="time" /> <label>close: </label><input name="ThClose" type="time" />
+        </div>
+        <br />
+        <label>Friday: </label>
+        <div class="times">
+            <label>open: </label><input name="FrOpen" type="time" /> <label>close: </label><input name="FrClose" type="time" />
+        </div>
+        <br />
+        <label>Saturday: </label>
+        <div class="times">
+            <label>open: </label><input name="SaOpen" type="time" /> <label>close: </label><input name="SaClose" type="time" />
+        </div>
+        <br />
+        <label>Sunday: </label>
+        <div class="times">
+            <label>open: </label><input name="SuOpen" type="time" /> <label>close: </label><input name="SuClose" type="time" />
+        </div>
+        <button class="btnNewP" style="border: none;color: white;padding: 6px 20px;
+        text-align: center;margin-top: 10px;background-color: #555555;cursor: pointer;" onclick="CreateNewPlace()">
+            Create new place
+        </button>
+    </form>
+    
+</div>
+

@@ -10,53 +10,84 @@ namespace FeedbackWebApp
 {
     public class HttpRequests
     {
-        HttpClient client;
-        public static int PlaceId { get; set; }
+        HttpClient client = new HttpClient();
+        private string path = "http://77.244.251.110/";
 
-        public HttpRequests()
-        {
-            var proxy = new WebProxy
-            {
-                Address = new Uri($"http://192.168.1.96:3128"),
-                BypassProxyOnLocal = false,
-                UseDefaultCredentials = false,
-                // *** These creds are given to the proxy server, not the web server ***
-                Credentials = new NetworkCredential( userName: "f.grausenburger", password: "franzy14" )
-            };
-            var httpClientHandler = new HttpClientHandler { Proxy = proxy };
-            client = new HttpClient(handler: httpClientHandler, disposeHandler: true);
-        }
-
-        public async Task<Place> GetProductAsync(string path)
+        public async Task<Place> GetPlaceAsync(int placeId)
         {
             Place place = null;
-            HttpResponseMessage response = await client.GetAsync(path);
+            HttpResponseMessage response = await client.GetAsync(path+ "api/places/"+placeId);
             if (response.IsSuccessStatusCode)
             {
-                place = await response.Content.ReadAsAsync<Place>();
+                var data = JsonConvert.DeserializeObject<Place>(await client.GetStringAsync(path + "api/places"));
+                place = data;
             }
             return place;
         }
-        public async Task<List<Place>> GetProductsAsync(string path)
+        public async Task<string> GetPlaceTypeAsync(int typeId)
+        {
+            PlaceType placetype = null;
+            HttpResponseMessage response = await client.GetAsync(path + "api/placetype/" + typeId);
+            if (response.IsSuccessStatusCode)
+            {
+                placetype = await response.Content.ReadAsAsync<PlaceType>();
+            }
+            return placetype.Name;
+        }
+        public async Task<List<PlaceType>> GetPlaceTypesAsync()
+        {
+            List<PlaceType> placetypes = new List<PlaceType>();
+            string response = await client.GetStringAsync(path + "api/placetypes");
+            var data = JsonConvert.DeserializeObject<PlaceType[]>(response);
+            for (int i = 0; i < data.Length; i++)
+            {
+                placetypes.Add(data[i]);
+            }
+            return placetypes;
+        }
+        public async Task<List<Place>> GetPlacesAsync()
         {
             List<Place> places = new List<Place>();
-            string response = await client.GetStringAsync(path);
-            var data = JsonConvert.DeserializeObject<Place[]>(response);
-            for(int i = 0; i<data.Length; i++)
+            HttpResponseMessage response = await client.GetAsync(path + "api/places");
+            if (response.IsSuccessStatusCode)
             {
-                places.Add(data[i]);
+                string response2 = await client.GetStringAsync(path + "api/places");
+                var data = JsonConvert.DeserializeObject<Place[]>(response2);
+                
+                for (int i = 0; i < data.Length; i++)
+                {
+                    places.Add(data[i]);
+                }
             }
+            
             return places;
         }
 
-    //    public async Task<Uri> CreateProductAsync(Place place)
-    //    {
-    //        HttpResponseMessage response = await client.PostAsJsonAsync(
-    //            "api/places", place);
-    //        response.EnsureSuccessStatusCode();
+        //public async Task<Uri> CreatePlaceAsync(Place place)
+        //{
+        //    HttpResponseMessage response = await client.PostAsJsonAsync(
+        //        path+"api/Places", place);
+        //    response.EnsureSuccessStatusCode();
 
-    //        // return URI of the created resource.
-    //        return response.Headers.Location;
-    //    }
+        //    // return URI of the created resource.
+        //    return response.Headers.Location;
+        //}
+
+        //public async Task<Uri> CreateUserAsync(User u)
+        //{
+        //    HttpResponseMessage response = await client.PostAsJsonAsync(
+        //        path + "api/users", u);
+        //    response.EnsureSuccessStatusCode();
+
+        //    // return URI of the created resource.
+        //    return response.Headers.Location;
+        //}
+
+        //public async void LoginUser(User user)
+        //{
+        //    HttpResponseMessage response = await client.PostAsJsonAsync(
+        //        path+"api/users", user);
+        //    response.EnsureSuccessStatusCode();
+        //}
     }
 }
