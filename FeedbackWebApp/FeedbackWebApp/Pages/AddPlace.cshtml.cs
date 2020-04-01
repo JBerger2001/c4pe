@@ -14,9 +14,16 @@ namespace FeedbackWebApp.Pages
         {
 
         }
-        public void OnPost()
+        public async void OnPost()
         {
-
+            HttpRequests req = new HttpRequests();
+            int placetypeID = 2;  //Request.Form["placetypes"].
+            object place = new { Name=Request.Form["placeName"],
+                              Address= Request.Form["zipCode"]+" "+Request.Form["City"]+", "+Request.Form["Street"], 
+                              IsVerified=false,
+                              PlaceTypeID = placetypeID 
+            };
+            await req.CreatePlaceAsync(place);
         }
     }
 }

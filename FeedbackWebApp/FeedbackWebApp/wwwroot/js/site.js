@@ -27,6 +27,9 @@ function CheckUser() {
 function AddPlace(){
     window.location.replace("http://localhost:58115/AddPlace");
 }
+function AddPlaceType() {
+    window.location.replace("http://localhost:58115/AddPlaceType");
+}
 function CreateNewPlace() {
     window.location.replace("http://localhost:58115/Overview");
     alert("New place created!")

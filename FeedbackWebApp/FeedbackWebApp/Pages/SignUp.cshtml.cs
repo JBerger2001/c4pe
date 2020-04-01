@@ -13,15 +13,18 @@ namespace FeedbackWebApp.Pages
         {
 
         }
-        public void OnPost()
+        public async void OnPost()
         {
-            User u = new User() { Username = Request.Form["Username"], FirstName=Request.Form["fn"], LastName=Request.Form["ln"]};
-            if(Request.Form["pwd"]== Request.Form["pwdC"])
-            {
-                u.Password = Request.Form["pwd"];
+            User u = new User() { Username = Request.Form["username"], FirstName=Request.Form["fn"], LastName=Request.Form["ln"],
+                                  Password=Request.Form["pwd"], Description=Request.Form["description"],
+                                  Street =Request.Form["street"], ZipCode = Convert.ToInt32(Request.Form["zipCode"]),
+                                  City = Request.Form["city"], Country = Request.Form["country"]
+            };
+            //if(Request.Form["check"]==true)
+           // {
                 HttpRequests r = new HttpRequests();
-                //await r.CreateUserAsync(u);
-            }
+                await r.CreateUserAsync(u);
+            //}
         }
     }
 }

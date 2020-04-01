@@ -13,15 +13,16 @@ namespace FeedbackWebApp.Pages
         {
 
         }
-        public void OnPost()
+        public IActionResult OnPostLogIn()
         {
             User u = new User() { Username = Request.Form["username"], Password = Request.Form["pwd"] };
             HttpRequests r = new HttpRequests();
-            //r.LoginUser(u);
+            r.LoginUser(u);
+            return RedirectToPage("/Overview");
         }
-        public void OnPostguest()
+        public IActionResult OnPostGuest()
         {
-            //RedirectToPage("/Overview");
+            return RedirectToPage("/Overview");
         }
     }
 }

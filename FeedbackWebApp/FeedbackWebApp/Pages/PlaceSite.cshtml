@@ -10,24 +10,50 @@
     //    IsVerified = false,
     //    OpenTimes = new openingTimes() { day = new TimeSpan(), open = new TimeSpan(10, 0, 0), close = new TimeSpan(18, 0, 0) }
     //};
+
     HttpRequests req = new HttpRequests();
-    Place place = await req.GetPlaceAsync(2);
-    ViewData["Title"] = @place.Name;
-    
+    Place place = await req.GetPlaceAsync(4);
+    //string r = await req.GetPlaceAsync(4);
+    ViewData["Title"] = place.Name;
+
 }
 
 <div class="container">
-    <div>
-        <img src="https://via.placeholder.com/300x200" alt="Bild" style="float: left" />
-        <div style="margin-left: 50px">
+    <div style="margin-top:10px">
+        <img src="https://via.placeholder.com/300x200" alt="Bild" style="" />
+        <div style="">
             <h3>@place.Name</h3>
             <h4>@place.PlaceType.Name</h4>
             <p>Opening times: </p>
-            @foreach(openingTimes o in place.OpeningTimes)
+            @foreach (openingTimes o in place.OpeningTimes)
             {
-                <p>@o.day: open from @o.open  to @o.close</p>
+                @switch (o.Day)
+                {
+                    case 0:
+                        <p>Monday: open from @o.Open  to @o.Close</p>
+                        break;
+                    case 1:
+                        <p>Tuesday: open from @o.Open  to @o.Close</p>
+                        break;
+                    case 2:
+                        <p>Wednesday: open from @o.Open  to @o.Close</p>
+                        break;
+                    case 3:
+                        <p>Thursday: open from @o.Open  to @o.Close</p>
+                        break;
+                    case 4:
+                        <p>Friday: open from @o.Open  to @o.Close</p>
+                        break;
+                    case 5:
+                        <p>Saturday: open from @o.Open  to @o.Close</p>
+                        break;
+                    case 6:
+                        <p>Sunday: open from @o.Open  to @o.Close</p>
+                        break;
+                }
             }
-            <p>Address: @place.Address</p>
+            <p>Address: </p>
+
         </div>
     </div>
 </div>

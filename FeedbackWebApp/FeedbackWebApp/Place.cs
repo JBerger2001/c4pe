@@ -7,7 +7,7 @@ namespace FeedbackWebApp
 {
     public class Place
     {
-        public long Id { get; set; }
+        public long ID { get; set; }
         public string Address { get; set; }
         public string Name { get; set; }
         public bool IsVerified { get; set; }

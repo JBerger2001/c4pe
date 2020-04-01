@@ -9,12 +9,15 @@ namespace FeedbackWebApp.Pages
 {
     public class OverviewModel : PageModel
     {
-        public List<Place> places { get; set; } = new List<Place>();
+        public List<Place> places { get; set; }
 
-        public void OnGet()
+        public IActionResult OnGetAddPlace()
         {
-            //HttpRequests req = new HttpRequests();
-            //places = await req.GetPlacesAsync();
+            return RedirectToPage("/AddPlace");
+        }
+        public IActionResult OnGetAddPlaceType()
+        {
+            return RedirectToPage("/SignUp");
         }
     }
 }

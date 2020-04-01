@@ -7,26 +7,31 @@
 <h1>Overview</h1>
 <div class="container">
     @{
-        List<Place> places = new List<Place>();
-
+        bool verfied = true;
         Place newP = new Place()
         {
-            Address = "3483 Feuersbrunn, Weinstrasse 11",
+            //Address = "3483 Feuersbrunn, Weinstrasse 11",
             Name = "Gasthaus zum goldenen Kreuz",
             IsVerified = true,
 
         };
-        //OpenTimes = new openingTimes() { day = 0, open = new TimeSpan(10, 0, 0), close = new TimeSpan(18, 0, 0) }     EINZELN
-        //await req.CreateProductAsync(newP);
         HttpRequests req = new HttpRequests();
         Model.places = await req.GetPlacesAsync();
-
     }
-    
-    <div  style="height:40px">
+
+    @if(verfied==true){
+    <div style="height:40px">
         <button id="btnAddPlace" onclick="AddPlace()" style="border: none;color: white;padding: 6px 20px;text-align: center;margin-bottom: 10px;float: right;
-             background-color: #555555;cursor: pointer;">Add Place</button>
+         background-color: #555555;cursor: pointer;">
+            Add Place
+        </button>
+        <button id="btnAddPlace" onclick="AddPlaceType()" style="border: none;color: white;padding: 6px 20px;text-align: center;margin-bottom: 10px;float: right;
+         background-color: #555555;cursor: pointer;">
+            Add PlaceType
+        </button> 
+       
     </div>
+    }
 
     @foreach (Place p in Model.places)
     {
@@ -34,10 +39,10 @@
             <div class="panel-body">
                 <img src="https://via.placeholder.com/180" alt="Bild" style="float: left" />
                 <div style="float:left; margin-left: 5%">
-                    <a asp-page="/PlaceSite" onclick=""><h3>@p.Name</h3></a>    @* @RedirectToPage("PlaceSite", new { id = p.Id })*@
+                    <a onclick="" asp-page="/PlaceSite"><h3>@p.Name</h3></a>
                     <h4> @p.PlaceType.Name</h4>
-                    <p>Opening time:  @p.OpeningTimes[0] , opens at @p.OpeningTimes[0].open, closes at @p.OpeningTimes[0].close</p>
-                    <p>address: @p.Address</p>
+                    @* <p>Opening time:  @p.OpeningTimes[0].Day , opens at @p.OpeningTimes[0].Open, closes at @p.OpeningTimes[0].Close</p> *@
+                    <p>address: </p> @*@p.Address*@
                     <a href="#">See on Google Maps</a>
                 </div>
                 <div class="rating" style="float:right; margin-right: 5%; margin-top: 2%; text-align: right">
@@ -57,6 +62,5 @@
             </div>
         </div>
     }
-
 </div>
 

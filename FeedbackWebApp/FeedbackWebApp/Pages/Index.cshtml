@@ -6,7 +6,7 @@
 
 <h1>Login</h1>
 <div class="loginDiv">
-    <form action="/" method="post">
+    <form method="POST">
         <label>username: </label>
         <br />
         <input class="textBLogin" type="text" name="username" value="" />
@@ -16,7 +16,9 @@
         <input class="textBLogin" type="password" name="pwd" value="" />
         <br />
         <br />
-        <button class="btnLogin" onclick="" asp-page-handler="">Log In As Guest</button> 
+        <input type="submit" class="btnLogin" asp-page-handler="LogIn" value="Log In">
+        <input type="submit" class="btnLogin" asp-page-handler="Guest" value="Log In As Guest">
     </form>
 </div>
+<br />
 <p>Or <a asp-page="/SignUp">sign up</a> if you don't have an account already</p>

@@ -9,7 +9,6 @@ namespace FeedbackWebApp.Pages
 {
     public class PlaceSiteModel : PageModel
     {
-        [BindProperty(Name ="id", SupportsGet = true)]
         public int Id { get; set; }
         public void OnGet()
         {

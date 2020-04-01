@@ -13,7 +13,10 @@ namespace FeedbackWebApp
         public string LastName { get; set; }
         public string Password { get; set; }
         public string Description { get; set; }
-        public string Address { get; set; }
+        public string Street { get; set; }
+        public string City { get; set; }
+        public long ZipCode { get; set; }
+        public string Country { get; set; }
         public bool IsVerified { get; set; }
     }
 }
