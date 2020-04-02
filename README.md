@@ -14,17 +14,28 @@ Grant the user 'feedback' all permissions on the feedback database:
 
 `GRANT ALL PRIVILEGES ON FeedbackDB.* TO 'feedback'@'localhost';`
 
-Additionally you need to add the secret JWT token and the MariaDB connection string in appsettings.json:
+This is how your `appsettings.json` should look like. If it doesn't exist yet, create it and copy the JSON below. You need to replace the placeholders marked with `<...>`, e.g. with your secret JWT token and your database user password.
 
-```
+```json
 {
   "AppSettings": {
-    "Token": "<your token here>"
+    "Token": "<secret token>"
   },
   "ConnectionStrings": {
     "FeedbackDB": "Server=localhost;Database=FeedbackDB;Uid=feedback;Pwd=<password>;"
+  },
+  "SwaggerConfig": {
+    "JsonRoute": "swagger/{documentName}/swagger.json",
+    "Description": "Feedback API",
+    "UIEndpoint": "v1/swagger.json"
+  },
+  "Logging": {
+    "LogLevel": {
+      "Default": "Information",
+      "Microsoft": "Warning",
+      "Microsoft.Hosting.Lifetime": "Information"
+    }
   }
-  ...
 }
 ```
 
