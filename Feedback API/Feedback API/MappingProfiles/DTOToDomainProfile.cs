@@ -25,6 +25,9 @@ namespace Feedback_API.MappingProfiles
                 .ForMember(dest => dest.PlaceType, opt => opt.Ignore());
             CreateMap<PlaceRequest, Place>();
 
+            CreateMap<PlaceTypeResponse, PlaceType>();
+            CreateMap<PlaceTypeRequest, PlaceType>();
+
             CreateMap<OpeningTimeResponse, OpeningTime>();
             CreateMap<OpeningTimeRequest, OpeningTime>();
 

@@ -33,6 +33,8 @@ namespace Feedback_API.MappingProfiles
                 })
                 .ForSourceMember(src => src.Reviews, opt => opt.DoNotValidate());
 
+            CreateMap<PlaceType, PlaceTypeResponse>();
+
             CreateMap<OpeningTime, OpeningTimeResponse>();
 
             CreateMap<User, UserResponse>();

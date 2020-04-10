@@ -91,7 +91,7 @@ namespace Feedback_API.Controllers
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see https://aka.ms/RazorPagesCRUD.
         [HttpPost]
-        public async Task<ActionResult<PlaceTypeResponse>> PostPlaceType(PlaceTypeResponse placeTypeDTO)
+        public async Task<ActionResult<PlaceTypeResponse>> PostPlaceType(PlaceTypeRequest placeTypeDTO)
         {
             if (!ModelState.IsValid)
             {
@@ -102,7 +102,9 @@ namespace Feedback_API.Controllers
             _context.PlaceTypes.Add(placeType);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetPlaceType", new { id = placeType.ID }, placeType);
+            var placeTypeResponse = _mapper.Map<PlaceTypeResponse>(placeType);
+
+            return CreatedAtAction("GetPlaceType", new { id = placeType.ID }, placeTypeResponse);
         }
 
         // DELETE: api/PlaceTypes/5
