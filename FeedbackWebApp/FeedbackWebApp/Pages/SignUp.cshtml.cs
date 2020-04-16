@@ -17,7 +17,7 @@ namespace FeedbackWebApp.Pages
         {
             User u = new User() { Username = Request.Form["username"], FirstName=Request.Form["fn"], LastName=Request.Form["ln"],
                                   Password=Request.Form["pwd"], Description=Request.Form["description"],
-                                  Street =Request.Form["street"], ZipCode = Convert.ToInt32(Request.Form["zipCode"]),
+                                  Street =Request.Form["street"], ZipCode = Request.Form["zipCode"],
                                   City = Request.Form["city"], Country = Request.Form["country"]
             };
             //if(Request.Form["check"]==true)

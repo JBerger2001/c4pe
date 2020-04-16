@@ -13,12 +13,19 @@ namespace FeedbackWebApp.Pages
         {
 
         }
-        public IActionResult OnPostLogIn()
+        public async Task<IActionResult> OnPostLogIn()
         {
             User u = new User() { Username = Request.Form["username"], Password = Request.Form["pwd"] };
             HttpRequests r = new HttpRequests();
-            r.LoginUser(u);
-            return RedirectToPage("/Overview");
+            string x = await r.LoginUser(u);       // Token wird gespeichert
+            if (x != "")
+            {
+                return RedirectToPage("/Overview");
+            }
+            else
+            {
+                return null;
+            }
         }
         public IActionResult OnPostGuest()
         {

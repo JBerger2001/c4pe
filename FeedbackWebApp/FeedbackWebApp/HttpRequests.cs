@@ -58,14 +58,31 @@ namespace FeedbackWebApp
 
             return places;
         }
-
-        public async Task<Uri> CreatePlaceAsync(Object place)
+        public async Task<List<Review>> GetReviews(int placeId)
         {
-            string path2 = path + "api/places";
-            HttpResponseMessage response = await path2.PostJsonAsync(place);
-            response.EnsureSuccessStatusCode();
+            List<Review> places = new List<Review>();
+            string response = await client.GetStringAsync(path + "api/places/"+placeId+"/reviews");
+            var data = JsonConvert.DeserializeObject<Review[]>(response);
+            for (int i = 0; i < data.Length; i++)
+            {
+                places.Add(data[i]);
+            }
+            return places;
+        }
 
-            // return URI of the created resource.
+        public async Task<Place> CreatePlaceAsync(Object place)
+        {
+            Place response = await client.PostAsJsonAsync(
+                path + "api/places", place).ReceiveJson<Place>();
+            if(response!=null)
+                return response;
+            return null;
+        }
+        public async Task<Uri> CreatePlaceTypeAsync(PlaceType placetype)
+        {
+            HttpResponseMessage response = await client.PostAsJsonAsync(
+                path + "api/placetypes", placetype);
+            response.EnsureSuccessStatusCode();
             return response.Headers.Location;
         }
 
@@ -81,15 +98,31 @@ namespace FeedbackWebApp
             else
                 return "A problem ...";
         }
+        public async Task<openingTimes> CreateOpeningTime(object opti,long pID)
+        {
+            openingTimes response = await client.PostAsJsonAsync(
+                path + "api/places/"+pID+"/OpeningTimes", opti).ReceiveJson<openingTimes>();
+            return response;
+        }
 
-        public async void LoginUser(User user)
+        public async Task<Uri> CreateReview(object review,long placeID)
+        {
+            HttpResponseMessage response = await client.PostAsJsonAsync(
+                path + "api/places/"+placeID+"/Reviews", review);
+            response.EnsureSuccessStatusCode();
+            return response.Headers.Location;
+        }
+
+        public async Task<string> LoginUser(User user)
         {
             if (user.Username != "" && user.Password != "")
             {
                 HttpResponseMessage response = await client.PostAsJsonAsync(
                 path + "api/users/login", user);
                 response.EnsureSuccessStatusCode();
+                return await response.Content.ReadAsStringAsync();
             }
+            return "";
         }
     }
 }

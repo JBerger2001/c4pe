@@ -12,15 +12,17 @@
     //};
 
     HttpRequests req = new HttpRequests();
-    Place place = await req.GetPlaceAsync(4);
+    Place place = await req.GetPlaceAsync(1);
     //string r = await req.GetPlaceAsync(4);
     ViewData["Title"] = place.Name;
-
+    List<Review> reviews = new List<Review>();
+    reviews = await req.GetReviews(1);
+    bool isVerfied = true;
 }
 
 <div class="container">
     <div style="margin-top:10px">
-        <img src="https://via.placeholder.com/300x200" alt="Bild" style="" />
+        @* <img src="https://via.placeholder.com/600x390" alt="Bild" style="" /> *@
         <div style="">
             <h3>@place.Name</h3>
             <h4>@place.PlaceType.Name</h4>
@@ -52,7 +54,27 @@
                         break;
                 }
             }
-            <p>Address: </p>
+            <p>Address: @place.Street, @place.ZipCode @place.City , @place.Country</p>
+
+            @if (isVerfied)
+            {
+                <button id="btnAddPlace" onclick="AddReview()" style="border: none;color: white;padding: 6px 20px;text-align: center;margin-bottom: 10px;float: right;
+                background-color: #555555;cursor: pointer;margin-top: 10px">
+                    Add Review
+                </button>
+            }
+
+            <h3>Reviews: </h3>
+            @foreach (Review r in reviews)
+            {
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <p>@r.User.Username gives this @place.PlaceType.Name @r.Rating stars and says: </p>
+                        <br />
+                        <b>@r.Text</b>
+                    </div>
+                </div>
+            }
 
         </div>
     </div>

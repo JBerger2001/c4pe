@@ -41,8 +41,11 @@
                 <div style="float:left; margin-left: 5%">
                     <a onclick="" asp-page="/PlaceSite"><h3>@p.Name</h3></a>
                     <h4> @p.PlaceType.Name</h4>
-                    @* <p>Opening time:  @p.OpeningTimes[0].Day , opens at @p.OpeningTimes[0].Open, closes at @p.OpeningTimes[0].Close</p> *@
-                    <p>address: </p> @*@p.Address*@
+                    @if (p.OpeningTimes.Count!=0)
+                    {
+                        <p>Opening time:  @p.OpeningTimes[0].Day , opens at @p.OpeningTimes[0].Open, closes at @p.OpeningTimes[0].Close</p>
+                    }
+                    <p>address: @p.Street, @p.ZipCode @p.City , @p.Country</p>
                     <a href="#">See on Google Maps</a>
                 </div>
                 <div class="rating" style="float:right; margin-right: 5%; margin-top: 2%; text-align: right">

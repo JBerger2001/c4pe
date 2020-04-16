@@ -30,6 +30,9 @@ function AddPlace(){
 function AddPlaceType() {
     window.location.replace("http://localhost:58115/AddPlaceType");
 }
+function AddReview() {
+    window.location.replace("http://localhost:58115/AddReview");
+}
 function CreateNewPlace() {
     window.location.replace("http://localhost:58115/Overview");
     alert("New place created!")

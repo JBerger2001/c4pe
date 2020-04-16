@@ -9,7 +9,7 @@ namespace FeedbackWebApp
     {
         public long ID { get; set; }
         public int Day { get; set; }    //0=Montag ConvertDay(day);
-        public TimeSpan Open { get; set; }   
-        public TimeSpan Close { get; set; }
+        public string Open { get; set; }   
+        public string Close { get; set; }
     }
 }
