@@ -1,22 +1,13 @@
 ﻿@page
 @model FeedbackWebApp.Pages.PlaceSiteModel
 @{
-    //var place = new Place()
-    //{
-    //    Id = 23754,
-    //    Name = "Franzis Burger",
-    //    Address = "Dorfstrasse 23, 3483 Wagram",
-    //    Type = "Restaurant and Fast Food",
-    //    IsVerified = false,
-    //    OpenTimes = new openingTimes() { day = new TimeSpan(), open = new TimeSpan(10, 0, 0), close = new TimeSpan(18, 0, 0) }
-    //};
 
     HttpRequests req = new HttpRequests();
-    Place place = await req.GetPlaceAsync(1);
+    Place place = await req.GetPlaceAsync(16);
     //string r = await req.GetPlaceAsync(4);
     ViewData["Title"] = place.Name;
     List<Review> reviews = new List<Review>();
-    reviews = await req.GetReviews(1);
+    reviews = await req.GetReviews(16);
     bool isVerfied = true;
 }
 
@@ -69,7 +60,7 @@
             {
                 <div class="panel panel-default">
                     <div class="panel-body">
-                        <p>@r.User.Username gives this @place.PlaceType.Name @r.Rating stars and says: </p>
+                        <p><b>@r.User.Username</b> gives this @place.PlaceType.Name <b>@r.Rating stars</b> and says: </p>
                         <br />
                         <b>@r.Text</b>
                     </div>

@@ -18,9 +18,8 @@ namespace FeedbackWebApp.Pages
             HttpRequests req = new HttpRequests();
             object r = new
             {
-                UserID = 6,    //mgrau
+                UserID = 5,    //mgrau
                 Rating = Convert.ToInt32(Request.Form["rating"].ToString()),
-                Time = DateTime.Now.ToString(),
                 Text = Request.Form["reviewContent"].ToString()
             };
             await req.CreateReview(r, 16);

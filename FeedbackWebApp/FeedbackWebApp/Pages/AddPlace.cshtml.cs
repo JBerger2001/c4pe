@@ -13,7 +13,7 @@ namespace FeedbackWebApp.Pages
         {
 
         }
-        public async void OnPost()
+        public async Task<IActionResult> OnPost()
         {
             HttpRequests req = new HttpRequests();
             long placetypeID = 2;  //Request.Form["placetypes"].
@@ -39,6 +39,7 @@ namespace FeedbackWebApp.Pages
             //        o = await req.CreateOpeningTime(opti, placeID);
             //    }
             //}
+            return RedirectToPage("/PlaceSite");
         }
     }
 }
