@@ -69,6 +69,16 @@ namespace FeedbackWebApp
             }
             return places;
         }
+        public async Task<User> GetUserAsync(long userId)
+        {
+            User u = null;
+            HttpResponseMessage response = await client.GetAsync(path + "api/users/" + userId);
+            if (response.IsSuccessStatusCode)
+            {
+                u = await response.Content.ReadAsAsync<User>();
+            }
+            return u;
+        }
 
         public async Task<Place> CreatePlaceAsync(Object place)
         {
@@ -113,16 +123,12 @@ namespace FeedbackWebApp
             return response.Headers.Location;
         }
 
-        public async Task<string> LoginUser(User user)
+        public async Task<LogIn> LoginUser(User user)
         {
-            if (user.Username != "" && user.Password != "")
-            {
-                HttpResponseMessage response = await client.PostAsJsonAsync(
-                path + "api/users/login", user);
-                response.EnsureSuccessStatusCode();
-                return await response.Content.ReadAsStringAsync();
-            }
-            return "";
+            LogIn response = await client.PostAsJsonAsync(
+            path + "api/users/login", user).ReceiveJson<LogIn>();
+            //response.EnsureSuccessStatusCode();
+            return response;
         }
     }
 }

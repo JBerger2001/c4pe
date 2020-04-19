@@ -39,7 +39,7 @@
             <div class="panel-body">
                 <img src="https://via.placeholder.com/180" alt="Bild" style="float: left" />
                 <div style="float:left; margin-left: 5%">
-                    <a onclick="" asp-page="/PlaceSite"><h3>@p.Name</h3></a>
+                    <a onclick="" asp-page="/PlaceSite" id="@p.ID"><h3>@p.Name</h3></a>
                     <h4> @p.PlaceType.Name</h4>
                     @if (p.OpeningTimes.Count!=0)
                     {

@@ -17,14 +17,20 @@ namespace FeedbackWebApp.Pages
         {
             User u = new User() { Username = Request.Form["username"], Password = Request.Form["pwd"] };
             HttpRequests r = new HttpRequests();
-            string x = await r.LoginUser(u);       // Token wird gespeichert
-            if (x != "")
+            LogIn x= new LogIn();
+            if (u.Username != "" & u.Password != "")
             {
+                x = await r.LoginUser(u);
+            }// Token wird gespeichert
+            if (x.token != "")
+            {
+                u = await r.GetUserAsync(x.userId);
+                BaseController.SetUserAndToken(u, x.token);
                 return RedirectToPage("/Overview");
             }
             else
             {
-                return null;
+                return RedirectToPage("/Index");
             }
         }
         public IActionResult OnPostGuest()
