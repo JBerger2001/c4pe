@@ -160,7 +160,7 @@ namespace Feedback_API.Controllers
             var token = tokenHandler.CreateToken(tokenDescriptor);
             var tokenString = tokenHandler.WriteToken(token);
 
-            return Ok(new { tokenString });
+            return Ok(new { token = tokenString, userId = user.ID });
         }
 
         // DELETE: api/Users/5
