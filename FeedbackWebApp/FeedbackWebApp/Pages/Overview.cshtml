@@ -10,9 +10,6 @@
         List<Place> places = new List<Place>();
         HttpRequests req = new HttpRequests();
         places = await req.GetProductsAsync("http://77.244.251.110/api/Places");
-        Place newP = new Place() { Address="3483 Feuersbrunn, Weinstrasse 11", Name="Gasthaus zum goldenen Kreuz", IsVerified=true, Type= "Restaurant",
-            OpenTimes = new openingTimes() { day = new TimeSpan(), open = new TimeSpan(10, 0, 0), close = new TimeSpan(18, 0, 0) } };
-        //await req.CreateProductAsync(newP);
     }
     @foreach(Place p in places)
     {
@@ -20,7 +17,7 @@
         <div class="panel-body">
             <img src="https://via.placeholder.com/180" alt="Bild" style="float: left" />
             <div style="float:left; margin-left: 5%">
-                <a asp-page="/PlaceSite" onclick="@req.PlaceId=p.Id"><h3>@p.Name</h3></a>
+                <a asp-page="/PlaceSite" onclick=""><h3>@p.Name</h3></a>
                 <h4>@p.Type</h4>
                 <p>Opening time: </p>
                 @*    @p.OpenTimes.day.Days , opens at @p.OpenTimes.open, closes at @p.OpenTimes.close*@
