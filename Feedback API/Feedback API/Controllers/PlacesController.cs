@@ -13,6 +13,8 @@ using Feedback_API.Models.Domain;
 using Microsoft.AspNetCore.Cors;
 using Feedback_API.Parameters;
 using Newtonsoft.Json;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Feedback_API.Controllers
 {
@@ -115,6 +117,7 @@ namespace Feedback_API.Controllers
         }
 
         // POST: api/Places
+        //[Authorize]
         [HttpPost]
         public async Task<ActionResult<PlaceResponse>> PostPlace(PlaceRequest placeRequest)
         {
@@ -123,15 +126,10 @@ namespace Feedback_API.Controllers
                 return BadRequest(ModelState);
             }
 
+            //var id = Convert.ToInt64(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+
             var place = _mapper.Map<Place>(placeRequest);
-            //place.PlaceType = await _context.PlaceTypes.FirstOrDefaultAsync(pt => pt.Name == placeDTO.Type.Name);
-            //place.PlaceTypeID = place.PlaceType?.ID ?? 0;
-            /*
-                        if (place.PlaceType == null)
-                        {
-                            return BadRequest();
-                        }
-            */
+
             _context.Places.Add(place);
             await _context.SaveChangesAsync();
 
@@ -285,7 +283,7 @@ namespace Feedback_API.Controllers
         {
             return !_context.OpeningTimes.Any(o =>
                 o.PlaceID == placeId
-                && (openingTimeId.HasValue) ? o.ID != openingTimeId.Value : true
+                && ((openingTimeId.HasValue) ? o.ID != openingTimeId.Value : true)
                 && o.Day == ot.Day
                 && o.Open < ot.Close
                 && o.Close > ot.Open); 
@@ -359,7 +357,6 @@ namespace Feedback_API.Controllers
         }
 
         [HttpPut("{placeId}/Reviews/{reviewId}")]
-
         public async Task<ActionResult<ReviewResponse>> PutReview(long placeId, long reviewId, ReviewRequest reviewRequest)
         {
             if (!ModelState.IsValid)
