@@ -58,6 +58,8 @@ namespace Feedback_API
 
             services.AddScoped<IAuthService, AuthService>();
 
+            services.AddScoped<IImageUploadService, ImageUploadService>();
+
             var key = Encoding.ASCII.GetBytes(Configuration.GetSection("AppSettings:Token").Value);
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
             {
