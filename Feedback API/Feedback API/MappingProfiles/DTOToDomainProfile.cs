@@ -33,6 +33,7 @@ namespace Feedback_API.MappingProfiles
 
             CreateMap<UserResponse, User>();
             CreateMap<UserRegisterRequest, User>();
+            CreateMap<UserUpdateRequest, User>();
 
             CreateMap<ReviewResponse, Review>();
             CreateMap<ReviewRequest, Review>();
