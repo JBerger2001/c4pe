@@ -18,6 +18,7 @@ using System.Text;
 using Microsoft.IdentityModel.Tokens;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
+using System.IO;
 
 namespace Feedback_API.Controllers
 {
@@ -27,13 +28,17 @@ namespace Feedback_API.Controllers
     {
         private readonly FeedbackContext _context;
         private readonly IAuthService _authService;
+        private readonly IImageUploadService _imageUploadService;
         private readonly IConfiguration _config;
         private readonly IMapper _mapper;
 
-        public UsersController(FeedbackContext context, IAuthService authService, IConfiguration config, IMapper mapper)
+        private long currentUserId => Convert.ToInt64(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+
+        public UsersController(FeedbackContext context, IAuthService authService, IImageUploadService imageUploadService, IConfiguration config, IMapper mapper)
         {
             _context = context;
             _authService = authService;
+            _imageUploadService = imageUploadService;
             _config = config;
             _mapper = mapper;
         }
@@ -44,6 +49,21 @@ namespace Feedback_API.Controllers
         {
             var users = await _context.Users.ToListAsync();
             return _mapper.Map<List<UserResponse>>(users);
+        }
+
+        // GET: api/Users/current
+        [HttpGet("me")]
+        [Authorize]
+        public async Task<ActionResult<UserResponse>> GetCurrentUser()
+        {
+            var user = await _context.Users.FindAsync(currentUserId);
+
+            if (user == null)
+            {
+                return BadRequest("User not found.");
+            }
+
+            return _mapper.Map<UserResponse>(user);
         }
 
         // GET: api/Users/5
@@ -92,6 +112,20 @@ namespace Feedback_API.Controllers
             }
 
             return NoContent();
+        }
+
+        // POST api/users/me/avatar
+        [HttpPost("me/avatar")]
+        public async Task<IActionResult> PostUploadAvatar(IFormFile image)
+        {
+            if (!_imageUploadService.IsValid(image))
+            {
+                return BadRequest("Invalid image. Maximum Image size is 8MB, supported file types are .jpg, .jpeg and .png");
+            }
+
+            var uriPath = await _imageUploadService.SaveAvatar(image, currentUserId);
+
+            return Ok(new { uriPath });
         }
 
         /*
