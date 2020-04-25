@@ -51,7 +51,7 @@ namespace Feedback_API.Controllers
             return _mapper.Map<List<UserResponse>>(users);
         }
 
-        // GET: api/Users/current
+        // GET: api/Users/me
         [HttpGet("me")]
         [Authorize]
         public async Task<ActionResult<UserResponse>> GetCurrentUser()
