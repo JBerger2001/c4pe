@@ -247,7 +247,7 @@ namespace Feedback_API.Migrations
                             PlaceID = 2L,
                             Rating = 2,
                             Text = "meh",
-                            Time = new DateTime(2020, 3, 4, 17, 36, 18, 345, DateTimeKind.Local).AddTicks(5757),
+                            Time = new DateTime(2020, 4, 22, 12, 15, 8, 700, DateTimeKind.Local).AddTicks(3740),
                             UserID = 2L
                         },
                         new
@@ -256,7 +256,7 @@ namespace Feedback_API.Migrations
                             PlaceID = 1L,
                             Rating = 5,
                             Text = "nice",
-                            Time = new DateTime(2020, 3, 4, 17, 36, 18, 350, DateTimeKind.Local).AddTicks(2076),
+                            Time = new DateTime(2020, 4, 22, 12, 15, 8, 703, DateTimeKind.Local).AddTicks(555),
                             UserID = 1L
                         },
                         new
@@ -265,7 +265,7 @@ namespace Feedback_API.Migrations
                             PlaceID = 1L,
                             Rating = 4,
                             Text = "pretty good",
-                            Time = new DateTime(2020, 3, 4, 17, 36, 18, 350, DateTimeKind.Local).AddTicks(2165),
+                            Time = new DateTime(2020, 4, 22, 12, 15, 8, 703, DateTimeKind.Local).AddTicks(611),
                             UserID = 2L
                         });
                 });
@@ -275,6 +275,9 @@ namespace Feedback_API.Migrations
                     b.Property<long>("ID")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint");
+
+                    b.Property<string>("AvatarURI")
+                        .HasColumnType("longtext CHARACTER SET utf8mb4");
 
                     b.Property<string>("City")
                         .HasColumnType("longtext CHARACTER SET utf8mb4");

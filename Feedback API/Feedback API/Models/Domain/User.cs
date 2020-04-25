@@ -23,5 +23,6 @@ namespace Feedback_API.Models.Domain
         public string ZipCode { get; set; }
         public string Country { get; set; }
         public bool IsVerified { get; set; }
+        public string AvatarURI { get; set; }
     }
 }

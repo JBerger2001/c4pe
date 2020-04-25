@@ -51,6 +51,8 @@
     <Compile Remove="Migrations\20200227132817_initial.Designer.cs" />
     <Compile Remove="Migrations\20200227132940_inital.cs" />
     <Compile Remove="Migrations\20200227132940_inital.Designer.cs" />
+    <Compile Remove="Migrations\20200304163618_Initial.cs" />
+    <Compile Remove="Migrations\20200304163618_Initial.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>
