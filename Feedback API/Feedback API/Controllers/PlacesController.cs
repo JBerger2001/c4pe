@@ -234,7 +234,6 @@ namespace Feedback_API.Controllers
             openingTime.ID = openingTimeId;
             openingTime.PlaceID = placeId;
             _context.Entry(openingTime).State = EntityState.Modified;
-            await _context.SaveChangesAsync();
 
             var placeResponse = _mapper.Map<OpeningTimeResponse>(openingTime);
 
@@ -319,7 +318,9 @@ namespace Feedback_API.Controllers
         [HttpGet("{placeId}/Reviews/{reviewId}")]
         public async Task<ActionResult<ReviewResponse>> GetReview(long placeId, long reviewId)
         {
-            var review = await _context.Reviews.FirstOrDefaultAsync(r => r.ID == reviewId && r.PlaceID == placeId);
+            var review = await _context.Reviews
+                .Include(r => r.User)
+                .FirstOrDefaultAsync(r => r.ID == reviewId && r.PlaceID == placeId);
 
             if (review == null)
             {
@@ -364,11 +365,10 @@ namespace Feedback_API.Controllers
                 return BadRequest(ModelState);
             }
 
-            var review = _mapper.Map<OpeningTime>(reviewRequest);
+            var review = _mapper.Map<Review>(reviewRequest);
             review.ID = reviewId;
             review.PlaceID = placeId;
             _context.Entry(review).State = EntityState.Modified;
-            await _context.SaveChangesAsync();
 
             var reviewResponse = _mapper.Map<ReviewResponse>(review);
 
