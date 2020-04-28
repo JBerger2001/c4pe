@@ -10,9 +10,12 @@ namespace Feedback_API.Models.Domain
     [Table("users")]
     public class User
     {
+        [Required]
         public long ID { get; set; }
         [Required]
         public string Username { get; set; }
+        [Required]
+        public string Role { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public byte[] PasswordHash { get; set; }
