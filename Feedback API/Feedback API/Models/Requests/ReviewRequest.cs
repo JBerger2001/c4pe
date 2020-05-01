@@ -8,9 +8,7 @@ namespace Feedback_API.Models.Requests
 {
     public class ReviewRequest
     {
-        public long UserID { get; set; }
         public int Rating { get; set; }
-        public DateTime Time { get; set; }
         public string Text { get; set; }
     }
 }
