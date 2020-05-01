@@ -12,6 +12,6 @@ namespace Feedback_API.Models.Responses
         public int Rating { get; set; }
         public DateTime Time { get; set; }
         public string Text { get; set; }
-        public UserResponse User { get; set; }
+        public UserPublicResponse User { get; set; }
     }
 }

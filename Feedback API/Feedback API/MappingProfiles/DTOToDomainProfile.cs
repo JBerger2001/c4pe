@@ -34,7 +34,8 @@ namespace Feedback_API.MappingProfiles
             CreateMap<OpeningTimeResponse, OpeningTime>();
             CreateMap<OpeningTimeRequest, OpeningTime>();
 
-            CreateMap<UserResponse, User>();
+            CreateMap<UserPrivateResponse, User>();
+            CreateMap<UserPublicResponse, User>();
             CreateMap<UserRegisterRequest, User>();
             CreateMap<UserUpdateRequest, User>();
 
