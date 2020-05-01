@@ -26,5 +26,6 @@ namespace Feedback_API.Models.Domain
 
         public ICollection<OpeningTime> OpeningTimes { get; set; }
         public ICollection<Review> Reviews { get; set; }
+        public ICollection<PlaceOwner> PlaceOwners { get; set; }
     }
 }

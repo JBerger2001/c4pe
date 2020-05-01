@@ -19,11 +19,16 @@ using Microsoft.AspNetCore.Authorization;
 namespace Feedback_API.Controllers
 {
     [Route("api/places")]
+    [Authorize]
     [ApiController]
     public class PlacesController : ControllerBase
     {
         private readonly FeedbackContext _context;
         private readonly IMapper _mapper;
+
+        private long CurrentUserId => Convert.ToInt64(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+        private bool IsAdmin => _context.Users.Find(CurrentUserId).Role == Role.Admin;
+        private bool IsAuthorized(long placeId) => IsPlaceOwner(placeId) || IsAdmin;
 
         public PlacesController(FeedbackContext context, IMapper mapper)
         {
@@ -33,6 +38,7 @@ namespace Feedback_API.Controllers
 
         #region PLACES
         // GET: api/Places
+        [AllowAnonymous]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<PlaceResponse>>> GetPlaces([FromQuery]PlacesParameters placesParameter)
         {
@@ -40,6 +46,7 @@ namespace Feedback_API.Controllers
                             .Include(p => p.PlaceType)
                             .Include(p => p.OpeningTimes)
                             .Include(p => p.Reviews)
+                            .Include(p => p.PlaceOwners)
                             .ToListAsync(),
                             placesParameter.PageNumber,
                             placesParameter.PageSize);
@@ -50,6 +57,7 @@ namespace Feedback_API.Controllers
         }
 
         // GET: api/Places/5
+        [AllowAnonymous]
         [HttpGet("{id}")]
         public async Task<ActionResult<PlaceResponse>> GetPlace(long id)
         {
@@ -57,6 +65,7 @@ namespace Feedback_API.Controllers
                             .Include(p => p.PlaceType)
                             .Include(p => p.OpeningTimes)
                             .Include(p => p.Reviews)
+                            .Include(p => p.PlaceOwners)
                             .FirstOrDefaultAsync(i => i.ID == id);
 
             if (place == null)
@@ -89,6 +98,10 @@ namespace Feedback_API.Controllers
             }
 
             */
+            if (!IsAuthorized(id))
+            {
+                return Unauthorized();
+            }
 
             var place = await _context.Places
                             .Include(p => p.OpeningTimes)
@@ -133,6 +146,15 @@ namespace Feedback_API.Controllers
             _context.Places.Add(place);
             await _context.SaveChangesAsync();
 
+            var placeOwner = new PlaceOwner
+            {
+                PlaceID = place.ID,
+                OwnerID = CurrentUserId
+            };
+
+            _context.PlaceOwners.Add(placeOwner);
+            await _context.SaveChangesAsync();
+
             place = await _context.Places
                         .Include(p => p.OpeningTimes)
                         .Include(p => p.PlaceType)
@@ -147,6 +169,11 @@ namespace Feedback_API.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeletePlace(long id)
         {
+            if (!IsAuthorized(id))
+            {
+                return Unauthorized();
+            }
+
             var place = await _context.Places.FindAsync(id);
             if (place == null)
             {
@@ -164,12 +191,69 @@ namespace Feedback_API.Controllers
             return _context.Places.Any(e => e.ID == id);
         }
 
-  
+        private bool IsPlaceOwner(long placeId)
+        {
+            return _context.PlaceOwners.Any(po => po.OwnerID == CurrentUserId && po.PlaceID == placeId);
+        }
+
+
+        #endregion
+
+        #region PLACE_OWNER
+
+        [HttpPost("{id}/owner")]
+        public async Task<ActionResult<PlaceOwnerResponse>> PostPlaceOwner(PlaceOwnerRequest placeOwnerRequest, long id)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            if (!IsAuthorized(id))
+            {
+                return Unauthorized();
+            }
+
+            var placeOwner = _mapper.Map<PlaceOwner>(placeOwnerRequest);
+
+            _context.PlaceOwners.Add(placeOwner);
+            await _context.SaveChangesAsync();
+
+            return _mapper.Map<PlaceOwnerResponse>(placeOwner);
+        }
+
+        [HttpDelete("{placeId}/owner/{userId}")]
+        public async Task<IActionResult> DeletePlaceOwner(long placeId, long userId)
+        {
+            if (!IsAuthorized(placeId))
+            {
+                return Unauthorized();
+            }
+
+            if (userId == CurrentUserId)
+            {
+                return BadRequest("You can't remove yourself from the place owners.");
+            }
+
+            var placeOwner = await _context.PlaceOwners.FirstOrDefaultAsync(po => po.OwnerID == placeId && po.PlaceID == userId);
+            if (placeOwner == null)
+            {
+                return NotFound();
+            }
+
+            _context.PlaceOwners.Remove(placeOwner);
+            await _context.SaveChangesAsync();
+
+            return NoContent();
+        }
+
+
         #endregion
 
         #region OPENING_TIMES
 
         // GET: api/Places/5/openingtimes
+        [AllowAnonymous]
         [HttpGet("{id}/OpeningTimes")]
         public async Task<ActionResult<IEnumerable<OpeningTimeResponse>>> GetOpeningTimes([FromQuery]OpeningTimeParameters parameters, long id)
         {
@@ -200,7 +284,12 @@ namespace Feedback_API.Controllers
                 return BadRequest(ModelState);
             }
 
-            if(!IsValidRange(placeId, openingTimeRequest))
+            if (!IsAuthorized(placeId))
+            {
+                return Unauthorized();
+            }
+
+            if (!IsValidRange(placeId, openingTimeRequest))
             {
                 return BadRequest("Opening time overlaps with an existing one.");
             }
@@ -217,7 +306,6 @@ namespace Feedback_API.Controllers
 
         // PUT: api/Places/5/OpeningTimes
         [HttpPut("{placeId}/OpeningTimes/{openingTimeId}")]
-        
         public async Task<ActionResult<OpeningTimeResponse>> PutOpeningTime(long placeId, long openingTimeId, OpeningTimeRequest openingTimeRequest)
         {
             if (!ModelState.IsValid)
@@ -225,7 +313,12 @@ namespace Feedback_API.Controllers
                 return BadRequest(ModelState);
             }
 
-            if(!IsValidRange(placeId, openingTimeRequest, openingTimeId))
+            if (!IsAuthorized(placeId))
+            {
+                return Unauthorized();
+            }
+
+            if (!IsValidRange(placeId, openingTimeRequest, openingTimeId))
             {
                 return BadRequest("Opening time overlaps with an existing one.");
             }
@@ -261,6 +354,11 @@ namespace Feedback_API.Controllers
 
         public async Task<IActionResult> DeleteOpeningTime(long placeId, long openingTimeId)
         {
+            if (!IsAuthorized(placeId))
+            {
+                return Unauthorized();
+            }
+
             var place = await _context.Places.FindAsync(placeId);
             var openingTime = await _context.OpeningTimes.FindAsync(openingTimeId);
             if (place == null || openingTime == null)
@@ -285,12 +383,13 @@ namespace Feedback_API.Controllers
                 && ((openingTimeId.HasValue) ? o.ID != openingTimeId.Value : true)
                 && o.Day == ot.Day
                 && o.Open < ot.Close
-                && o.Close > ot.Open); 
+                && o.Close > ot.Open);
         }
         #endregion
 
         #region REVIEWS
         // GET: api/Places/5/Reviews
+        [AllowAnonymous]
         [HttpGet("{id}/Reviews")]
         public async Task<ActionResult<IEnumerable<ReviewResponse>>> GetReviews([FromQuery]ReviewParameters parameters, long id)
         {
@@ -315,6 +414,7 @@ namespace Feedback_API.Controllers
         }
 
         // GET: api/Places/5/Reviews/1
+        [AllowAnonymous]
         [HttpGet("{placeId}/Reviews/{reviewId}")]
         public async Task<ActionResult<ReviewResponse>> GetReview(long placeId, long reviewId)
         {
@@ -366,6 +466,12 @@ namespace Feedback_API.Controllers
             }
 
             var review = _mapper.Map<Review>(reviewRequest);
+
+            if ((review.UserID != CurrentUserId) && !IsAdmin)
+            {
+                return Unauthorized();
+            }
+
             review.ID = reviewId;
             review.PlaceID = placeId;
             _context.Entry(review).State = EntityState.Modified;
@@ -393,7 +499,6 @@ namespace Feedback_API.Controllers
 
         //DELETE: api/Reviews/5/Reviews
         [HttpDelete("{placeId}/Reviews/{reviewId}")]
-
         public async Task<IActionResult> DeleteReview(long placeId, long reviewId)
         {
             var place = await _context.Places.FindAsync(placeId);
@@ -401,6 +506,11 @@ namespace Feedback_API.Controllers
             if (place == null || review == null)
             {
                 return NotFound();
+            }
+
+            if ((review.UserID != CurrentUserId) && !IsAdmin)
+            {
+                return Unauthorized();
             }
 
             _context.Reviews.Remove(review);
