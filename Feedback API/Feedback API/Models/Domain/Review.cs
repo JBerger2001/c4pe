@@ -25,5 +25,6 @@ namespace Feedback_API.Models.Domain
 
         public User User { get; set; }
         public Place Place { get; set; }
+        public ICollection<Reaction> Reactions { get; set; }
     }
 }

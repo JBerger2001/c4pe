@@ -15,6 +15,7 @@ using Feedback_API.Parameters;
 using Newtonsoft.Json;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
+using Feedback_API.Services;
 
 namespace Feedback_API.Controllers
 {
@@ -25,15 +26,17 @@ namespace Feedback_API.Controllers
     {
         private readonly FeedbackContext _context;
         private readonly IMapper _mapper;
+        private readonly IImageUploadService _imageUploadService;
 
         private long CurrentUserId => Convert.ToInt64(User.FindFirst(ClaimTypes.NameIdentifier).Value);
         private bool IsAdmin => _context.Users.Find(CurrentUserId).Role == Role.Admin;
         private bool IsAuthorized(long placeId) => IsPlaceOwner(placeId) || IsAdmin;
 
-        public PlacesController(FeedbackContext context, IMapper mapper)
+        public PlacesController(FeedbackContext context, IMapper mapper, IImageUploadService imageUploadService)
         {
             _context = context;
             _mapper = mapper;
+            _imageUploadService = imageUploadService;
         }
 
         #region PLACES
@@ -47,6 +50,7 @@ namespace Feedback_API.Controllers
                             .Include(p => p.OpeningTimes)
                             .Include(p => p.Reviews)
                             .Include(p => p.PlaceOwners)
+                            .Include(p => p.Images)
                             .ToListAsync(),
                             placesParameter.PageNumber,
                             placesParameter.PageSize);
@@ -66,6 +70,7 @@ namespace Feedback_API.Controllers
                             .Include(p => p.OpeningTimes)
                             .Include(p => p.Reviews)
                             .Include(p => p.PlaceOwners)
+                            .Include(p => p.Images)
                             .FirstOrDefaultAsync(i => i.ID == id);
 
             if (place == null)
@@ -158,6 +163,8 @@ namespace Feedback_API.Controllers
             place = await _context.Places
                         .Include(p => p.OpeningTimes)
                         .Include(p => p.PlaceType)
+                        .Include(p => p.PlaceOwners)
+                        .Include(p => p.Images)
                         .FirstOrDefaultAsync(p => p.ID == place.ID);
 
             var placeResponse = _mapper.Map<PlaceResponse>(place);
@@ -214,7 +221,15 @@ namespace Feedback_API.Controllers
                 return Unauthorized();
             }
 
+            var user = await _context.Users.FindAsync(placeOwnerRequest.OwnerID);
+
+            if (user == null)
+            {
+                return NotFound();
+            }
+
             var placeOwner = _mapper.Map<PlaceOwner>(placeOwnerRequest);
+            placeOwner.PlaceID = id;
 
             _context.PlaceOwners.Add(placeOwner);
             await _context.SaveChangesAsync();
@@ -393,22 +408,21 @@ namespace Feedback_API.Controllers
         [HttpGet("{id}/Reviews")]
         public async Task<ActionResult<IEnumerable<ReviewResponse>>> GetReviews([FromQuery]ReviewParameters parameters, long id)
         {
-            var place = await _context.Places
-                            .Include(p => p.Reviews)
-                            .FirstOrDefaultAsync(p => p.ID == id);
+            var place = await _context.Places.FindAsync(id);
 
             if (place == null)
             {
                 return NotFound();
             }
 
-            var reviews = PagedList<Review>.ToPagedList(place.Reviews, parameters.PageNumber, parameters.PageSize);
-            foreach (var review in reviews)
-            {
-                review.User = await _context.Users.FindAsync(review.UserID);
-            }
+            var reviews = _context.Reviews
+                .Include(r => r.User)
+                .Include(r => r.Reactions)
+                .Where(r => r.PlaceID == id);
 
-            Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(reviews.Metadata));
+            var pagedReviews = PagedList<Review>.ToPagedList(reviews, parameters.PageNumber, parameters.PageSize);
+
+            Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(pagedReviews.Metadata));
 
             return _mapper.Map<List<ReviewResponse>>(reviews);
         }
@@ -420,6 +434,7 @@ namespace Feedback_API.Controllers
         {
             var review = await _context.Reviews
                 .Include(r => r.User)
+                .Include(r => r.Reactions)
                 .FirstOrDefaultAsync(r => r.ID == reviewId && r.PlaceID == placeId);
 
             if (review == null)
@@ -448,10 +463,15 @@ namespace Feedback_API.Controllers
 
             var review = _mapper.Map<Review>(reviewRequest);
             review.PlaceID = placeId;
+            review.UserID = CurrentUserId;
             review.Time = DateTime.Now;
 
             _context.Reviews.Add(review);
             await _context.SaveChangesAsync();
+
+            review = await _context.Reviews
+                .Include(r => r.User)
+                .FirstOrDefaultAsync(r => r.ID == review.ID);
 
             var reviewResponse = _mapper.Map<ReviewResponse>(review);
 
@@ -467,6 +487,11 @@ namespace Feedback_API.Controllers
             }
 
             var review = _context.Reviews.FirstOrDefault(r => r.PlaceID == placeId && r.ID == reviewId);
+
+            if (review == null)
+            {
+                return NotFound();
+            }
 
             if ((review.UserID != CurrentUserId) && !IsAdmin)
             {
@@ -526,6 +551,161 @@ namespace Feedback_API.Controllers
         {
             return _context.Reviews.Any(e => e.ID == id);
         }
+        #endregion
+
+        #region REACTION
+        [HttpGet("{placeId}/reviews/{reviewId}/reaction")]
+        public async Task<ActionResult<ReactionResponse>> GetReaction(long placeId, long reviewId)
+        {
+            var reaction = await _context.Reactions.FindAsync(reviewId, CurrentUserId);
+            if (reaction == null)
+            {
+                return NotFound();
+            }
+
+            return _mapper.Map<ReactionResponse>(reaction);
+        }
+
+        [HttpPost("{placeId}/reviews/{reviewId}/reaction")]
+        public async Task<ActionResult<ReactionResponse>> PostReaction(long placeId, long reviewId, ReactionRequest reactionRequest)
+        {
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var place = _context.Places.Find(placeId);
+            var review = _context.Reviews.Find(reviewId);
+
+            if (place == null || review == null)
+            {
+                return NotFound();
+            }
+
+            //var userAlreadyReacted = await _context.Reactions.AnyAsync(r => r.ReviewID == reviewId && r.UserID == CurrentUserId);
+            var reaction = await _context.Reactions.FindAsync(reviewId, CurrentUserId);
+            if (reaction != null)
+            {
+                //var reaction = _context.Reactions.Where(r => r.ReviewID == reviewId && r.UserID == CurrentUserId);
+                _mapper.Map(reactionRequest, reaction);
+
+                _context.Entry(reaction).State = EntityState.Modified;
+            }
+            else
+            {
+                reaction = _mapper.Map<Reaction>(reactionRequest);
+
+                reaction.UserID = CurrentUserId;
+                reaction.ReviewID = reviewId;
+
+                _context.Reactions.Add(reaction);
+            }
+
+            await _context.SaveChangesAsync();
+
+
+            return _mapper.Map<ReactionResponse>(reaction);
+        }
+
+        [HttpDelete("{placeId}/reviews/{reviewId}/reaction")]
+        public async Task<ActionResult> DeleteReaction(long placeId, long reviewId)
+        {
+            var reaction = await _context.Reactions.FindAsync(reviewId, CurrentUserId);
+
+            if (reaction == null)
+            {
+                return NotFound();
+            }
+
+            _context.Reactions.Remove(reaction);
+            await _context.SaveChangesAsync();
+
+            return NoContent();
+        }
+
+        [Authorize(Roles = Role.Admin)]
+        [HttpDelete("{placeId}/reviews/{reviewId}/reaction/{userId}")]
+        public async Task<ActionResult> DeleteReactionById(long placeId, long reviewId, long userId)
+        {
+            var reaction = await _context.Reactions.FindAsync(reviewId, userId);
+
+            if (reaction == null)
+            {
+                return NotFound();
+            }
+
+            _context.Reactions.Remove(reaction);
+            await _context.SaveChangesAsync();
+
+            return NoContent();
+        }
+        #endregion
+
+        #region IMAGES
+
+        [HttpPost("{placeId}/images/{imageId}")]
+        public async Task<ActionResult<string>> PostUploadImage(long placeId, int imageId, IFormFile file)
+        {
+            if (imageId < 1 || imageId > 3)
+            {
+                return BadRequest("You can only upload 3 images per place.");
+            }
+
+            if (!IsAuthorized(placeId))
+            {
+                return Unauthorized();
+            }
+
+            if(!_imageUploadService.IsValid(file))
+            {
+                return BadRequest("Invalid image. Maximum Image size is 8MB, supported file types are .jpg, .jpeg and .png");
+            }
+
+            var uriPath = await _imageUploadService.SavePlaceImage(file, placeId, imageId);
+
+            return Ok(new { uriPath });
+        }
+
+        [HttpDelete("{placeId}/images/{imageId}")]
+        public async Task<ActionResult> DeleteImage(long placeId, int imageId)
+        {
+            /*
+            var user = await _context.Users.FindAsync(CurrentUserId);
+            if (user == null || user?.AvatarURI == null)
+            {
+                return NotFound();
+            }
+
+            _imageUploadService.RemoveImage(user.AvatarURI);
+
+            return NoContent();
+            */
+
+            var place = await _context.Places
+                .Include(p => p.Images)
+                .FirstOrDefaultAsync(p => p.ID == placeId);
+
+            if (place == null || place?.Images == null)
+            {
+                return NotFound();
+            }
+
+            var image = place.Images.FirstOrDefault(p => p?.ID == imageId);
+
+            if (image == null)
+            {
+                return NotFound();
+            }
+
+            _imageUploadService.RemoveImage(image.URI);
+
+            _context.PlaceImages.Remove(image);
+            await _context.SaveChangesAsync();
+
+            return NoContent();
+        }
+
         #endregion
     }
 }
