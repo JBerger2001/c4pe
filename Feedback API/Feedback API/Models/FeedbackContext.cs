@@ -37,6 +37,9 @@ namespace Feedback_API.Models
         {
             base.OnModelCreating(modelBuilder);
 
+            modelBuilder.Entity<PlaceOwner>()
+                .HasKey(po => new { po.PlaceID, po.OwnerID });
+
             // default users
             List<User> users = new List<User>
             {
