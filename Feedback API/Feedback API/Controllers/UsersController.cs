@@ -33,7 +33,7 @@ namespace Feedback_API.Controllers
         private readonly IConfiguration _config;
         private readonly IMapper _mapper;
 
-        private long currentUserId => Convert.ToInt64(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+        private long CurrentUserId => Convert.ToInt64(User.FindFirst(ClaimTypes.NameIdentifier).Value);
 
         public UsersController(FeedbackContext context, IAuthService authService, IImageUploadService imageUploadService, IConfiguration config, IMapper mapper)
         {
@@ -58,7 +58,7 @@ namespace Feedback_API.Controllers
         [HttpGet("me")]
         public async Task<ActionResult<UserPrivateResponse>> GetCurrentUser()
         {
-            var user = await _context.Users.FindAsync(currentUserId);
+            var user = await _context.Users.FindAsync(CurrentUserId);
 
             if (user == null)
             {
@@ -83,10 +83,37 @@ namespace Feedback_API.Controllers
             return _mapper.Map<UserPublicResponse>(user);
         }
 
+        [AllowAnonymous]
+        [HttpGet("{id}/reviews")]
+        public async Task<ActionResult<IEnumerable<ReviewUserResponse>>> GetUserReviews(long id)
+        {
+            List<Review> reviews = await _context.Reviews
+                .Include(r => r.User)
+                .Include(r => r.Place)
+                .Include(r => r.Place.OpeningTimes)
+                .Include(r => r.Place.PlaceType)
+                .Where(r => r.UserID == id).ToListAsync();
+
+            return _mapper.Map<List<ReviewUserResponse>>(reviews);
+        }
+
+        [HttpGet("me/reviews")]
+        public async Task<ActionResult<IEnumerable<ReviewUserResponse>>> GetCurrentUserReviews()
+        {
+            List<Review> reviews = await _context.Reviews
+                .Include(r => r.User)
+                .Include(r => r.Place)
+                .Include(r => r.Place.OpeningTimes)
+                .Include(r => r.Place.PlaceType)
+                .Where(r => r.UserID == CurrentUserId).ToListAsync();
+
+            return _mapper.Map<List<ReviewUserResponse>>(reviews);
+        }
+
         // PUT: api/Users/5
         [Authorize(Roles = Role.Admin)]
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutUser(long id, UserUpdateRequest userDTO)
+        public async Task<IActionResult> PutUser(long id, UserFullUpdateRequest userDTO)
         {
             if (!ModelState.IsValid)
             {
@@ -131,7 +158,7 @@ namespace Feedback_API.Controllers
                 return BadRequest(ModelState);
             }
 
-            var user = await _context.Users.FirstOrDefaultAsync(u => u.ID == currentUserId);
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.ID == CurrentUserId);
             _mapper.Map(userDTO, user);
             _context.Entry(user).State = EntityState.Modified;
 
@@ -141,7 +168,7 @@ namespace Feedback_API.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!UserExists(currentUserId))
+                if (!UserExists(CurrentUserId))
                 {
                     return NotFound();
                 }
@@ -163,7 +190,7 @@ namespace Feedback_API.Controllers
                 return BadRequest("Invalid image. Maximum Image size is 8MB, supported file types are .jpg, .jpeg and .png");
             }
 
-            var uriPath = await _imageUploadService.SaveAvatar(image, currentUserId);
+            var uriPath = await _imageUploadService.SaveAvatar(image, CurrentUserId);
 
             return Ok(new { uriPath });
         }
@@ -244,7 +271,7 @@ namespace Feedback_API.Controllers
         [HttpDelete("me")]
         public async Task<IActionResult> DeleteCurrentUser()
         {
-            var user = await _context.Users.FindAsync(currentUserId);
+            var user = await _context.Users.FindAsync(CurrentUserId);
             if (user == null)
             {
                 return NotFound();
@@ -260,7 +287,7 @@ namespace Feedback_API.Controllers
         [HttpDelete("me/avatar")]
         public async Task<IActionResult> DeleteCurrentUserAvatar()
         {
-            var user = await _context.Users.FindAsync(currentUserId);
+            var user = await _context.Users.FindAsync(CurrentUserId);
             if (user == null || user?.AvatarURI == null)
             {
                 return NotFound();
