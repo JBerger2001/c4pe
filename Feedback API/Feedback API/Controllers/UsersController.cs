@@ -23,6 +23,7 @@ using System.IO;
 namespace Feedback_API.Controllers
 {
     [Route("api/users")]
+    [Authorize]
     [ApiController]
     public class UsersController : ControllerBase
     {
@@ -44,17 +45,18 @@ namespace Feedback_API.Controllers
         }
 
         // GET: api/Users
+        [AllowAnonymous]
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<UserResponse>>> GetUsers()
+        public async Task<ActionResult<IEnumerable<UserPublicResponse>>> GetUsers()
         {
             var users = await _context.Users.ToListAsync();
-            return _mapper.Map<List<UserResponse>>(users);
+            return _mapper.Map<List<UserPublicResponse>>(users);
         }
 
         // GET: api/Users/me
-        [HttpGet("me")]
         [Authorize]
-        public async Task<ActionResult<UserResponse>> GetCurrentUser()
+        [HttpGet("me")]
+        public async Task<ActionResult<UserPrivateResponse>> GetCurrentUser()
         {
             var user = await _context.Users.FindAsync(currentUserId);
 
@@ -63,12 +65,13 @@ namespace Feedback_API.Controllers
                 return BadRequest("User not found.");
             }
 
-            return _mapper.Map<UserResponse>(user);
+            return _mapper.Map<UserPrivateResponse>(user);
         }
 
         // GET: api/Users/5
+        [AllowAnonymous]
         [HttpGet("{id}")]
-        public async Task<ActionResult<UserResponse>> GetUser(long id)
+        public async Task<ActionResult<UserPublicResponse>> GetUser(long id)
         {
             var user = await _context.Users.FindAsync(id);
 
@@ -77,12 +80,11 @@ namespace Feedback_API.Controllers
                 return NotFound();
             }
 
-            return _mapper.Map<UserResponse>(user);
+            return _mapper.Map<UserPublicResponse>(user);
         }
 
         // PUT: api/Users/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
-        // more details see https://aka.ms/RazorPagesCRUD.
+        [Authorize(Roles = Role.Admin)]
         [HttpPut("{id}")]
         public async Task<IActionResult> PutUser(long id, UserUpdateRequest userDTO)
         {
@@ -114,6 +116,38 @@ namespace Feedback_API.Controllers
             return NoContent();
         }
 
+        // PUT: api/Users/me
+        [HttpPut]
+        public async Task<IActionResult> PutCurrentUser(UserUpdateRequest userDTO)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.ID == currentUserId);
+            _mapper.Map(userDTO, user);
+            _context.Entry(user).State = EntityState.Modified;
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!UserExists(currentUserId))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return NoContent();
+        }
+
         // POST api/users/me/avatar
         [HttpPost("me/avatar")]
         public async Task<IActionResult> PostUploadAvatar(IFormFile image)
@@ -128,27 +162,8 @@ namespace Feedback_API.Controllers
             return Ok(new { uriPath });
         }
 
-        /*
-        // POST: api/Users
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
-        // more details see https://aka.ms/RazorPagesCRUD.
-        [HttpPost]
-        public async Task<ActionResult<UserResponse>> PostUser(UserRequest userDTO)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            var user = _mapper.Map<User>(userDTO);
-            _context.Users.Add(user);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction(nameof(GetUser), new { id = user.ID }, userDTO);
-        }
-        */
-
         // POST: api/Users/register
+        [AllowAnonymous]
         [HttpPost("register")]
         public async Task<IActionResult> Register(UserRegisterRequest userRegisterRequest)
         {
@@ -170,6 +185,8 @@ namespace Feedback_API.Controllers
             return StatusCode(201);
         }
 
+        // POST: api/Users/login
+        [AllowAnonymous]
         [HttpPost("login")]
         public async Task<IActionResult> Login(UserLoginRequest userLoginRequest)
         {
@@ -185,7 +202,8 @@ namespace Feedback_API.Controllers
             {
                 Subject = new ClaimsIdentity(new Claim[]{
                     new Claim(ClaimTypes.NameIdentifier, user.ID.ToString()),
-                    new Claim(ClaimTypes.Name, user.Username)
+                    new Claim(ClaimTypes.Name, user.Username),
+                    new Claim(ClaimTypes.Role, user.Role)
                 }),
                 Expires = DateTime.Now.AddDays(14),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha512Signature)
@@ -198,11 +216,27 @@ namespace Feedback_API.Controllers
         }
 
         // DELETE: api/Users/5
-        [Authorize]
+        [Authorize(Roles = Role.Admin)]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteUser(long id)
         {
             var user = await _context.Users.FindAsync(id);
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            _context.Users.Remove(user);
+            await _context.SaveChangesAsync();
+
+            return NoContent();
+        }
+
+        // DELETE: api/Users/me
+        [HttpDelete]
+        public async Task<IActionResult> DeleteCurrentUser()
+        {
+            var user = await _context.Users.FindAsync(currentUserId);
             if (user == null)
             {
                 return NotFound();
