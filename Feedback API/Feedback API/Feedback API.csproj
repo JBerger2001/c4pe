@@ -63,6 +63,16 @@
     <Compile Remove="Migrations\20200501090852_LastEdited2.Designer.cs" />
     <Compile Remove="Migrations\20200501091142_Initial.cs" />
     <Compile Remove="Migrations\20200501091142_Initial.Designer.cs" />
+    <Compile Remove="Migrations\20200501091832_Initial.cs" />
+    <Compile Remove="Migrations\20200501091832_Initial.Designer.cs" />
+    <Compile Remove="Migrations\20200501142025_RemoveReactionID.cs" />
+    <Compile Remove="Migrations\20200501142025_RemoveReactionID.Designer.cs" />
+    <Compile Remove="Migrations\20200501142142_Initial.cs" />
+    <Compile Remove="Migrations\20200501142142_Initial.Designer.cs" />
+    <Compile Remove="Migrations\20200501151129_Initial.cs" />
+    <Compile Remove="Migrations\20200501151129_Initial.Designer.cs" />
+    <Compile Remove="Migrations\20200501160143_Initial.cs" />
+    <Compile Remove="Migrations\20200501160143_Initial.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -78,9 +88,10 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="3.1.0" />
-    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.0" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.2" />
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="3.1.0" />
     <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="3.1.0" />
+    <PackageReference Include="SixLabors.ImageSharp" Version="1.0.0-rc0001" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="5.0.0-rc4" />
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="5.6.0" />
   </ItemGroup>
