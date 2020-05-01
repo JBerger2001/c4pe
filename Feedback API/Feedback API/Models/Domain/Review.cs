@@ -20,6 +20,7 @@ namespace Feedback_API.Models.Domain
         public int Rating { get; set; }
         [Required]
         public DateTime Time { get; set; }
+        public DateTime? LastEdited { get; set; }
         public string Text { get; set; }
 
         public User User { get; set; }
