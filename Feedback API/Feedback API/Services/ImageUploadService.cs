@@ -8,16 +8,28 @@ using Feedback_API.Models;
 using System.IO;
 using Microsoft.EntityFrameworkCore;
 
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.Formats;
+using Feedback_API.Models.Domain;
+
 namespace Feedback_API.Services
 {
     public class ImageUploadService : IImageUploadService
     {
         private readonly long MAX_SIZE = 8000000;
-        private readonly string[] EXTENSIONS = 
+        private readonly string[] EXTENSIONS =
         {
-            ".jpg",
-            ".jpeg",
-            ".png"
+            "jpg",
+            "jpeg",
+            "png",
+            "bmp"
+        };
+        private readonly string[] CONTENT_TYPES =
+        {
+            "image/jpg",
+            "image/jpeg",
+            "image/png",
+            "image/bmp"
         };
 
         private readonly FeedbackContext _context;
@@ -30,8 +42,10 @@ namespace Feedback_API.Services
         public bool IsValid(IFormFile file)
         {
             return file != null
-                && IsValidExtension(file) 
-                && IsValidSize(file);
+                && IsValidSize(file)
+                && IsValidExtension(file)
+                && IsValidContentType(file)
+                && IsValidFileContent(file);
         }
 
         private bool IsValidSize(IFormFile file)
@@ -42,13 +56,36 @@ namespace Feedback_API.Services
 
         private bool IsValidExtension(IFormFile file)
         {
-            return EXTENSIONS.Any(ext => file.FileName.ToLower().EndsWith(ext));
+            return EXTENSIONS.Any(ext => file.FileName.ToLower().EndsWith($".{ext}"));
         }
 
-        // TODO: check if this is needed, implement some way to check magic bytes if necessary
+        private bool IsValidContentType(IFormFile file)
+        {
+            return CONTENT_TYPES.Contains(file.ContentType.ToLower());
+        }
+
         private bool IsValidFileContent(IFormFile file)
         {
-            throw new NotImplementedException();
+            try
+            {
+                IImageFormat imageFormat;
+
+                using Image image = Image.Load(file.OpenReadStream(), out imageFormat);
+
+                var validMimeType = CONTENT_TYPES.Contains(imageFormat.DefaultMimeType);
+                var validFileType = EXTENSIONS.Contains(imageFormat.Name.ToLower());
+
+                if (!validMimeType || !validFileType)
+                {
+                    return false;
+                }
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+
+            return true;
         }
 
         public async Task<string> SaveAvatar(IFormFile file, long userID)
@@ -87,9 +124,48 @@ namespace Feedback_API.Services
             }
         }
 
-        public Task<string> SavePlaceImage(IFormFile file, long placeId, long imageId)
+        public async Task<string> SavePlaceImage(IFormFile file, long placeId, long imageId)
         {
-            throw new NotImplementedException();
+            var fileName = Guid.NewGuid().ToString();
+            var filePath = Path.Join("images", fileName);
+            var uriPath = $"images/{fileName}";
+
+            using (var stream = File.Create(filePath))
+            {
+                await file.CopyToAsync(stream);
+            }
+
+            var image = await _context.PlaceImages.FindAsync(placeId, imageId);
+
+            if (image != null)
+            {
+                var oldImage = image.URI;
+
+                image.URI = uriPath;
+
+                _context.Entry(image).State = EntityState.Modified;
+
+                if (oldImage != null)
+                {
+                    RemoveImage(oldImage);
+                }
+            }
+            else
+            {
+                image = new PlaceImage()
+                {
+                    ID = imageId,
+                    PlaceID = placeId,
+                    URI = uriPath
+                };
+
+                _context.PlaceImages.Add(image);
+            }
+
+            await _context.SaveChangesAsync();
+
+
+            return uriPath;
         }
     }
 }
