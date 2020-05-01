@@ -9,7 +9,6 @@ namespace Feedback_API.Models.Requests
         public string ZipCode { get; set; }
         public string Country { get; set; }
         public string Name { get; set; }
-        public bool IsVerified { get; set; }
         public long PlaceTypeID { get; set; }
     }
 }
