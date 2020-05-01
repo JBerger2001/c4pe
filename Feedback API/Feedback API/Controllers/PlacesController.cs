@@ -440,7 +440,7 @@ namespace Feedback_API.Controllers
                 return BadRequest(ModelState);
             }
 
-            var userAlreadyReviewed = await _context.Reviews.AnyAsync(r => r.PlaceID == placeId && r.UserID == reviewRequest.UserID);
+            var userAlreadyReviewed = await _context.Reviews.AnyAsync(r => r.PlaceID == placeId && r.UserID == CurrentUserId);
             if (userAlreadyReviewed)
             {
                 return BadRequest("This user already reviewed this place");
@@ -448,6 +448,7 @@ namespace Feedback_API.Controllers
 
             var review = _mapper.Map<Review>(reviewRequest);
             review.PlaceID = placeId;
+            review.Time = DateTime.Now;
 
             _context.Reviews.Add(review);
             await _context.SaveChangesAsync();
@@ -465,15 +466,17 @@ namespace Feedback_API.Controllers
                 return BadRequest(ModelState);
             }
 
-            var review = _mapper.Map<Review>(reviewRequest);
+            var review = _context.Reviews.FirstOrDefault(r => r.PlaceID == placeId && r.ID == reviewId);
 
             if ((review.UserID != CurrentUserId) && !IsAdmin)
             {
                 return Unauthorized();
             }
 
-            review.ID = reviewId;
-            review.PlaceID = placeId;
+            _mapper.Map(reviewRequest, review);
+
+            review.LastEdited = DateTime.Now;
+
             _context.Entry(review).State = EntityState.Modified;
 
             var reviewResponse = _mapper.Map<ReviewResponse>(review);

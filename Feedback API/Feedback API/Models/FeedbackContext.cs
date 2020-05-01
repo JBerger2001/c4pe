@@ -40,6 +40,8 @@ namespace Feedback_API.Models
             modelBuilder.Entity<PlaceOwner>()
                 .HasKey(po => new { po.PlaceID, po.OwnerID });
 
+            modelBuilder.Entity<Review>().Property("LastEdited").IsRequired(false);
+
             // default users
             List<User> users = new List<User>
             {
