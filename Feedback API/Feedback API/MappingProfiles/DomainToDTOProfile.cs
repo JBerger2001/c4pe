@@ -42,9 +42,30 @@ namespace Feedback_API.MappingProfiles
             CreateMap<User, UserPrivateResponse>();
             CreateMap<User, UserPublicResponse>();
 
-            CreateMap<Review, ReviewResponse>();
+            CreateMap<Review, ReviewResponse>()
+                .ForMember(dest => dest.PositiveReactions, opt =>
+                {
+                    opt.MapFrom(src => src.Reactions.Count(r => r.IsHelpful));
+                })
+                .ForMember(dest => dest.NegativeReactions, opt =>
+                {
+                    opt.MapFrom(src => src.Reactions.Count(r => !r.IsHelpful));
+                });
+            CreateMap<Review, ReviewUserResponse>()
+                .ForMember(dest => dest.PositiveReactions, opt =>
+                {
+                    opt.MapFrom(src => src.Reactions.Count(r => r.IsHelpful));
+                })
+                .ForMember(dest => dest.NegativeReactions, opt =>
+                {
+                    opt.MapFrom(src => src.Reactions.Count(r => !r.IsHelpful));
+                });
+
+            CreateMap<Reaction, ReactionResponse>();
 
             CreateMap<PlaceType, PlaceTypeResponse>();
+
+            CreateMap<PlaceImage, PlaceImageResponse>();
         }
     }
 }
