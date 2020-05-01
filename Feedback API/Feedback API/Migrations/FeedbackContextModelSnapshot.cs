@@ -139,6 +139,38 @@ namespace Feedback_API.Migrations
                         });
                 });
 
+            modelBuilder.Entity("Feedback_API.Models.Domain.PlaceOwner", b =>
+                {
+                    b.Property<long>("PlaceID")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("OwnerID")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("PlaceID", "OwnerID");
+
+                    b.HasIndex("OwnerID");
+
+                    b.ToTable("placeowner");
+
+                    b.HasData(
+                        new
+                        {
+                            PlaceID = 1L,
+                            OwnerID = 1L
+                        },
+                        new
+                        {
+                            PlaceID = 2L,
+                            OwnerID = 2L
+                        },
+                        new
+                        {
+                            PlaceID = 3L,
+                            OwnerID = 3L
+                        });
+                });
+
             modelBuilder.Entity("Feedback_API.Models.Domain.PlaceType", b =>
                 {
                     b.Property<long>("ID")
@@ -247,7 +279,7 @@ namespace Feedback_API.Migrations
                             PlaceID = 2L,
                             Rating = 2,
                             Text = "meh",
-                            Time = new DateTime(2020, 4, 22, 12, 15, 8, 700, DateTimeKind.Local).AddTicks(3740),
+                            Time = new DateTime(2020, 4, 28, 19, 34, 46, 797, DateTimeKind.Local).AddTicks(6533),
                             UserID = 2L
                         },
                         new
@@ -256,7 +288,7 @@ namespace Feedback_API.Migrations
                             PlaceID = 1L,
                             Rating = 5,
                             Text = "nice",
-                            Time = new DateTime(2020, 4, 22, 12, 15, 8, 703, DateTimeKind.Local).AddTicks(555),
+                            Time = new DateTime(2020, 4, 28, 19, 34, 46, 800, DateTimeKind.Local).AddTicks(1457),
                             UserID = 1L
                         },
                         new
@@ -265,7 +297,7 @@ namespace Feedback_API.Migrations
                             PlaceID = 1L,
                             Rating = 4,
                             Text = "pretty good",
-                            Time = new DateTime(2020, 4, 22, 12, 15, 8, 703, DateTimeKind.Local).AddTicks(611),
+                            Time = new DateTime(2020, 4, 28, 19, 34, 46, 800, DateTimeKind.Local).AddTicks(1502),
                             UserID = 2L
                         });
                 });
@@ -303,6 +335,10 @@ namespace Feedback_API.Migrations
                     b.Property<byte[]>("PasswordSalt")
                         .HasColumnType("longblob");
 
+                    b.Property<string>("Role")
+                        .IsRequired()
+                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+
                     b.Property<string>("Street")
                         .HasColumnType("longtext CHARACTER SET utf8mb4");
 
@@ -326,8 +362,9 @@ namespace Feedback_API.Migrations
                             FirstName = "Peter",
                             IsVerified = false,
                             LastName = "Gustav",
-                            PasswordHash = new byte[] { 0 },
-                            PasswordSalt = new byte[] { 0 },
+                            PasswordHash = new byte[] { 43, 123, 95, 19, 133, 41, 199, 80, 73, 107, 152, 124, 163, 45, 103, 243, 175, 99, 143, 188, 123, 27, 32, 168, 147, 80, 159, 141, 43, 185, 152, 60, 16, 116, 118, 158, 33, 222, 221, 85, 91, 112, 233, 171, 247, 91, 67, 220, 222, 129, 52, 28, 3, 174, 139, 203, 176, 244, 128, 131, 137, 79, 158, 97 },
+                            PasswordSalt = new byte[] { 219, 103, 168, 175, 252, 98, 208, 84, 170, 187, 84, 42, 225, 2, 97, 163, 115, 77, 136, 19, 145, 211, 148, 255, 183, 123, 89, 230, 91, 116, 197, 131, 234, 101, 13, 44, 43, 94, 43, 82, 204, 0, 143, 24, 41, 79, 240, 95, 39, 191, 112, 125, 22, 210, 68, 4, 90, 75, 162, 84, 156, 164, 210, 93, 182, 132, 134, 130, 123, 111, 232, 163, 240, 242, 163, 231, 187, 72, 185, 6, 89, 2, 16, 255, 151, 93, 8, 234, 255, 184, 102, 159, 182, 10, 141, 203, 2, 1, 190, 121, 98, 157, 43, 201, 206, 21, 221, 151, 103, 102, 32, 80, 68, 45, 108, 214, 213, 193, 196, 221, 30, 11, 208, 233, 225, 175, 231, 88 },
+                            Role = "User",
                             Street = "Example Street 1",
                             Username = "pete",
                             ZipCode = "3500"
@@ -340,8 +377,9 @@ namespace Feedback_API.Migrations
                             FirstName = "John",
                             IsVerified = false,
                             LastName = "Gustav",
-                            PasswordHash = new byte[] { 0 },
-                            PasswordSalt = new byte[] { 0 },
+                            PasswordHash = new byte[] { 50, 23, 176, 17, 247, 36, 132, 236, 210, 181, 227, 69, 250, 53, 1, 214, 114, 106, 42, 233, 148, 151, 92, 227, 194, 176, 57, 31, 166, 118, 54, 232, 150, 181, 144, 36, 251, 157, 140, 243, 107, 118, 47, 86, 181, 201, 128, 139, 174, 52, 206, 235, 88, 194, 73, 252, 154, 98, 72, 90, 37, 16, 154, 229 },
+                            PasswordSalt = new byte[] { 35, 221, 121, 115, 79, 136, 91, 84, 51, 216, 55, 7, 52, 50, 74, 168, 149, 56, 194, 238, 106, 250, 142, 209, 201, 251, 13, 200, 61, 162, 8, 108, 184, 249, 103, 226, 51, 107, 130, 207, 80, 202, 146, 44, 197, 236, 216, 46, 55, 184, 89, 23, 106, 5, 178, 5, 116, 50, 153, 7, 250, 162, 175, 29, 59, 19, 4, 233, 90, 247, 239, 153, 33, 75, 29, 232, 217, 247, 159, 56, 230, 82, 224, 69, 68, 183, 226, 213, 0, 159, 218, 138, 4, 13, 48, 75, 89, 192, 99, 183, 236, 102, 249, 148, 88, 120, 175, 246, 103, 137, 0, 187, 174, 113, 45, 57, 183, 234, 185, 173, 164, 119, 161, 219, 2, 30, 142, 65 },
+                            Role = "User",
                             Street = "Example Street 2",
                             Username = "MrJohn",
                             ZipCode = "3500"
@@ -354,8 +392,9 @@ namespace Feedback_API.Migrations
                             FirstName = "Heinz",
                             IsVerified = false,
                             LastName = "Gustav",
-                            PasswordHash = new byte[] { 0 },
-                            PasswordSalt = new byte[] { 0 },
+                            PasswordHash = new byte[] { 101, 198, 175, 77, 145, 239, 202, 124, 89, 192, 39, 49, 111, 202, 144, 65, 52, 100, 171, 149, 187, 86, 21, 98, 75, 113, 243, 127, 177, 156, 20, 69, 122, 65, 137, 247, 234, 116, 42, 105, 182, 140, 147, 232, 109, 1, 76, 93, 63, 238, 183, 49, 49, 229, 65, 183, 224, 148, 71, 193, 170, 17, 86, 82 },
+                            PasswordSalt = new byte[] { 30, 208, 90, 170, 223, 233, 39, 146, 155, 135, 57, 139, 29, 182, 29, 182, 238, 38, 94, 65, 194, 185, 66, 22, 242, 173, 249, 35, 35, 46, 26, 65, 166, 97, 221, 127, 29, 21, 193, 61, 27, 107, 26, 199, 62, 183, 116, 180, 28, 244, 209, 229, 80, 206, 158, 163, 136, 244, 29, 133, 211, 28, 2, 9, 123, 107, 130, 51, 189, 192, 97, 221, 104, 145, 60, 77, 186, 92, 101, 80, 47, 171, 30, 244, 194, 76, 25, 76, 107, 86, 210, 17, 174, 92, 198, 42, 50, 235, 247, 71, 193, 198, 19, 208, 73, 154, 116, 42, 2, 11, 240, 171, 105, 199, 34, 36, 188, 213, 135, 108, 70, 169, 47, 242, 54, 196, 38, 87 },
+                            Role = "User",
                             Street = "Example Street 3",
                             Username = "Ketchup",
                             ZipCode = "3500"
@@ -368,8 +407,9 @@ namespace Feedback_API.Migrations
                             FirstName = "Olaf",
                             IsVerified = false,
                             LastName = "Gustav",
-                            PasswordHash = new byte[] { 0 },
-                            PasswordSalt = new byte[] { 0 },
+                            PasswordHash = new byte[] { 242, 147, 181, 158, 42, 185, 244, 64, 134, 89, 247, 131, 141, 118, 172, 167, 131, 24, 130, 246, 174, 159, 16, 156, 118, 190, 238, 152, 184, 225, 199, 202, 243, 98, 41, 2, 13, 230, 182, 247, 199, 183, 108, 249, 94, 63, 37, 229, 164, 225, 133, 156, 0, 84, 222, 161, 99, 158, 231, 210, 238, 93, 89, 241 },
+                            PasswordSalt = new byte[] { 137, 76, 109, 255, 116, 145, 219, 100, 175, 170, 184, 112, 209, 79, 51, 6, 141, 14, 228, 8, 244, 102, 224, 143, 132, 43, 223, 143, 243, 200, 42, 187, 149, 30, 126, 31, 137, 27, 12, 225, 64, 179, 171, 35, 184, 255, 97, 32, 222, 155, 72, 207, 208, 180, 158, 11, 77, 25, 20, 66, 213, 135, 128, 43, 249, 244, 97, 185, 98, 39, 185, 193, 49, 138, 156, 140, 86, 9, 37, 15, 0, 130, 104, 125, 24, 78, 14, 247, 70, 44, 52, 173, 195, 175, 214, 147, 195, 86, 127, 122, 107, 211, 126, 239, 76, 1, 6, 92, 58, 217, 214, 205, 71, 89, 94, 216, 178, 208, 245, 104, 229, 198, 208, 33, 133, 197, 186, 203 },
+                            Role = "User",
                             Street = "Example Street 4",
                             Username = "Olaf",
                             ZipCode = "3500"
@@ -382,11 +422,27 @@ namespace Feedback_API.Migrations
                             FirstName = "Hans",
                             IsVerified = false,
                             LastName = "Gustav",
-                            PasswordHash = new byte[] { 0 },
-                            PasswordSalt = new byte[] { 0 },
+                            PasswordHash = new byte[] { 191, 247, 249, 19, 71, 6, 207, 144, 102, 17, 194, 98, 2, 244, 160, 17, 2, 107, 215, 210, 1, 170, 140, 131, 185, 27, 60, 37, 216, 61, 143, 196, 181, 92, 40, 204, 116, 228, 98, 37, 132, 245, 4, 89, 79, 33, 21, 229, 49, 113, 45, 199, 48, 29, 98, 19, 26, 107, 212, 93, 129, 36, 112, 214 },
+                            PasswordSalt = new byte[] { 132, 35, 247, 2, 229, 38, 12, 146, 182, 193, 173, 224, 111, 18, 180, 64, 94, 178, 2, 104, 86, 104, 235, 114, 227, 196, 224, 53, 255, 97, 113, 234, 10, 91, 82, 181, 98, 27, 175, 107, 177, 101, 250, 194, 87, 162, 34, 162, 221, 244, 235, 127, 92, 164, 252, 205, 234, 52, 23, 102, 136, 132, 172, 204, 239, 251, 77, 15, 174, 55, 111, 125, 236, 30, 47, 51, 164, 145, 249, 123, 164, 10, 223, 11, 217, 158, 32, 239, 46, 116, 61, 168, 225, 102, 138, 31, 150, 25, 67, 164, 91, 205, 5, 229, 42, 45, 210, 95, 161, 191, 185, 172, 79, 251, 192, 64, 106, 45, 13, 227, 116, 186, 156, 61, 172, 177, 200, 15 },
+                            Role = "User",
                             Street = "Example Street 5",
                             Username = "hansi12",
                             ZipCode = "3500"
+                        },
+                        new
+                        {
+                            ID = 6L,
+                            City = "localhost",
+                            Country = "yes",
+                            FirstName = "Bobby",
+                            IsVerified = false,
+                            LastName = "Tables",
+                            PasswordHash = new byte[] { 188, 139, 238, 79, 154, 81, 237, 46, 180, 175, 89, 173, 186, 248, 211, 233, 128, 22, 253, 30, 90, 248, 132, 214, 226, 109, 240, 84, 25, 210, 204, 120, 75, 201, 24, 189, 225, 160, 128, 110, 74, 244, 198, 51, 69, 194, 169, 173, 230, 161, 248, 115, 97, 230, 217, 189, 218, 62, 219, 82, 1, 253, 5, 64 },
+                            PasswordSalt = new byte[] { 63, 225, 73, 42, 34, 152, 29, 26, 104, 152, 195, 78, 187, 22, 130, 63, 6, 34, 127, 68, 216, 89, 134, 86, 177, 203, 170, 111, 24, 72, 82, 173, 94, 199, 165, 157, 1, 107, 62, 159, 254, 44, 37, 244, 12, 203, 228, 201, 100, 211, 131, 5, 199, 152, 64, 20, 180, 176, 171, 46, 183, 5, 145, 74, 201, 252, 219, 186, 247, 247, 48, 20, 33, 177, 10, 222, 81, 236, 238, 46, 139, 136, 219, 51, 214, 216, 115, 106, 181, 149, 254, 238, 168, 60, 65, 144, 232, 78, 42, 216, 85, 233, 130, 112, 121, 254, 223, 134, 6, 185, 199, 15, 49, 69, 243, 164, 107, 151, 44, 85, 64, 19, 191, 25, 116, 9, 109, 63 },
+                            Role = "Admin",
+                            Street = "443",
+                            Username = "admin",
+                            ZipCode = "1337"
                         });
                 });
 
@@ -404,6 +460,21 @@ namespace Feedback_API.Migrations
                     b.HasOne("Feedback_API.Models.Domain.PlaceType", "PlaceType")
                         .WithMany("Places")
                         .HasForeignKey("PlaceTypeID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Feedback_API.Models.Domain.PlaceOwner", b =>
+                {
+                    b.HasOne("Feedback_API.Models.Domain.User", "Owner")
+                        .WithMany()
+                        .HasForeignKey("OwnerID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Feedback_API.Models.Domain.Place", "Place")
+                        .WithMany("PlaceOwners")
+                        .HasForeignKey("PlaceID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
