@@ -29,7 +29,8 @@ namespace Feedback_API.Services
 
         public bool IsValid(IFormFile file)
         {
-            return IsValidExtension(file) 
+            return file != null
+                && IsValidExtension(file) 
                 && IsValidSize(file);
         }
 
@@ -76,7 +77,7 @@ namespace Feedback_API.Services
             return uriPath;
         }
 
-        private void RemoveImage(string path)
+        public void RemoveImage(string path)
         {
             var fullPath = Path.Combine(Directory.GetCurrentDirectory(), path);
 

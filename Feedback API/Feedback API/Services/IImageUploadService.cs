@@ -11,5 +11,6 @@ namespace Feedback_API.Services
         bool IsValid(IFormFile file);
         Task<string> SaveAvatar(IFormFile file, long userId);
         Task<string> SavePlaceImage(IFormFile file, long placeId, long imageId);
+        public void RemoveImage(string path);
     }
 }
