@@ -20,6 +20,7 @@ namespace Feedback_API.Models
         public DbSet<Place> Places { get; set; }
         public DbSet<PlaceType> PlaceTypes { get; set; }
         public DbSet<PlaceOwner> PlaceOwners { get; set; }
+        public DbSet<PlaceImage> PlaceImages { get; set; }
         public DbSet<Review> Reviews { get; set; }
         public DbSet<OpeningTime> OpeningTimes { get; set; }
         public DbSet<Reaction> Reactions { get; set; }
@@ -39,6 +40,12 @@ namespace Feedback_API.Models
 
             modelBuilder.Entity<PlaceOwner>()
                 .HasKey(po => new { po.PlaceID, po.OwnerID });
+
+            modelBuilder.Entity<Reaction>()
+                .HasKey(r => new { r.ReviewID, r.UserID });
+
+            modelBuilder.Entity<PlaceImage>()
+                .HasKey(pi => new { pi.PlaceID, pi.ID });
 
             modelBuilder.Entity<Review>().Property("LastEdited").IsRequired(false);
 
@@ -97,8 +104,8 @@ namespace Feedback_API.Models
 
             modelBuilder.Entity<Reaction>().HasData(new Reaction[]
             {
-                new Reaction { ID = 1, ReviewID = 2, UserID = 3, IsHelpful = false },
-                new Reaction { ID = 2, ReviewID = 1, UserID = 2, IsHelpful = true },
+                new Reaction { ReviewID = 2, UserID = 3, IsHelpful = false },
+                new Reaction { ReviewID = 1, UserID = 2, IsHelpful = true },
             });
         }
     }

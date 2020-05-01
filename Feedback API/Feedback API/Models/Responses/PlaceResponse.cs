@@ -15,5 +15,6 @@ namespace Feedback_API.Models.Responses
         public int ReviewCount { get; set; }
         public PlaceTypeResponse PlaceType { get; set; }
         public ICollection<OpeningTimeResponse> OpeningTimes { get; set; }
+        public ICollection<PlaceImageResponse> Images { get; set; }
     }
 }
