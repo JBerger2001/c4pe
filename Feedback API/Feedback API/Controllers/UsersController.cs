@@ -94,6 +94,12 @@ namespace Feedback_API.Controllers
             }
 
             var user = await _context.Users.FirstOrDefaultAsync(u => u.ID == id);
+
+            if (user == null)
+            {
+                return NotFound("User not found.");
+            }
+
             _mapper.Map(userDTO, user);
             _context.Entry(user).State = EntityState.Modified;
 
@@ -117,7 +123,7 @@ namespace Feedback_API.Controllers
         }
 
         // PUT: api/Users/me
-        [HttpPut]
+        [HttpPut("me")]
         public async Task<IActionResult> PutCurrentUser(UserUpdateRequest userDTO)
         {
             if (!ModelState.IsValid)
@@ -180,6 +186,8 @@ namespace Feedback_API.Controllers
             }
 
             var newUser = _mapper.Map<User>(userRegisterRequest);
+            newUser.Role = Role.User;
+
             await _authService.Register(newUser, userRegisterRequest.Password);
 
             return StatusCode(201);
@@ -233,7 +241,7 @@ namespace Feedback_API.Controllers
         }
 
         // DELETE: api/Users/me
-        [HttpDelete]
+        [HttpDelete("me")]
         public async Task<IActionResult> DeleteCurrentUser()
         {
             var user = await _context.Users.FindAsync(currentUserId);
@@ -244,6 +252,21 @@ namespace Feedback_API.Controllers
 
             _context.Users.Remove(user);
             await _context.SaveChangesAsync();
+
+            return NoContent();
+        }
+
+        // DELETE: api/Users/me/avatar
+        [HttpDelete("me/avatar")]
+        public async Task<IActionResult> DeleteCurrentUserAvatar()
+        {
+            var user = await _context.Users.FindAsync(currentUserId);
+            if (user == null || user?.AvatarURI == null)
+            {
+                return NotFound();
+            }
+
+            _imageUploadService.RemoveImage(user.AvatarURI);
 
             return NoContent();
         }
