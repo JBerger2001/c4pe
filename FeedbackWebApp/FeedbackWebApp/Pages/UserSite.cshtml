@@ -2,7 +2,50 @@
 @model FeedbackWebApp.Pages.UserSiteModel
 @{
     ViewData["Title"] = "UserSite";
+    User u = BaseController.GetUser();
 }
 
-<h2>UserSite</h2>
+<div class="loginDiv">
+    <h1>User Information</h1>
+    <form method="POST">
+        <label>Username:</label>
+        <br />
+        <input class="textBLogin" type="text" name="username" value="@u.Username" />
+        <br />
+        <label>Firstname:</label>
+        <br />
+        <input class="textBLogin" type="text" name="fn" value="@u.FirstName" />
+        <br />
+        <label>Lastname:</label>
+        <br />
+        <input class="textBLogin" type="text" name="ln" value="@u.LastName" />
+        <br />
+        <label>Description:</label>
+        <br />
+        <textarea class="textBLogin" name="description" cols="35" rows="4">@u.Description</textarea>
+        <br />
+        <label class="labelMargin">Street & Number: </label>
+        <br />
+        <input class="textBLogin" type="text" name="street" value="@u.Street" />
+        <br />
+        <label class="labelMargin">ZipCode: </label>
+        <br />
+        <input class="textBLogin" type="text" name="zipCode" value="@u.ZipCode" />
+        <br />
+        <label class="labelMargin">City: </label>
+        <br />
+        <input class="textBLogin" type="text" name="city" value="@u.City" />
+        <br />
+        <label class="labelMargin">Country: </label>
+        <br />
+        <input class="textBLogin" type="text" name="country" value="@u.Country" />
+        <br />
+        <br />
+        <input type="submit" class="btnNewP" style="border: none;color: white;padding: 6px 20px;
+            text-align: center;background-color: #555555;cursor: pointer; margin-bottom: 3px" asp-page-handler="" value="Cancel">
+        <input type="hidden" name="_METHOD" value="PUT" />
+        <input type="submit" class="btnNewP" style="border: none;color: white;padding: 6px 20px;
+            text-align: center;background-color: #555555;cursor: pointer" asp-page-handler="" value="Save Changes">
+    </form>
+</div>
 

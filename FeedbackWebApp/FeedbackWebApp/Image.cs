@@ -5,9 +5,9 @@ using System.Threading.Tasks;
 
 namespace FeedbackWebApp
 {
-    public class LogIn
+    public class Image
     {
-        public string Token { get; set; }
-        public int userId { get; set; }
+        public int ID { get; set; }
+        public string URI { get; set; }
     }
 }

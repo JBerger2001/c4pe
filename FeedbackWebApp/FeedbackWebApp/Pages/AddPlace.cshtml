@@ -3,10 +3,9 @@
 @{
     ViewData["Title"] = "Add new Place";
     HttpRequests req = new HttpRequests();
-    List<PlaceType> types = new List<PlaceType>();
-    types = await req.GetPlaceTypesAsync();
+    List<PlaceType> types = await req.GetPlaceTypesAsync();
+    List<string> days = new List<string>() { "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday" };
 }
-
 <div class="loginDiv">
     <h2>Add new Place</h2>
     <form method="POST">
@@ -41,44 +40,20 @@
         <label class="labelMargin">Opening Times: </label>
         <br />
         <div style="text-align:center">
-            <label>Monday: </label>
-            <div class="times">
-                <label>open: </label><input name="Open0" type="time" /> <label>close: </label><input name="Close0" type="time" />
-            </div>
-            <br />
-            <label>Tuesday: </label>
-            <div class="times">
-                <label>open: </label><input name="Open1" type="time" /> <label>close: </label><input name="Close1" type="time" />
-            </div>
-            <br />
-            <label>Wednesday: </label>
-            <div class="times">
-                <label>open: </label><input name="Open2" type="time" /> <label>close: </label><input name="Close2" type="time" />
-            </div>
-            <br />
-            <label>Thursday: </label>
-            <div class="times">
-                <label>open: </label><input name="Open3" type="time" /> <label>close: </label><input name="Close3" type="time" />
-            </div>
-            <br />
-            <label>Friday: </label>
-            <div class="times">
-                <label>open: </label><input name="Open4" type="time" /> <label>close: </label><input name="Close4" type="time" />
-            </div>
-            <br />
-            <label>Saturday: </label>
-            <div class="times">
-                <label>open: </label><input name="Open5" type="time" /> <label>close: </label><input name="Close5" type="time" />
-            </div>
-            <br />
-            <label>Sunday: </label>
-            <div class="times">
-                <label>open: </label><input name="Open6" type="time" /> <label>close: </label><input name="Close6" type="time" />
-            </div>
+            @for (int i = 0; i < days.Count; i++)
+            {
+                string opN = "Open" + i; string clN = "Close" + i;
+                <label>@days[i]: </label>
+                <div class="times">
+                    <label>open: </label><input name=opN type="time" /> <label>close: </label><input name=clN type="time" />
+                </div>
+                <br />
+            }
             <input type="submit" class="btnNewP" style="border: none;color: white;padding: 6px 20px;
             text-align: center;margin-top: 10px;background-color: #555555;cursor: pointer;margin-left:20px" asp-page-handler="" value="Create new place">
         </div>
     </form>
-    
+
 </div>
+
 

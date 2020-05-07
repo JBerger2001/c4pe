@@ -14,121 +14,94 @@ namespace FeedbackWebApp
     {
         HttpClient client = new HttpClient();
         private string path = "http://77.244.251.110/";
+        private string path2 = "";
 
+        #region GET Requests
         public async Task<Place> GetPlaceAsync(int placeId)
         {
-            Place place = null;
-            HttpResponseMessage response = await client.GetAsync(path + "api/places/" + placeId);
-            if (response.IsSuccessStatusCode)
-            {
-                place = await response.Content.ReadAsAsync<Place>();
-            }
-            return place;
+            path2 = path + "api/places/" + placeId;
+            return await path2.GetJsonAsync<Place>();
         }
         public async Task<string> GetPlaceTypeAsync(int typeId)
         {
-            PlaceType placetype = null;
-            HttpResponseMessage response = await client.GetAsync(path + "api/placetype/" + typeId);
-            if (response.IsSuccessStatusCode)
-            {
-                placetype = await response.Content.ReadAsAsync<PlaceType>();
-            }
-            return placetype.Name;
+            path2 = path + "api/placetype/" + typeId;
+            return (await path2.GetJsonAsync<PlaceType>()).Name;
         }
         public async Task<List<PlaceType>> GetPlaceTypesAsync()
         {
-            List<PlaceType> placetypes = new List<PlaceType>();
-            string response = await client.GetStringAsync(path + "api/placetypes");
-            var data = JsonConvert.DeserializeObject<PlaceType[]>(response);
-            for (int i = 0; i < data.Length; i++)
-            {
-                placetypes.Add(data[i]);
-            }
-            return placetypes;
+            path2 = path + "api/placetypes";
+            return await path2.GetJsonAsync<List<PlaceType>>();
         }
-        public async Task<List<Place>> GetPlacesAsync()
+        public async Task<List<Place>> GetPlacesAsync(int page)
         {
-            List<Place> places = new List<Place>();
-            string response = await client.GetStringAsync(path + "api/places");
-            var data = JsonConvert.DeserializeObject<Place[]>(response);
-            for (int i = 0; i < data.Length; i++)
-            {
-                places.Add(data[i]);
-            }
-
-            return places;
+            path2 = path + "api/places?PageNumber=" + page;
+            return await path2.GetJsonAsync<List<Place>>();
         }
         public async Task<List<Review>> GetReviews(int placeId)
         {
-            List<Review> places = new List<Review>();
-            string response = await client.GetStringAsync(path + "api/places/"+placeId+"/reviews");
-            var data = JsonConvert.DeserializeObject<Review[]>(response);
-            for (int i = 0; i < data.Length; i++)
-            {
-                places.Add(data[i]);
-            }
-            return places;
+            path2 = path + "api/places/" + placeId + "/reviews";
+            return await path2.GetJsonAsync<List<Review>>();
         }
-        public async Task<User> GetUserAsync(long userId)
+        public async Task<User> GetUserAsync(string token)
         {
-            User u = null;
-            HttpResponseMessage response = await client.GetAsync(path + "api/users/" + userId);
-            if (response.IsSuccessStatusCode)
-            {
-                u = await response.Content.ReadAsAsync<User>();
-            }
-            return u;
+            path2 = path + "api/users/me";
+            return await path2.WithOAuthBearerToken(token).GetJsonAsync<User>();
         }
+        #endregion GET Requests
 
-        public async Task<Place> CreatePlaceAsync(Object place)
+        #region POST Requests
+        public async Task<Place> CreatePlaceAsync(Object place, string token)
         {
-            Place response = await client.PostAsJsonAsync(
-                path + "api/places", place).ReceiveJson<Place>();
-            if(response!=null)
-                return response;
-            return null;
+            path2 = path + "api/places";
+            return await path2.WithOAuthBearerToken(token).PostJsonAsync(place).ReceiveJson<Place>();
         }
-        public async Task<Uri> CreatePlaceTypeAsync(PlaceType placetype)
+        public async Task<HttpStatusCode> CreatePlaceTypeAsync(PlaceType placetype,string token)
         {
-            HttpResponseMessage response = await client.PostAsJsonAsync(
-                path + "api/placetypes", placetype);
-            response.EnsureSuccessStatusCode();
-            return response.Headers.Location;
+            path2 = path + "api/placetypes";
+            return (await path2.WithOAuthBearerToken(token).PostJsonAsync(placetype)).StatusCode;
         }
-
-        public async Task<string> CreateUserAsync(User u)
+        public async Task<HttpStatusCode> CreateUserAsync(object u)
         {
-            if (u.Username != "" && u.Password != "")
-            {
-                HttpResponseMessage response = await client.PostAsJsonAsync(
-                path + "api/users/register", u);
-                response.EnsureSuccessStatusCode();
-                return "Sucessfully registered!";
-            }
+            path2 = path + "api/users/register";
+            return (await path2.PostJsonAsync(u)).StatusCode;
+        }
+        public async Task<HttpStatusCode> CreateOpeningTime(openingTimes opti,long pID,string token)
+        {
+            string path2 = path + "api/places/" + pID + "/OpeningTimes";
+            return (await path2.WithOAuthBearerToken(token).PostJsonAsync(opti)).StatusCode;
+        }
+        public async Task<HttpStatusCode> CreateReview(object review,long placeID,string token)
+        {
+            string path2 = path + "api/places/" + placeID + "/Reviews";
+            return (await path2.WithOAuthBearerToken(token).PostJsonAsync(review)).StatusCode;
+        }
+        public async Task<LogIn> LoginUser(object user)
+        {
+            string path2 = path + "api/users/login";
+            HttpStatusCode resp = (await path2.PostJsonAsync(user)).StatusCode;     // Problem!!!!
+            if (resp == HttpStatusCode.OK)
+                return await path2.PostJsonAsync(user).ReceiveJson<LogIn>();
             else
-                return "A problem ...";
+                return new LogIn() { Token = "", userId = 0 };
         }
-        public async Task<openingTimes> CreateOpeningTime(object opti,long pID)
-        {
-            openingTimes response = await client.PostAsJsonAsync(
-                path + "api/places/"+pID+"/OpeningTimes", opti).ReceiveJson<openingTimes>();
-            return response;
-        }
+        #endregion POST Requests
 
-        public async Task<Uri> CreateReview(object review,long placeID)
+        #region PUT Requests
+        public async Task<HttpStatusCode> UpdateUserAsync(Object u, string token)
         {
-            HttpResponseMessage response = await client.PostAsJsonAsync(
-                path + "api/places/"+placeID+"/Reviews", review);
-            response.EnsureSuccessStatusCode();
-            return response.Headers.Location;
+            string path2 = path + "api/users/me";
+            return (await path2.WithOAuthBearerToken(token).PutJsonAsync(u)).StatusCode;
         }
-
-        public async Task<LogIn> LoginUser(User user)
+        public async Task<HttpStatusCode> UpdatePlaceAsync(Object place,int pID)
         {
-            LogIn response = await client.PostAsJsonAsync(
-            path + "api/users/login", user).ReceiveJson<LogIn>();
-            //response.EnsureSuccessStatusCode();
-            return response;
+            string path2 = path + "api/places/" + pID;
+            return (await path2.PutJsonAsync(place)).StatusCode;
         }
+        public async Task<HttpStatusCode> UpdateOpeningTime(openingTimes o, int pID, int opID)
+        {
+            string path2 = path + "api/places/" + pID + "/OpeningTimes/"+opID;
+            return (await path2.PutJsonAsync(o)).StatusCode;
+        }
+        #endregion PUT Requests
     }
 }

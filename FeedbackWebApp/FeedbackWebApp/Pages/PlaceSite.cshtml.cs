@@ -10,7 +10,7 @@ namespace FeedbackWebApp.Pages
     public class PlaceSiteModel : PageModel
     {
         public int Id { get; set; }
-        public void OnGet()
+        public void OnGetEdit()
         {
 
         }

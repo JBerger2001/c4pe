@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using System.Net;
 
 namespace FeedbackWebApp.Pages
 {
@@ -18,11 +19,14 @@ namespace FeedbackWebApp.Pages
             HttpRequests req = new HttpRequests();
             object r = new
             {
-                UserID = BaseController.GetUser().Id,    //mgrau
+                UserID = BaseController.GetUser().Id,
                 Rating = Convert.ToInt32(Request.Form["rating"].ToString()),
                 Text = Request.Form["reviewContent"].ToString()
             };
-            await req.CreateReview(r, 15);
+            if(await req.CreateReview(r, 1, BaseController.GetToken()) != HttpStatusCode.OK)
+            {
+                // Zeige Fehler an
+            }
         }
     }
 }

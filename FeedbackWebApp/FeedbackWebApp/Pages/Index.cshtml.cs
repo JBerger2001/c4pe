@@ -15,17 +15,17 @@ namespace FeedbackWebApp.Pages
         }
         public async Task<IActionResult> OnPostLogIn()
         {
-            User u = new User() { Username = Request.Form["username"], Password = Request.Form["pwd"] };
             HttpRequests r = new HttpRequests();
-            LogIn x= new LogIn();
-            if (u.Username != "" & u.Password != "")
+            LogIn x = new LogIn();
+            if (Request.Form["username"] != "" & Request.Form["pwd"] != "")
             {
+                object u = new { username = Request.Form["username"].ToString(), password = Request.Form["pwd"].ToString() };
                 x = await r.LoginUser(u);
-            }// Token wird gespeichert
-            if (x.token != "")
+            }
+            if (x.Token != "" && x.userId!=0)
             {
-                u = await r.GetUserAsync(x.userId);
-                BaseController.SetUserAndToken(u, x.token);
+                User us = await r.GetUserAsync(x.Token);
+                BaseController.SetUserAndToken(us, x.Token);
                 return RedirectToPage("/Overview");
             }
             else

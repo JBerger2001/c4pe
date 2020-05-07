@@ -10,13 +10,15 @@ namespace FeedbackWebApp
         public long Id { get; set; }
         public string Username { get; set; }
         public string FirstName { get; set; }
+        public string Role { get; set; }
         public string LastName { get; set; }
-        public string Password { get; set; }
+        //public string Password { get; set; }
         public string Description { get; set; }
         public string Street { get; set; }
         public string City { get; set; }
         public string ZipCode { get; set; }
         public string Country { get; set; }
         public bool IsVerified { get; set; }
+        public string AvatarURI { get; set; }
     }
 }

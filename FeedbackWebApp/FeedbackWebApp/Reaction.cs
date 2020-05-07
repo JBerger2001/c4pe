@@ -5,9 +5,8 @@ using System.Threading.Tasks;
 
 namespace FeedbackWebApp
 {
-    public class LogIn
+    public class Reaction
     {
-        public string Token { get; set; }
-        public int userId { get; set; }
+        public bool isHelpful { get; set; }
     }
 }

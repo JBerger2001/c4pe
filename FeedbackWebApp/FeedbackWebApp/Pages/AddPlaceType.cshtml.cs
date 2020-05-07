@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using System.Net;
 
 namespace FeedbackWebApp.Pages
 {
@@ -12,11 +13,15 @@ namespace FeedbackWebApp.Pages
         public void OnGet()
         {
         }
-        public async void OnPost()
+        public async Task<IActionResult> OnPost()
         {
             HttpRequests req = new HttpRequests();
             PlaceType placetype = new PlaceType(){ Name = Request.Form["placetypeName"] };
-            await req.CreatePlaceTypeAsync(placetype);
+            if(await req.CreatePlaceTypeAsync(placetype, BaseController.GetToken()) != HttpStatusCode.OK)
+            {
+                // Zeig Fehler an
+            }
+            return RedirectToPage("/Overview");
         }
     }
 }

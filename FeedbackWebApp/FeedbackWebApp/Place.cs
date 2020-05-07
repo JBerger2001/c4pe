@@ -18,7 +18,8 @@ namespace FeedbackWebApp
         public int ReviewCount { get; set; }
         public PlaceType PlaceType { get; set; }
         public List<openingTimes> OpeningTimes { get; set; }
-
+        public List<Image> Images { get; set; }
+        public List<Owner> Owners { get; set; }
 
     }
 }

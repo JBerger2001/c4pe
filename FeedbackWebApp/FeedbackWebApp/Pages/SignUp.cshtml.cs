@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using System.Net;
 
 namespace FeedbackWebApp.Pages
 {
@@ -15,16 +16,28 @@ namespace FeedbackWebApp.Pages
         }
         public async void OnPost()
         {
-            User u = new User() { Username = Request.Form["username"], FirstName=Request.Form["fn"], LastName=Request.Form["ln"],
-                                  Password=Request.Form["pwd"], Description=Request.Form["description"],
-                                  Street =Request.Form["street"], ZipCode = Request.Form["zipCode"],
-                                  City = Request.Form["city"], Country = Request.Form["country"], IsVerified=true
-            };
-            //if(Request.Form["check"]==true)
-           // {
+            if(Request.Form["username"]!="" && Request.Form["pwd"] != "")
+            {
+                Object u = new
+                {
+                    Username = Request.Form["username"].ToString(),
+                    FirstName = Request.Form["fn"].ToString(),
+                    LastName = Request.Form["ln"].ToString(),
+                    Password = Request.Form["pwd"].ToString(),
+                    Description = Request.Form["description"].ToString(),
+                    Street = Request.Form["street"].ToString(),
+                    ZipCode = Request.Form["zipCode"].ToString(),
+                    City = Request.Form["city"].ToString(),
+                    Country = Request.Form["country"].ToString(),
+                    IsVerified = false
+                };
                 HttpRequests r = new HttpRequests();
-                await r.CreateUserAsync(u);
-            //}
+                if(await r.CreateUserAsync(u) != HttpStatusCode.OK)
+                {
+                    // Zeige Fehler an
+                }
+            }
+
         }
     }
 }

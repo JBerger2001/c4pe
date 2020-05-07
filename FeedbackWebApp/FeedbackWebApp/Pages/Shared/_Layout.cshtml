@@ -9,6 +9,7 @@
         <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
         <link rel="stylesheet" href="~/css/site.css" />
         <link rel="stylesheet" href="~/css/myCSS.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
         <script src="~/js/site.js"></script>
     </environment>
     <environment exclude="Development">
@@ -33,9 +34,17 @@
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
                     <li><a asp-page="/Overview" onclick="">Overview</a></li>
+                    <li><a asp-page="/PlaceTypeSite">All Types of Places</a></li>
                     <li><a asp-page="/About">About</a></li>
-                    <li><a asp-page="/Contact">Contact</a></li>
-                    <li><a asp-page="/Index" style="float: right; display:inline-block">Log In/Sign up</a></li>
+                    @if (BaseController.GetToken() == "")
+                    {
+                        <li><a asp-page="/Index" style="float: right; display:inline-block">Log In/Sign up</a></li>
+                    }
+                    else
+                    {
+                        <li><a asp-page="/UserSite" style="float: right; display:inline-block">User Information</a></li>
+                    }
+
                 </ul>
             </div>
         </div>

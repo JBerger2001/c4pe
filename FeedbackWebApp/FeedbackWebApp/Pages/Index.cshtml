@@ -2,6 +2,8 @@
 @model IndexModel
 @{
     ViewData["Title"] = "Login";
+    HttpRequests req = new HttpRequests();
+    BaseController.SetPlace(await req.GetPlaceAsync(1));
 }
 
 <h1>Login</h1>
@@ -16,8 +18,10 @@
         <input class="textBLogin" type="password" name="pwd" value="" />
         <br />
         <br />
-        <input type="submit" class="btnLogin" asp-page-handler="LogIn" value="Log In">
-        <input type="submit" class="btnLogin" asp-page-handler="Guest" value="Log In As Guest">
+        <input type="submit" class="btnNewP" style="border: none;color: white;padding: 6px 20px; margin-bottom: 3px;
+            text-align: center;background-color: #555555;cursor: pointer" asp-page-handler="LogIn" value="Log In">
+        <input type="submit" class="btnNewP" style="border: none;color: white;padding: 6px 20px;
+            text-align: center;background-color: #555555;cursor: pointer" asp-page-handler="Guest" value="Log In As Guest">
     </form>
 </div>
 <br />

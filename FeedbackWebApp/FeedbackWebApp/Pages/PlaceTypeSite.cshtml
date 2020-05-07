@@ -1,0 +1,25 @@
+﻿@page
+@model ContactModel
+@{
+    ViewData["Title"] = "All Types of Places";
+    HttpRequests req = new HttpRequests();
+    List<PlaceType> types = await req.GetPlaceTypesAsync();
+}
+<h1>@Model.ViewData["Title"]</h1>
+<div class="container">
+    @foreach (PlaceType t in types)
+    {
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <h3 style="display:inline-block; margin-right: 58%"> @t.Name</h3>
+                <input type="submit" class="btnNewP" style="border: none;color: white;padding: 6px 20px;
+                text-align: center;margin-bottom: 10px;float: right;background-color: #555555;cursor: pointer;margin-top:12px" asp-page="/UpdatePlaceType" value="Delete Type">
+                <input type="submit" class="btnNewP" style="border: none;color: white;padding: 6px 20px;
+                text-align: center;margin-bottom: 10px;float: right;background-color: #555555;cursor: pointer;margin-right:3px; margin-top:12px" asp-page="" value="Edit Type">
+
+            </div>
+        </div>
+
+    }
+    
+</div>
