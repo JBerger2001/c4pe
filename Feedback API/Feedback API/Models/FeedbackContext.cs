@@ -39,7 +39,7 @@ namespace Feedback_API.Models
             base.OnModelCreating(modelBuilder);
 
             modelBuilder.Entity<PlaceOwner>()
-                .HasKey(po => new { po.PlaceID, po.OwnerID });
+                .HasKey(po => new { po.PlaceID, po.UserID });
 
             modelBuilder.Entity<Reaction>()
                 .HasKey(r => new { r.ReviewID, r.UserID });
@@ -83,9 +83,9 @@ namespace Feedback_API.Models
 
             modelBuilder.Entity<PlaceOwner>().HasData(new PlaceOwner[]
             {
-                new PlaceOwner { OwnerID = 1, PlaceID = 1 },
-                new PlaceOwner { OwnerID = 2, PlaceID = 2 },
-                new PlaceOwner { OwnerID = 3, PlaceID = 3 },
+                new PlaceOwner { UserID = 1, PlaceID = 1 },
+                new PlaceOwner { UserID = 2, PlaceID = 2 },
+                new PlaceOwner { UserID = 3, PlaceID = 3 },
             });
 
             modelBuilder.Entity<OpeningTime>().HasData(new OpeningTime[]

@@ -10,9 +10,10 @@ namespace Feedback_API.Models.Domain
     [Table("placeowner")]
     public class PlaceOwner
     {
-        public long OwnerID { get; set; }
+        public long UserID { get; set; }
         public long PlaceID { get; set; }
 
+        public User User { get; set; }
         public Place Place { get; set; }
     }
 }

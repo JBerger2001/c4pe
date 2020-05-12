@@ -5,8 +5,9 @@ using System.Threading.Tasks;
 
 namespace Feedback_API.Models.Responses
 {
-    public class PlaceOwnerResponse
+    public class PlaceOwnerFullResponse
     {
         public long UserID { get; set; }
+        public long PlaceID { get; set; }
     }
 }
