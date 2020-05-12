@@ -43,21 +43,30 @@ namespace Feedback_API.Controllers
         // GET: api/Places
         [AllowAnonymous]
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<PlaceResponse>>> GetPlaces([FromQuery]PlacesParameters placesParameter)
+        public async Task<ActionResult<IEnumerable<PlaceResponse>>> GetPlaces([FromQuery]PlacesParameters parameters)
         {
-            var places = PagedList<Place>.ToPagedList(await _context.Places
+            var places = await _context.Places
                             .Include(p => p.PlaceType)
                             .Include(p => p.OpeningTimes)
                             .Include(p => p.Reviews)
-                            .Include(p => p.PlaceOwners)
+                            .Include(p => p.Owners)
                             .Include(p => p.Images)
-                            .ToListAsync(),
-                            placesParameter.PageNumber,
-                            placesParameter.PageSize);
+                            .ToListAsync();
 
-            Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(places.Metadata));
+            var placesFiltered = PagedList<Place>.ToPagedList(places
+                .Where(p => MatchesFilter(p, parameters)),
+                parameters.PageNumber,
+                parameters.PageSize);
 
-            return _mapper.Map<List<PlaceResponse>>(places);
+            Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(placesFiltered.Metadata));
+
+            var placesResponse = _mapper.Map<List<PlaceResponse>>(placesFiltered);
+            foreach (var place in placesResponse)
+            {
+                place.UserIsOwner = IsAuthorized(place.ID);
+            }
+
+            return placesResponse;
         }
 
         // GET: api/Places/5
@@ -69,7 +78,7 @@ namespace Feedback_API.Controllers
                             .Include(p => p.PlaceType)
                             .Include(p => p.OpeningTimes)
                             .Include(p => p.Reviews)
-                            .Include(p => p.PlaceOwners)
+                            .Include(p => p.Owners)
                             .Include(p => p.Images)
                             .FirstOrDefaultAsync(i => i.ID == id);
 
@@ -78,7 +87,10 @@ namespace Feedback_API.Controllers
                 return NotFound();
             }
 
-            return _mapper.Map<PlaceResponse>(place);
+            var placeResponse = _mapper.Map<PlaceResponse>(place);
+            placeResponse.UserIsOwner = IsAuthorized(placeResponse.ID);
+
+            return placeResponse;
         }
 
         // PUT: api/Places/5
@@ -154,7 +166,7 @@ namespace Feedback_API.Controllers
             var placeOwner = new PlaceOwner
             {
                 PlaceID = place.ID,
-                OwnerID = CurrentUserId
+                UserID = CurrentUserId
             };
 
             _context.PlaceOwners.Add(placeOwner);
@@ -163,7 +175,7 @@ namespace Feedback_API.Controllers
             place = await _context.Places
                         .Include(p => p.OpeningTimes)
                         .Include(p => p.PlaceType)
-                        .Include(p => p.PlaceOwners)
+                        .Include(p => p.Owners)
                         .Include(p => p.Images)
                         .FirstOrDefaultAsync(p => p.ID == place.ID);
 
@@ -200,7 +212,66 @@ namespace Feedback_API.Controllers
 
         private bool IsPlaceOwner(long placeId)
         {
-            return _context.PlaceOwners.Any(po => po.OwnerID == CurrentUserId && po.PlaceID == placeId);
+            return _context.PlaceOwners.Any(po => po.UserID == CurrentUserId && po.PlaceID == placeId);
+        }
+
+        private bool MatchesFilter(Place p, PlacesParameters parameters)
+        {
+            bool matchingCity = string.IsNullOrEmpty(parameters.City)
+                ? true
+                : p.City.Equals(parameters.City, StringComparison.OrdinalIgnoreCase);
+
+            if (!matchingCity) return false;
+
+            bool matchingCountry = string.IsNullOrEmpty(parameters.Country)
+                ? true
+                : p.Country.Equals(parameters.Country, StringComparison.OrdinalIgnoreCase);
+
+            if (!matchingCountry) return false;
+
+            bool matchingVerified = parameters.IsVerified.HasValue
+                ? p.IsVerified == parameters.IsVerified.Value
+                : true;
+
+            if (!matchingVerified) return false;
+
+            bool matchingName = string.IsNullOrEmpty(parameters.Name)
+                ? true
+                : p.Name.Equals(parameters.Name, StringComparison.OrdinalIgnoreCase);
+
+            if (!matchingName) return false;
+
+            var avgRating = p.Reviews.Count > 0
+                ? p.Reviews.Average(r => r.Rating)
+                : 0;
+
+            bool matchingMinRating = parameters.MinRating.HasValue
+                ? parameters.MinRating <= avgRating
+                : true;
+
+            if (!matchingMinRating) return false;
+
+            bool matchingMaxRating = parameters.MaxRating.HasValue
+                ? parameters.MaxRating >= avgRating
+                : true;
+
+            if (!matchingMaxRating) return false;
+
+            bool matchingPlaceType = parameters.PlaceType.Count > 0
+                ? parameters.PlaceType.Contains(p.PlaceType.ID)
+                : true;
+
+            if (!matchingPlaceType) return false;
+
+            var now = DateTime.Now.TimeOfDay;
+
+            bool matchingIsOpen = parameters.IsOpen.HasValue
+                ? p.OpeningTimes.Any(ot => ot.Open < now && ot.Close > now)
+                : true;
+
+            if (!matchingIsOpen) return false;
+
+            return true;
         }
 
 
@@ -209,7 +280,7 @@ namespace Feedback_API.Controllers
         #region PLACE_OWNER
 
         [HttpPost("{id}/owner")]
-        public async Task<ActionResult<PlaceOwnerResponse>> PostPlaceOwner(PlaceOwnerRequest placeOwnerRequest, long id)
+        public async Task<ActionResult<PlaceOwnerFullResponse>> PostPlaceOwner(PlaceOwnerRequest placeOwnerRequest, long id)
         {
             if (!ModelState.IsValid)
             {
@@ -221,20 +292,23 @@ namespace Feedback_API.Controllers
                 return Unauthorized();
             }
 
-            var user = await _context.Users.FindAsync(placeOwnerRequest.OwnerID);
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Username == placeOwnerRequest.Username);
 
             if (user == null)
             {
-                return NotFound();
+                return NotFound("User not found");
             }
 
-            var placeOwner = _mapper.Map<PlaceOwner>(placeOwnerRequest);
-            placeOwner.PlaceID = id;
+            var placeOwner = new PlaceOwner
+            {
+                UserID = user.ID,
+                PlaceID = id
+            };
 
             _context.PlaceOwners.Add(placeOwner);
             await _context.SaveChangesAsync();
 
-            return _mapper.Map<PlaceOwnerResponse>(placeOwner);
+            return _mapper.Map<PlaceOwnerFullResponse>(placeOwner);
         }
 
         [HttpDelete("{placeId}/owner/{userId}")]
@@ -250,7 +324,7 @@ namespace Feedback_API.Controllers
                 return BadRequest("You can't remove yourself from the place owners.");
             }
 
-            var placeOwner = await _context.PlaceOwners.FirstOrDefaultAsync(po => po.OwnerID == placeId && po.PlaceID == userId);
+            var placeOwner = await _context.PlaceOwners.FirstOrDefaultAsync(po => po.UserID == placeId && po.PlaceID == userId);
             if (placeOwner == null)
             {
                 return NotFound();
@@ -281,13 +355,12 @@ namespace Feedback_API.Controllers
                 return NotFound();
             }
 
-            var openingTimes = PagedList<OpeningTime>.ToPagedList(place.OpeningTimes, parameters.PageNumber, parameters.PageSize);
+            var openingTimes = place.OpeningTimes.Where(ot => ot.Day == parameters.Day);
+            var openingTimesPaged = PagedList<OpeningTime>.ToPagedList(openingTimes, parameters.PageNumber, parameters.PageSize);
 
-            Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(openingTimes.Metadata));
+            Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(openingTimesPaged.Metadata));
 
-            var openingTimesFiltered = openingTimes.Where(ot => ot.Day == parameters.Day);
-
-            return _mapper.Map<List<OpeningTimeResponse>>(openingTimes);
+            return _mapper.Map<List<OpeningTimeResponse>>(openingTimesPaged);
         }
 
         // POST: api/Places/5/OpeningTimes
@@ -670,18 +743,6 @@ namespace Feedback_API.Controllers
         [HttpDelete("{placeId}/images/{imageId}")]
         public async Task<ActionResult> DeleteImage(long placeId, int imageId)
         {
-            /*
-            var user = await _context.Users.FindAsync(CurrentUserId);
-            if (user == null || user?.AvatarURI == null)
-            {
-                return NotFound();
-            }
-
-            _imageUploadService.RemoveImage(user.AvatarURI);
-
-            return NoContent();
-            */
-
             var place = await _context.Places
                 .Include(p => p.Images)
                 .FirstOrDefaultAsync(p => p.ID == placeId);

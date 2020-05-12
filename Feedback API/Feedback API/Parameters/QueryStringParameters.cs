@@ -7,7 +7,7 @@ namespace Feedback_API.Parameters
 {
     public abstract class QueryStringParameters
     {
-        const int maxPageSize = 50;
+        const int MAX_PAGE_SIZE = 50;
         public int PageNumber { get; set; } = 1;
 
         private int _pageSize = 10;
@@ -20,7 +20,9 @@ namespace Feedback_API.Parameters
             }
             set
             {
-                _pageSize = (value > maxPageSize) ? maxPageSize : value;
+                _pageSize = (value > MAX_PAGE_SIZE) 
+                    ? MAX_PAGE_SIZE 
+                    : value;
             }
         }
     }
