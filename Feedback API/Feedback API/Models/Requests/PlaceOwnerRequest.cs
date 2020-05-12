@@ -9,6 +9,6 @@ namespace Feedback_API.Models.Requests
     public class PlaceOwnerRequest
     {
         [Required]
-        public long OwnerID { get; set; }
+        public string Username { get; set; }
     }
 }
