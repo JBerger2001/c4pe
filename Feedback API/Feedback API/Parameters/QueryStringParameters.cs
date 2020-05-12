@@ -25,5 +25,7 @@ namespace Feedback_API.Parameters
                     : value;
             }
         }
+
+        public string OrderBy { get; set; }
     }
 }
