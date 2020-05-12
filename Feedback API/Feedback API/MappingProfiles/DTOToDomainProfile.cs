@@ -28,7 +28,7 @@ namespace Feedback_API.MappingProfiles
             CreateMap<PlaceTypeResponse, PlaceType>();
             CreateMap<PlaceTypeRequest, PlaceType>();
 
-            CreateMap<PlaceOwnerResponse, PlaceOwner>();
+            CreateMap<PlaceOwnerFullResponse, PlaceOwner>();
             CreateMap<PlaceOwnerRequest, PlaceOwner>();
 
             CreateMap<OpeningTimeResponse, OpeningTime>();
