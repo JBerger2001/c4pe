@@ -15,5 +15,10 @@ namespace Feedback_API.Parameters
         public float? MaxRating { get; set; }
         public IList<long> PlaceType { get; set; } = new List<long>();
         public bool? IsOpen { get; set; }
+
+        public PlacesParameters()
+        {
+            OrderBy = "Name";
+        }
     }
 }

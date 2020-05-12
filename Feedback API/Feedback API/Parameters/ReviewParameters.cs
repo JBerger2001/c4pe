@@ -7,6 +7,9 @@ namespace Feedback_API.Parameters
 {
     public class ReviewParameters : QueryStringParameters
     {
-        
+        public ReviewParameters()
+        {
+            OrderBy = "PositiveReactions";
+        }
     }
 }
