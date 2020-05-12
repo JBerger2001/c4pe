@@ -16,6 +16,8 @@ using Newtonsoft.Json;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Feedback_API.Services;
+using Feedback_API.Extensions;
+using AutoMapper.QueryableExtensions;
 
 namespace Feedback_API.Controllers
 {
@@ -28,9 +30,10 @@ namespace Feedback_API.Controllers
         private readonly IMapper _mapper;
         private readonly IImageUploadService _imageUploadService;
 
-        private long CurrentUserId => Convert.ToInt64(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+        private long CurrentUserId => Convert.ToInt64(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
         private bool IsAdmin => _context.Users.Find(CurrentUserId).Role == Role.Admin;
-        private bool IsAuthorized(long placeId) => IsPlaceOwner(placeId) || IsAdmin;
+        private bool IsAuthorized(long placeId) => HasJWT && (IsPlaceOwner(placeId) || IsAdmin);
+        private bool HasJWT => User.Claims.Any();
 
         public PlacesController(FeedbackContext context, IMapper mapper, IImageUploadService imageUploadService)
         {
@@ -53,20 +56,22 @@ namespace Feedback_API.Controllers
                             .Include(p => p.Images)
                             .ToListAsync();
 
-            var placesFiltered = PagedList<Place>.ToPagedList(places
-                .Where(p => MatchesFilter(p, parameters)),
-                parameters.PageNumber,
-                parameters.PageSize);
+            var placesFiltered = places.Where(p => MatchesFilter(p, parameters));
 
-            Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(placesFiltered.Metadata));
+            var placeResponses = _mapper.Map<List<PlaceResponse>>(placesFiltered);
 
-            var placesResponse = _mapper.Map<List<PlaceResponse>>(placesFiltered);
-            foreach (var place in placesResponse)
+            foreach (var place in placeResponses)
             {
                 place.UserIsOwner = IsAuthorized(place.ID);
             }
 
-            return placesResponse;
+            var placesSorted = placeResponses.Sort(parameters.OrderBy);
+
+            var placesPaged = PagedList<PlaceResponse>.ToPagedList(placesSorted, parameters.PageNumber, parameters.PageSize);
+
+            Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(placesPaged.Metadata));
+
+            return placesPaged;
         }
 
         // GET: api/Places/5
