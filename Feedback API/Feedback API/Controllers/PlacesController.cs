@@ -496,7 +496,9 @@ namespace Feedback_API.Controllers
             var reviews = _context.Reviews
                 .Include(r => r.User)
                 .Include(r => r.Reactions)
-                .Where(r => r.PlaceID == id);
+                .Where(r => r.PlaceID == id)
+                .Where(r => r.Rating >= parameters.MinRating)
+                .Where(r => r.Rating <= parameters.MaxRating);
 
             var pagedReviews = PagedList<Review>.ToPagedList(reviews, parameters.PageNumber, parameters.PageSize);
 
