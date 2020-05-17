@@ -120,6 +120,11 @@ namespace Feedback_API.Controllers
                 return BadRequest(ModelState);
             }
 
+            if (userDTO.Role != Role.Admin && userDTO.Role != Role.Admin)
+            {
+                return BadRequest("Invalid role.");
+            }
+
             var user = await _context.Users.FirstOrDefaultAsync(u => u.ID == id);
 
             if (user == null)
@@ -205,7 +210,7 @@ namespace Feedback_API.Controllers
                 return BadRequest("Invalid ModelState");
             }
 
-            userRegisterRequest.Username = userRegisterRequest.Username.ToLower();
+            userRegisterRequest.Username = userRegisterRequest.Username;
 
             if (await _authService.UserExists(userRegisterRequest.Username))
             {

@@ -74,7 +74,7 @@ namespace Feedback_API.Services
 
         public async Task<bool> UserExists(string username)
         {
-            return await _context.Users.AnyAsync(u => u.Username == username);
+            return await _context.Users.AnyAsync(u => u.Username.Equals(username, StringComparison.OrdinalIgnoreCase));
         }
     }
 }
