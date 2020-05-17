@@ -297,7 +297,7 @@ namespace Feedback_API.Controllers
                 return Unauthorized();
             }
 
-            var user = await _context.Users.FirstOrDefaultAsync(u => u.Username == placeOwnerRequest.Username);
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Username.Equals(placeOwnerRequest.Username, StringComparison.OrdinalIgnoreCase));
 
             if (user == null)
             {
