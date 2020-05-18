@@ -7,7 +7,7 @@ namespace Feedback_API.Parameters
 {
     public class OpeningTimeParameters : QueryStringParameters
     {
-        public int Day { get; set; }
+        public int? Day { get; set; }
 
         public OpeningTimeParameters()
         {
