@@ -329,7 +329,7 @@ namespace Feedback_API.Controllers
                 return BadRequest("You can't remove yourself from the place owners.");
             }
 
-            var placeOwner = await _context.PlaceOwners.FirstOrDefaultAsync(po => po.UserID == placeId && po.PlaceID == userId);
+            var placeOwner = await _context.PlaceOwners.FirstOrDefaultAsync(po => po.UserID == userId && po.PlaceID == placeId);
             if (placeOwner == null)
             {
                 return NotFound();
@@ -360,7 +360,13 @@ namespace Feedback_API.Controllers
                 return NotFound();
             }
 
-            var openingTimes = place.OpeningTimes.Where(ot => ot.Day == parameters.Day);
+            //var openingTimes = place.OpeningTimes.Where(ot => ot.Day == parameters.Day);
+            var openingTimes = place.OpeningTimes;
+
+            if (parameters.Day.HasValue)
+            {
+                openingTimes = openingTimes.Where(ot => ot.Day == parameters.Day.Value).ToList();
+            }
             var openingTimesPaged = PagedList<OpeningTime>.ToPagedList(openingTimes, parameters.PageNumber, parameters.PageSize);
 
             Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(openingTimesPaged.Metadata));
