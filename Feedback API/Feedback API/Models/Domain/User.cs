@@ -27,5 +27,8 @@ namespace Feedback_API.Models.Domain
         public string Country { get; set; }
         public bool IsVerified { get; set; }
         public string AvatarURI { get; set; }
+
+        public ICollection<Review> Reviews { get; set; }
+        public ICollection<Reaction> Reactions { get; set; }
     }
 }
