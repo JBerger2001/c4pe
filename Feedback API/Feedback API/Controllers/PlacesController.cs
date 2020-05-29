@@ -269,10 +269,31 @@ namespace Feedback_API.Controllers
             if (!matchingPlaceType) return false;
 
             var now = DateTime.Now.TimeOfDay;
+            var today = (int)(DateTime.Today.DayOfWeek + 6) % 7;
 
-            bool matchingIsOpen = parameters.IsOpen.HasValue
-                ? p.OpeningTimes.Any(ot => ot.Open < now && ot.Close > now)
-                : true;
+
+            // value, no opening times => no
+            // value, opening times => check
+            // _ => ok
+
+            bool matchingIsOpen = true;
+
+            if (parameters.IsOpen.HasValue && p.OpeningTimes.Count == 0)
+            {
+                matchingIsOpen = false;
+            }
+            
+            if (parameters.IsOpen.HasValue && p.OpeningTimes.Count > 0)
+            {
+                var open = p.OpeningTimes.Any(ot =>
+                        ot.Day == today
+                        && ot.Open < now
+                        && ot.Close > now);
+
+                matchingIsOpen = (parameters.IsOpen.Value)
+                    ? open
+                    : !open;
+            }
 
             if (!matchingIsOpen) return false;
 
@@ -510,7 +531,20 @@ namespace Feedback_API.Controllers
 
             Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(pagedReviews.Metadata));
 
-            return _mapper.Map<List<ReviewResponse>>(reviews);
+            var reviewResponse = _mapper.Map<List<ReviewResponse>>(pagedReviews);
+
+            if (HasJWT)
+            {
+                foreach (var review in reviewResponse)
+                {
+                    var userReaction = _context.Reactions.Find(review.ID, CurrentUserId);
+
+                    review.UserReactionIsHelpful = userReaction?.IsHelpful;
+                }
+            }
+
+
+            return reviewResponse;
         }
 
         // GET: api/Places/5/Reviews/1
@@ -669,6 +703,11 @@ namespace Feedback_API.Controllers
                 return NotFound();
             }
 
+            if (review.UserID == CurrentUserId)
+            {
+                return BadRequest("You can't react to your own review.");
+            }
+
             //var userAlreadyReacted = await _context.Reactions.AnyAsync(r => r.ReviewID == reviewId && r.UserID == CurrentUserId);
             var reaction = await _context.Reactions.FindAsync(reviewId, CurrentUserId);
             if (reaction != null)
@@ -731,7 +770,7 @@ namespace Feedback_API.Controllers
         #region IMAGES
 
         [HttpPost("{placeId}/images/{imageId}")]
-        public async Task<ActionResult<string>> PostUploadImage(long placeId, int imageId, IFormFile file)
+        public async Task<ActionResult<string>> PostUploadImage(long placeId, int imageId, IFormFile image)
         {
             if (imageId < 1 || imageId > 3)
             {
@@ -743,12 +782,12 @@ namespace Feedback_API.Controllers
                 return Unauthorized();
             }
 
-            if(!_imageUploadService.IsValid(file))
+            if(!_imageUploadService.IsValid(image))
             {
-                return BadRequest("Invalid image. Maximum Image size is 8MB, supported file types are .jpg, .jpeg and .png");
+                return BadRequest(ImageUploadService.INVALID_MESSAGE);
             }
 
-            var uriPath = await _imageUploadService.SavePlaceImage(file, placeId, imageId);
+            var uriPath = await _imageUploadService.SavePlaceImage(image, placeId, imageId);
 
             return Ok(new { uriPath });
         }
