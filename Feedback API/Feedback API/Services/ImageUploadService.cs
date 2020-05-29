@@ -16,6 +16,8 @@ namespace Feedback_API.Services
 {
     public class ImageUploadService : IImageUploadService
     {
+        public static readonly string INVALID_MESSAGE = "Invalid image. Maximum Image size is 8MB, supported file types are .jpg, .jpeg, .png and .bmp";
+
         private readonly long MAX_SIZE = 8000000;
         private readonly string[] EXTENSIONS =
         {
@@ -61,7 +63,9 @@ namespace Feedback_API.Services
 
         private bool IsValidContentType(IFormFile file)
         {
-            return CONTENT_TYPES.Contains(file.ContentType.ToLower());
+            return file.ContentType != null
+                ? CONTENT_TYPES.Contains(file.ContentType?.ToLower())
+                : true;
         }
 
         private bool IsValidFileContent(IFormFile file)
