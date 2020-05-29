@@ -33,7 +33,9 @@ namespace Feedback_API.Controllers
         private readonly IConfiguration _config;
         private readonly IMapper _mapper;
 
-        private long CurrentUserId => Convert.ToInt64(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+        private long CurrentUserId => Convert.ToInt64(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+        private bool IsAdmin => _context.Users.Find(CurrentUserId).Role == Role.Admin;
+        private bool HasJWT => User.Claims.Any();
 
         public UsersController(FeedbackContext context, IAuthService authService, IImageUploadService imageUploadService, IConfiguration config, IMapper mapper)
         {
@@ -83,6 +85,20 @@ namespace Feedback_API.Controllers
             return _mapper.Map<UserPublicResponse>(user);
         }
 
+        private void AddUserReactionIsHelpful(IEnumerable<ReviewUserResponse> reviewUserResponses)
+        {
+            if (HasJWT)
+            {
+                foreach (var review in reviewUserResponses)
+                {
+                    var userReaction = _context.Reactions.Find(review.ID, CurrentUserId);
+
+                    review.UserReactionIsHelpful = userReaction?.IsHelpful;
+                }
+            }
+
+        }
+
         [AllowAnonymous]
         [HttpGet("{id}/reviews")]
         public async Task<ActionResult<IEnumerable<ReviewUserResponse>>> GetUserReviews(long id)
@@ -94,7 +110,10 @@ namespace Feedback_API.Controllers
                 .Include(r => r.Place.PlaceType)
                 .Where(r => r.UserID == id).ToListAsync();
 
-            return _mapper.Map<List<ReviewUserResponse>>(reviews);
+            var response = _mapper.Map<List<ReviewUserResponse>>(reviews);
+            AddUserReactionIsHelpful(response);
+
+            return response;
         }
 
         [HttpGet("me/reviews")]
@@ -107,7 +126,10 @@ namespace Feedback_API.Controllers
                 .Include(r => r.Place.PlaceType)
                 .Where(r => r.UserID == CurrentUserId).ToListAsync();
 
-            return _mapper.Map<List<ReviewUserResponse>>(reviews);
+            var response = _mapper.Map<List<ReviewUserResponse>>(reviews);
+            AddUserReactionIsHelpful(response);
+
+            return response;
         }
 
         // PUT: api/Users/5
@@ -192,7 +214,7 @@ namespace Feedback_API.Controllers
         {
             if (!_imageUploadService.IsValid(image))
             {
-                return BadRequest("Invalid image. Maximum Image size is 8MB, supported file types are .jpg, .jpeg and .png");
+                return BadRequest(ImageUploadService.INVALID_MESSAGE);
             }
 
             var uriPath = await _imageUploadService.SaveAvatar(image, CurrentUserId);
