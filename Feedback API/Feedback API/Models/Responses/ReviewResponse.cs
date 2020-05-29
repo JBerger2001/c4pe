@@ -11,6 +11,7 @@ namespace Feedback_API.Models.Responses
         public string Text { get; set; }
         public int PositiveReactions { get; set; }
         public int NegativeReactions { get; set; }
+        public bool? UserReactionIsHelpful { get; set; }
         public UserPublicResponse User { get; set; }
     }
 }
