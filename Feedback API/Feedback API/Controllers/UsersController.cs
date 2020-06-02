@@ -51,7 +51,7 @@ namespace Feedback_API.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<UserPublicResponse>>> GetUsers()
         {
-            var users = await _context.Users.ToListAsync();
+            var users = await _context.Users.Include(u => u.Reviews).ToListAsync();
             return _mapper.Map<List<UserPublicResponse>>(users);
         }
 
@@ -67,6 +67,8 @@ namespace Feedback_API.Controllers
                 return BadRequest("User not found.");
             }
 
+            await _context.Entry(user).Collection(u => u.Reviews).LoadAsync();
+
             return _mapper.Map<UserPrivateResponse>(user);
         }
 
@@ -81,6 +83,8 @@ namespace Feedback_API.Controllers
             {
                 return NotFound();
             }
+
+            await _context.Entry(user).Collection(u => u.Reviews).LoadAsync();
 
             return _mapper.Map<UserPublicResponse>(user);
         }
@@ -108,6 +112,7 @@ namespace Feedback_API.Controllers
                 .Include(r => r.Place)
                 .Include(r => r.Place.OpeningTimes)
                 .Include(r => r.Place.PlaceType)
+                .Include(r => r.Reactions)
                 .Where(r => r.UserID == id).ToListAsync();
 
             var response = _mapper.Map<List<ReviewUserResponse>>(reviews);
@@ -124,6 +129,7 @@ namespace Feedback_API.Controllers
                 .Include(r => r.Place)
                 .Include(r => r.Place.OpeningTimes)
                 .Include(r => r.Place.PlaceType)
+                .Include(r => r.Reactions)
                 .Where(r => r.UserID == CurrentUserId).ToListAsync();
 
             var response = _mapper.Map<List<ReviewUserResponse>>(reviews);
@@ -321,6 +327,8 @@ namespace Feedback_API.Controllers
             }
 
             _imageUploadService.RemoveImage(user.AvatarURI);
+
+            user.AvatarURI = null;
 
             return NoContent();
         }
