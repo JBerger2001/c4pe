@@ -40,8 +40,16 @@ namespace Feedback_API.MappingProfiles
 
             CreateMap<OpeningTime, OpeningTimeResponse>();
 
-            CreateMap<User, UserPrivateResponse>();
-            CreateMap<User, UserPublicResponse>();
+            CreateMap<User, UserPrivateResponse>()
+                .ForMember(dest => dest.ReviewCount, opt =>
+                {
+                    opt.MapFrom(src => src.Reviews.Count);
+                });
+            CreateMap<User, UserPublicResponse>()
+                .ForMember(dest => dest.ReviewCount, opt =>
+                {
+                    opt.MapFrom(src => src.Reviews.Count);
+                });
 
             CreateMap<Review, ReviewResponse>()
                 .ForMember(dest => dest.PositiveReactions, opt =>
