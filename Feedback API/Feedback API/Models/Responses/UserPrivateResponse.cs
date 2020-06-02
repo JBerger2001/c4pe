@@ -10,8 +10,9 @@ namespace Feedback_API.Models.Responses
         public long ID { get; set; }
         public string Username { get; set; }
         public string FirstName { get; set; }
-        public string Role { get; set; }
         public string LastName { get; set; }
+        public int ReviewCount { get; set; }
+        public string Role { get; set; }
         public string Description { get; set; }
         public string Street { get; set; }
         public string City { get; set; }
