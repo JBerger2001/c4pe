@@ -1,0 +1,27 @@
+﻿@page "{id:int}"
+@model FeedbackWebApp.Pages.DeleteOpenTimeModel
+@{
+    ViewData["Title"] = "Delete Opening Times";
+    HttpRequests r = new HttpRequests();
+    List<openingTimes> ops = await r.GetOpenTimesAsync(Convert.ToInt32(RouteData.Values["id"]), BaseController.GetToken());
+    List<string> days = new List<string>() { "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday" };
+}
+
+<div class="loginDiv">
+    <h2>Delete Opening Times</h2>
+    <form action="" method="POST">
+        <label>Select the days, that you want to delete:</label>
+        <br />
+        @for (int i = 0; i < days.Count; i++)
+        {
+            if (ops.Where((o) => o.Day == i).ToList().Count != 0)
+            {
+                <label><input type="checkbox" name="CheckedDays" value=@i>  @days[i]</label>
+                <br />
+            }
+        }
+        <input type="submit" class="btnNewP" style="border: none;color: white;padding: 6px 20px;
+            text-align: center;margin-top: 10px;background-color: #555555;cursor: pointer;margin-left:20px" asp-page-handler="" value="Delete the selected Opening Times">
+    </form>
+</div>
+

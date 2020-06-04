@@ -8,41 +8,39 @@
 <div class="loginDiv">
     <h1>User Information</h1>
     <form method="POST">
-        <label>Username:</label>
+        <label>Username: <b>@u.Username</b></label>
         <br />
-        <input class="textBLogin" type="text" name="username" value="@u.Username" />
+        <label for="Firstname">Firstname:</label>
         <br />
-        <label>Firstname:</label>
+        <input class="textBLogin" type="text" name="Firstname" value="@u.FirstName" />
         <br />
-        <input class="textBLogin" type="text" name="fn" value="@u.FirstName" />
+        <label for="Lastname">Lastname:</label>
         <br />
-        <label>Lastname:</label>
+        <input class="textBLogin" type="text" name="Lastname" value="@u.LastName" />
         <br />
-        <input class="textBLogin" type="text" name="ln" value="@u.LastName" />
+        <label for="Description">Description:</label>
         <br />
-        <label>Description:</label>
+        <textarea class="textBLogin" name="Description" cols="35" rows="4">@u.Description</textarea>
         <br />
-        <textarea class="textBLogin" name="description" cols="35" rows="4">@u.Description</textarea>
+        <label class="labelMargin" for="Street">Street & Number: </label>
         <br />
-        <label class="labelMargin">Street & Number: </label>
+        <input class="textBLogin" type="text" name="Street" value="@u.Street" />
         <br />
-        <input class="textBLogin" type="text" name="street" value="@u.Street" />
+        <label class="labelMargin" for="ZipCode">ZipCode: </label>
         <br />
-        <label class="labelMargin">ZipCode: </label>
+        <input class="textBLogin" type="text" name="ZipCode" value="@u.ZipCode" />
         <br />
-        <input class="textBLogin" type="text" name="zipCode" value="@u.ZipCode" />
+        <label class="labelMargin" for="City">City: </label>
         <br />
-        <label class="labelMargin">City: </label>
+        <input class="textBLogin" type="text" name="City" value="@u.City" />
         <br />
-        <input class="textBLogin" type="text" name="city" value="@u.City" />
+        <label class="labelMargin" for="Country">Country: </label>
         <br />
-        <label class="labelMargin">Country: </label>
-        <br />
-        <input class="textBLogin" type="text" name="country" value="@u.Country" />
+        <input class="textBLogin" type="text" name="Country" value="@u.Country" />
         <br />
         <br />
         <input type="submit" class="btnNewP" style="border: none;color: white;padding: 6px 20px;
-            text-align: center;background-color: #555555;cursor: pointer; margin-bottom: 3px" asp-page-handler="" value="Cancel">
+            text-align: center;background-color: #555555;cursor: pointer; margin-bottom: 3px" asp-page-handler="Del" value="Delete my user">
         <input type="hidden" name="_METHOD" value="PUT" />
         <input type="submit" class="btnNewP" style="border: none;color: white;padding: 6px 20px;
             text-align: center;background-color: #555555;cursor: pointer" asp-page-handler="" value="Save Changes">

@@ -8,7 +8,7 @@ using System.Net;
 
 namespace FeedbackWebApp.Pages
 {
-    public class AddReviewModel : PageModel
+    public class UpdateReviewModel : PageModel
     {
         [BindProperty]
         public int Rating { get; set; }
@@ -21,18 +21,15 @@ namespace FeedbackWebApp.Pages
         public async Task<IActionResult> OnPost()
         {
             HttpRequests req = new HttpRequests();
-            object r = new
-            {
-                rating = Rating,
-                text = reviewContent
-            };
-            HttpStatusCode c = await req.CreateReview(r, Convert.ToInt32(RouteData.Values["id"]), BaseController.GetToken());
-            if (c == HttpStatusCode.Created)
+            Object r = new { rating = Rating, text = reviewContent };
+            //await req.UpdateReview(r, Convert.ToInt32(RouteData.Values["id"]), BaseController.GetreviewID(), BaseController.GetToken());
+            HttpStatusCode c = await req.UpdateReview(r, Convert.ToInt32(RouteData.Values["id"]), BaseController.GetreviewID(), BaseController.GetToken());
+            if (c == HttpStatusCode.NoContent)
             {
                 return RedirectToPage("/PlaceSite", new { id = RouteData.Values["id"] });
             }
-            else{
-                // Zeige Fehler an
+            else
+            {
                 return null;
             }
         }

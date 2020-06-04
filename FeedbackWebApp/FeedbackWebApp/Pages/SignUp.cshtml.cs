@@ -10,26 +10,43 @@ namespace FeedbackWebApp.Pages
 {
     public class SignUpModel : PageModel
     {
+        [BindProperty]
+        public string Username { get; set; }
+        [BindProperty]
+        public string Firstname { get; set; }
+        [BindProperty]
+        public string Lastname { get; set; }
+        [BindProperty]
+        public string Password { get; set; }
+        [BindProperty]
+        public string Description { get; set; }
+        [BindProperty]
+        public string Street { get; set; }
+        [BindProperty]
+        public string City { get; set; }
+        [BindProperty]
+        public string ZipCode { get; set; }
+        [BindProperty]
+        public string Country { get; set; }
         public void OnGet()
         {
 
         }
-        public async void OnPost()
+        public async Task<IActionResult> OnPost()
         {
             if(Request.Form["username"]!="" && Request.Form["pwd"] != "")
             {
                 Object u = new
                 {
-                    Username = Request.Form["username"].ToString(),
-                    FirstName = Request.Form["fn"].ToString(),
-                    LastName = Request.Form["ln"].ToString(),
-                    Password = Request.Form["pwd"].ToString(),
-                    Description = Request.Form["description"].ToString(),
-                    Street = Request.Form["street"].ToString(),
-                    ZipCode = Request.Form["zipCode"].ToString(),
-                    City = Request.Form["city"].ToString(),
-                    Country = Request.Form["country"].ToString(),
-                    IsVerified = false
+                    username = Username,
+                    firstName = Firstname,
+                    lastName = Lastname,
+                    password = Password,
+                    description = Description,
+                    street = Street,
+                    zipCode = ZipCode,
+                    city = City,
+                    country = Country
                 };
                 HttpRequests r = new HttpRequests();
                 if(await r.CreateUserAsync(u) != HttpStatusCode.OK)
@@ -37,7 +54,7 @@ namespace FeedbackWebApp.Pages
                     // Zeige Fehler an
                 }
             }
-
+            return RedirectToPage("/Index");
         }
     }
 }

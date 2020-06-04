@@ -10,13 +10,15 @@ namespace FeedbackWebApp.Pages
 {
     public class AddPlaceTypeModel : PageModel
     {
+        [BindProperty]
+        public string PlacetypeName { get; set; }
         public void OnGet()
         {
         }
         public async Task<IActionResult> OnPost()
         {
             HttpRequests req = new HttpRequests();
-            PlaceType placetype = new PlaceType(){ Name = Request.Form["placetypeName"] };
+            PlaceType placetype = new PlaceType(){ Name = PlacetypeName };
             if(await req.CreatePlaceTypeAsync(placetype, BaseController.GetToken()) != HttpStatusCode.OK)
             {
                 // Zeig Fehler an

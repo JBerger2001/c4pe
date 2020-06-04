@@ -9,24 +9,28 @@ namespace FeedbackWebApp.Pages
 {
     public class IndexModel : PageModel
     {
+        [BindProperty]
+        public string Username { get; set; }
+        [BindProperty]
+        public string Password { get; set; }
         public void OnGet()
         {
-
+            BaseController.SetUserAndToken(new User() { Role = "nothing", Id = 0 }, "");
         }
         public async Task<IActionResult> OnPostLogIn()
         {
             HttpRequests r = new HttpRequests();
             LogIn x = new LogIn();
-            if (Request.Form["username"] != "" & Request.Form["pwd"] != "")
+            if (Username != "" & Password != "")
             {
-                object u = new { username = Request.Form["username"].ToString(), password = Request.Form["pwd"].ToString() };
+                object u = new { username = Username, password = Password };
                 x = await r.LoginUser(u);
             }
             if (x.Token != "" && x.userId!=0)
             {
                 User us = await r.GetUserAsync(x.Token);
                 BaseController.SetUserAndToken(us, x.Token);
-                return RedirectToPage("/Overview");
+                return RedirectToPage("/Overview", new { id = 1 });
             }
             else
             {
@@ -35,7 +39,7 @@ namespace FeedbackWebApp.Pages
         }
         public IActionResult OnPostGuest()
         {
-            return RedirectToPage("/Overview");
+            return RedirectToPage("/Overview", new { id = 1 });
         }
     }
 }

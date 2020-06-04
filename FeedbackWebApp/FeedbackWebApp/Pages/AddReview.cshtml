@@ -1,20 +1,20 @@
-﻿@page
+﻿@page "{id:int}"
 @model FeedbackWebApp.Pages.AddReviewModel
 @{
     ViewData["Title"] = "Add Review";
-    string placeName = "Hallo";
+    string placeName = (string)RouteData.Values["name"];    // funkt nicht
 }
 
 <div class="loginDiv">
-    <h2>Add review to a place</h2>
+    <h2>Add review to </h2>
     <form action="" method="POST">
         <label class="labelMargin">Name of Place: <i>@placeName</i></label>        
         <br />
-        <label class="labelMargin">How many stars would you give this place?</label>
+        <label class="labelMargin" for="rating">How many stars would you give this place?</label>
         <br />
         <input type="number" min="0" max="5" step="1" name="rating">
         <br />
-        <label class="labelMargin">Your Review:</label>
+        <label class="labelMargin" for="reviewContent">Your Review:</label>
         <br />
         <textarea class="textBLogin" name="reviewContent" cols="35" rows="4"></textarea>
         <br />

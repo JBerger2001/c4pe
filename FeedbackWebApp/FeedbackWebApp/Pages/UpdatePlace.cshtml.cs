@@ -10,49 +10,64 @@ namespace FeedbackWebApp.Pages
 {
     public class UpdatePlaceModel : PageModel
     {
+        [BindProperty]
+        public string Name { get; set; }
+        [BindProperty]
+        public string Street { get; set; }
+        [BindProperty]
+        public string ZipCode { get; set; }
+        [BindProperty]
+        public string Country { get; set; }
+        [BindProperty]
+        public string City { get; set; }
+        [BindProperty]
+        public int Placetype { get; set; }
+        [BindProperty]
+        public string[] OpeningTimes_Open { get; set; }
+        [BindProperty]
+        public string[] OpeningTimes_Close { get; set; }
         public void OnGet()
         {
 
         }
-        public IActionResult OnPutCancel()
+        public IActionResult OnPostCancel()
         {
-            return RedirectToPage("/Overview");
+            return RedirectToPage("/PlaceSite", new { id = RouteData.Values["id"] });
         }
         public async Task<IActionResult> OnPost()
         {
-            HttpRequests req = new HttpRequests();
-            long placetypeID = 2;  //Request.Form["placetypes"].
+            HttpRequests req = new HttpRequests(); 
             object place = new 
             {
-                Name = Request.Form["placeName"].ToString(),
-                ZipCode = Request.Form["zipCode"].ToString(),
-                City = Request.Form["city"].ToString(),
-                Street = Request.Form["street"].ToString(),
-                Country = Request.Form["country"].ToString(),
-                placeTypeID = placetypeID
+                name = Name,
+                zipCode = ZipCode,
+                city = City,
+                street = Street,
+                country = Country,
+                placeTypeID = Placetype
             };
-            if(await req.UpdatePlaceAsync(place, Convert.ToInt32(BaseController.GetPlaceID())) == HttpStatusCode.OK)
+            HttpStatusCode c = await req.UpdatePlaceAsync(place, Convert.ToInt32(RouteData.Values["id"]), BaseController.GetToken());
+            if (c==HttpStatusCode.NoContent)
             {
-                int placeID = BaseController.GetPlaceID();
+                int placeID = Convert.ToInt32(RouteData.Values["id"]);
+                List<openingTimes> ops = await req.GetOpenTimesAsync(placeID, BaseController.GetToken());
                 openingTimes opti;
-                int max = BaseController.GetOpeningTimes().Count;
-                for (int i = 0; i < max; i++)
+                for (int i = 0; i < 7; i++)
                 {
-                    int opID = Convert.ToInt32(BaseController.GetOpeningTimes()[i].ID);
-                    if (Request.Form["Open" + i].ToString() != "" && Request.Form["Close" + i].ToString() != "")
+
+                    if(ops.Where((o)=> o.Day==i).ToList().Count!=0)
                     {
-                        opti = new openingTimes { Day = BaseController.GetOpeningTimes()[i].Day, Open = Request.Form["Open" + i].ToString(), Close = Request.Form["Close" + i].ToString() };
-                        if(await req.UpdateOpeningTime(opti, placeID, opID) != HttpStatusCode.OK)
+                        opti = new openingTimes { Day = i, Open = Request.Form["Open" + i].ToString(), Close = Request.Form["Close" + i].ToString() };
+                        if (await req.UpdateOpeningTime(opti, placeID, ops.Where((o) => o.Day == i).ToList()[0].ID, BaseController.GetToken()) != HttpStatusCode.OK)
                         {
                             // Fehler mitteilen
                         }
                     }
                 }
-                return RedirectToPage("/PlaceSite");
+                return RedirectToPage("/PlaceSite",new { id = RouteData.Values["id"] });
             }
             else
             {
-                // Fehler mitteilen
                 return null;
             }
         }

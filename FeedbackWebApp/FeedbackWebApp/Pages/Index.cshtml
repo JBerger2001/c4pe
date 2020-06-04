@@ -3,19 +3,18 @@
 @{
     ViewData["Title"] = "Login";
     HttpRequests req = new HttpRequests();
-    BaseController.SetPlace(await req.GetPlaceAsync(1));
 }
 
 <h1>Login</h1>
 <div class="loginDiv">
     <form method="POST">
-        <label>username: </label>
+        <label for="Username">username: </label>
         <br />
-        <input class="textBLogin" type="text" name="username" value="" />
+        <input class="textBLogin" type="text" name="Username" value="" />
         <br />
-        <label>password: </label>
+        <label for="Password">password: </label>
         <br />
-        <input class="textBLogin" type="password" name="pwd" value="" />
+        <input class="textBLogin" type="password" name="Password" value="" />
         <br />
         <br />
         <input type="submit" class="btnNewP" style="border: none;color: white;padding: 6px 20px; margin-bottom: 3px;

@@ -5,11 +5,26 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.Net;
+using Microsoft.AspNetCore.Http;
 
 namespace FeedbackWebApp.Pages
 {
     public class AddPlaceModel : PageModel
     {
+        [BindProperty]
+        public string Name { get; set; }
+        [BindProperty]
+        public string Street { get; set; }
+        [BindProperty]
+        public string ZipCode { get; set; }
+        [BindProperty]
+        public string Country { get; set; }
+        [BindProperty]
+        public string City { get; set; }
+        [BindProperty]
+        public int Placetype { get; set; }
+        [BindProperty]
+        public IFormFile Upload { get; set; }
         public void OnGet()
         {
 
@@ -17,32 +32,17 @@ namespace FeedbackWebApp.Pages
         public async Task<IActionResult> OnPost()
         {
             HttpRequests req = new HttpRequests();
-            long placetypeID = 1;    //Request.Form["placetypes"].
             Object place = new
             {
-                name = Request.Form["placeName"].ToString(),
-                zipCode = Request.Form["zipCode"].ToString(),
-                city = Request.Form["city"].ToString(),
-                street = Request.Form["street"].ToString(),
-                country = Request.Form["country"].ToString(),
-                placeTypeID = placetypeID
+                name = Name,
+                zipCode = ZipCode,
+                city = City,
+                street = Street,
+                country = Country,
+                placeTypeID = Placetype
             };
             Place p = await req.CreatePlaceAsync(place,BaseController.GetToken());
-            int placeID = Convert.ToInt32(p.ID);
-            openingTimes opti;
-            for (int i = 0; i < 7; i++)
-            {
-                if (Request.Form["Open" + i].ToString() != "" && Request.Form["Close" + i].ToString() != "")
-                {
-                    opti = new openingTimes{ Day = i, Open = Request.Form["Open" + i].ToString(), Close = Request.Form["Close" + i].ToString() };
-                    if(await req.CreateOpeningTime(opti, placeID, BaseController.GetToken()) != HttpStatusCode.OK)
-                    {
-                        // Zeig an, dass es nicht funktioniert hat
-                    }
-                }
-            }
-            BaseController.SetPlace(await req.GetPlaceAsync(placeID));
-            return RedirectToPage("/PlaceSite");
+            return RedirectToPage("/PlaceSite",new { id = Convert.ToInt32(p.ID) });
         }
     }
 }

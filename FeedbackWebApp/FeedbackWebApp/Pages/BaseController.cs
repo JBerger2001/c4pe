@@ -8,9 +8,9 @@ namespace FeedbackWebApp.Pages
 {
     public class BaseController : Controller
     {
-        private static User _instance = null;
+        private static User _instance = new User() { Role="nothing", Id=0};
         private static string _token = "";
-        private static Place _place;
+        private static int _reviewID;
         public static User GetUser()
         {
             return _instance;
@@ -19,17 +19,9 @@ namespace FeedbackWebApp.Pages
         {
             return _token;
         }
-        public static Place GetPlace()
+        public static int GetreviewID()
         {
-            return _place;
-        }
-        public static int GetPlaceID()
-        {
-            return Convert.ToInt32(_place.ID);
-        }
-        public static List<openingTimes> GetOpeningTimes()
-        {
-            return _place.OpeningTimes;
+            return _reviewID;
         }
         public static void SetToken(string t)
         {
@@ -39,14 +31,14 @@ namespace FeedbackWebApp.Pages
         {
             _instance = u;
         }
+        public static void SetreviewID(int i)
+        {
+            _reviewID = i;
+        }
         public static void SetUserAndToken(User u, string t)
         {
             _instance = u;
             _token = t;
-        }
-        public static void SetPlace(Place p)
-        {
-            _place = p;
         }
     }
 }

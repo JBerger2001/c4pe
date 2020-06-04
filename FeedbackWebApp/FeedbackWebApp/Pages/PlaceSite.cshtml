@@ -1,40 +1,69 @@
-﻿@page
+﻿@page "{id:int}"
 @model FeedbackWebApp.Pages.PlaceSiteModel
 @{
     List<string> days = new List<string>() { "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday" };
     HttpRequests req = new HttpRequests();
-    Place place = await req.GetPlaceAsync(BaseController.GetPlaceID());
-    List<Review> reviews = await req.GetReviews(BaseController.GetPlaceID());
+    Place place = await req.GetPlaceAsync(Convert.ToInt32(RouteData.Values["id"]), BaseController.GetToken());
+    List<Review> reviews = await req.GetReviews(Convert.ToInt32(RouteData.Values["id"]), BaseController.GetToken());
     ViewData["Title"] = place.Name;
 
 }
 
 <div class="container">
     <div style="margin-top:10px">
-        <input type="submit" class="btnNewP" style="border: none;color: white;padding: 6px 20px;
-          text-align: center;margin-top: 10px;margin-bottom: 10px;float: right;background-color: #555555;cursor: pointer;" asp-page="/UpdatePlace" value="Edit Place">
+        @if (place.UserIsOwner)
+        {
+        <form action="" method="post">
+            <input type="submit" class="btnNewP" style="border: none;color: white;padding: 6px 20px;
+                text-align: center;margin-top: 10px;margin-bottom: 10px;float: right;background-color: #555555;cursor: pointer;" asp-page-handler="Edit" value="Edit Place">
+            <input type="hidden" name="_METHOD" value="DELETE" />
+            <input type="submit" class="btnNewP" style="border: none;color: white;padding: 6px 20px;
+                text-align: center;margin-top: 10px;margin-bottom: 10px;float: right;background-color: #555555;cursor: pointer;" asp-page-handler="DeletePlace" value="Delete this Place">
+        </form>
+        }
+
         @* <img src="https://via.placeholder.com/600x390" alt="Bild" style="" /> *@
         <div style="">
             <h3>@place.Name</h3>
             <h4>@place.PlaceType.Name</h4>
             <p>Opening times: </p>
-            @for (int i = 0; i < place.OpeningTimes.Count; i++)
+            @for (int i = 0; i < 7; i++)
             {
-                <p>@days[place.OpeningTimes[i].Day]: open from @place.OpeningTimes[i].Open  to @place.OpeningTimes[i].Close</p>
+                List<openingTimes> op = place.OpeningTimes.Where((o) => o.Day == i).ToList();
+                if (op.Count != 0)
+                {
+                    <p>@days[i]: open from @op[0].Open  to @op[0].Close</p>
+                }
+                else
+                {
+                    <p>@days[i]: no data</p>}
             }
+            <a asp-page="/AddOpenTimes" asp-route-id="@place.ID">Add Opening Times</a>
+            <a asp-page="/DeleteOpenTime" asp-route-id="@place.ID">Delete Opening Times</a>
             <br />
             <p>Address: @place.Street, @place.ZipCode @place.City , @place.Country</p>
 
-            @if (BaseController.GetToken()=="")
+            @if (reviews.Count((r) => r.User.Username == BaseController.GetUser().Username) == 0)
             {
-                <button id="btnAddPlace" onclick="AddReview()" style="border: none;color: white;padding: 6px 20px;text-align: center;margin-bottom: 10px;float: right;
-                background-color: #555555;cursor: pointer;margin-top: 10px">
-                    Add Review
-                </button>
+                <form action="" method="post">
+                    <input type="submit" class="btnNewP" style="border: none;color: white;padding: 6px 20px;
+                        text-align: center;margin-top: 10px;margin-bottom: 10px;float: right;background-color: #555555;cursor: pointer;" asp-page-handler="Review" value="Write a Review" />
+                </form>
+            }
+            @if (reviews.Count((r) => r.User.Username == BaseController.GetUser().Username) > 0 || BaseController.GetUser().Role == "admin")
+            {
+                BaseController.SetreviewID(Convert.ToInt32(reviews.Where((r) => r.User.Username == BaseController.GetUser().Username).ToList()[0].Id));
+                <form action="" method="POST">
+                    <input type="hidden" name="_METHOD" value="DELETE" />
+                    <input type="submit" class="btnNewP" style="border: none;color: white;padding: 6px 20px;
+                text-align: center;margin-top: 10px;margin-bottom: 10px;float: right;background-color: #555555;cursor: pointer;" asp-page-handler="DeleteReview" value="Delete your review">
+                    <input type="submit" class="btnNewP" style="border: none;color: white;padding: 6px 20px;
+                        text-align: center;margin-top: 10px;margin-bottom: 10px;float: right;background-color: #555555;cursor: pointer;" asp-page-handler="Update" value="Update your Review">
+                </form>
             }
 
             <h3>Reviews: </h3>
-            
+
             @foreach (Review r in reviews)
             {
                 <div class="panel panel-default">
@@ -42,8 +71,10 @@
                         <p><b>@r.User.Username</b> gives this @place.PlaceType.Name <b>@r.Rating stars</b> and says: </p>
                         <br />
                         <b>@r.Text</b>
-                        <br />
-                        <i>Last edited: @r.LastEdited.Date</i>
+                        <br /><br />
+                        @if (r.LastEdited != null)
+                        {
+                            <i>Last edited: @r.LastEdited</i>}
                         <i>Positive Reactions: @r.positiveReactions</i>
                         <i>Negative Reactions: @r.negativeReactions</i>
                     </div>

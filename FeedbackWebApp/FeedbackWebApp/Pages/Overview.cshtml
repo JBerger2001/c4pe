@@ -1,36 +1,45 @@
-﻿@page
+﻿@page "{id:int}"
 @model FeedbackWebApp.Pages.OverviewModel
 @{
-    ViewData["Title"] = "Overview";
-    bool verfied = true;
+    ViewData["Title"] = "Overview"; //"{id:int}"
     HttpRequests req = new HttpRequests();
-    Model.places = await req.GetPlacesAsync(1);
+    //await req.GetPagesAsync(BaseController.GetToken());
+    Model.places = await req.GetPlacesAsync(Convert.ToInt32(RouteData.Values["id"]), BaseController.GetToken()); 
 }
 
 <h1>Overview</h1>
 <div class="container">
-    @if (verfied == true)
-    {
-        <div style="height:40px">
-            <button id="btnAddPlace" onclick="AddPlace()" style="border: none;color: white;padding: 6px 20px;text-align: center;margin-bottom: 10px;float: right;
-         background-color: #555555;cursor: pointer;margin-left:3px">
-                Add Place
-            </button>
-            <button id="btnAddPlace" onclick="AddPlaceType()" style="border: none;color: white;padding: 6px 20px;text-align: center;margin-bottom: 10px;float: right;
-         background-color: #555555;cursor: pointer;">
-                Add PlaceType
-            </button>
+    <div style="height:50px">
+        @if (BaseController.GetUser().Role == "User" || BaseController.GetUser().Role == "Admin")
+        {
 
-        </div>
-    }
-
+            <a asp-page="/AddPlace">
+                <input type="submit" class="btnNewP" style="border: none;color: white;padding: 6px 20px;text-align: center;margin-bottom: 10px;float: right;
+        background-color: #555555;cursor: pointer;margin-left:3px;margin-top:12px;display:inline-block" value="Add Place">
+            </a>
+        }
+        @if (BaseController.GetUser().Role == "Admin")
+        { 
+        <a asp-page="/AddPlaceType">
+            <input type="submit" class="btnNewP" style="border: none;color: white;padding: 6px 20px;
+                     text-align: center;margin-bottom: 10px;float: right;background-color: #555555;cursor: pointer;margin-top:12px;display:inline-block" value="Add PlaceType">
+        </a>
+        }
+    </div>
     @foreach (Place p in Model.places)
     {
         <div class="panel panel-default">
             <div class="panel-body">
-                <img src="https://via.placeholder.com/180" alt="Bild" style="float: left" />
+                @if (p.Images.Count == 0)
+                {
+                    <img src="https://via.placeholder.com/180" alt="Bild" style="float: left" />
+                }
+                else
+                { string path = "http://77.244.251.110/" + @p.Images[0].URI; 
+                <img src="@path" alt="Picture" style="float: left" width="180" height="180" />
+                }
                 <div style="float:left; margin-left: 5%">
-                    <a onclick="" asp-page="/PlaceSite" id="@p.ID"><h3>@p.Name</h3></a>
+                    <a onclick="" asp-page="/PlaceSite" asp-route-id="@p.ID"><h3>@p.Name</h3></a>
                     <h4> @p.PlaceType.Name</h4>
                     @if (p.OpeningTimes.Count != 0)
                     {
@@ -58,13 +67,13 @@
     }
     <div class="pagination">
         <a href="#">&laquo;</a>
-        <a class="active"href="#">1</a>
-        <a href="#">2</a>
-        <a href="#">3</a>
+        <a class="active" asp-page="/Overview" asp-route-id="1">1</a>
+        <a asp-page="/Overview" asp-route-id="2">2</a>
+        <a asp-page="/Overview" asp-route-id="3">3</a>
         <a href="#">4</a>
         <a href="#">5</a>
         <a href="#">6</a>
         <a href="#">&raquo;</a>
-</div>
+    </div>
 </div>
 

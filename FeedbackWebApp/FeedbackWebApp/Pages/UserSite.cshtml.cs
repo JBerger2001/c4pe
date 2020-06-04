@@ -10,31 +10,51 @@ namespace FeedbackWebApp.Pages
 {
     public class UserSiteModel : PageModel
     {
+        [BindProperty]
+        public string Firstname { get; set; }
+        [BindProperty]
+        public string Lastname { get; set; }
+        [BindProperty]
+        public string Password { get; set; }
+        [BindProperty]
+        public string Description { get; set; }
+        [BindProperty]
+        public string Street { get; set; }
+        [BindProperty]
+        public string City { get; set; }
+        [BindProperty]
+        public string ZipCode { get; set; }
+        [BindProperty]
+        public string Country { get; set; }
         public void OnGet()
         {
          
         }
-        public IActionResult OnPutCancel()
+        public async Task<IActionResult> OnPostDel()
         {
-            return RedirectToPage("/Overview");
+            HttpRequests req = new HttpRequests();
+            await req.DeleteUserAsync(BaseController.GetToken());
+            BaseController.SetUserAndToken(new User() { Role = "nothing", Id = 0 }, "");
+            return RedirectToPage("/Index");
         }
         public async Task<IActionResult> OnPost()
         {
             HttpRequests req = new HttpRequests();
             Object u = new 
             {
-                FirstName = Request.Form["fn"].ToString(),
-                LastName = Request.Form["ln"].ToString(),
-                Description = Request.Form["description"].ToString(),
-                Street = Request.Form["street"].ToString(),
-                ZipCode = Request.Form["zipCode"].ToString(),
-                City = Request.Form["city"].ToString(),
-                Country = Request.Form["country"].ToString(),
+                firstName = Firstname,
+                lastName = Lastname,
+                description = Description,
+                street = Street,
+                zipCode = ZipCode,
+                city = City,
+                country = Country,
             };
-            if(await req.UpdateUserAsync(u, BaseController.GetToken()) == HttpStatusCode.OK)
+            HttpStatusCode c = await req.UpdateUserAsync(u, BaseController.GetToken());
+            if (c == HttpStatusCode.OK || c == HttpStatusCode.NoContent)
             {
                 BaseController.SetUser(await req.GetUserAsync(BaseController.GetToken()));
-                return RedirectToPage("/Overview");
+                return RedirectToPage("/UserSite");
             }
             else
             {

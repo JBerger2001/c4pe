@@ -1,0 +1,28 @@
+﻿@page "{id:int}"
+@model FeedbackWebApp.Pages.AddOpenTimesModel
+@{
+    ViewData["Title"] = "AddOpenTimes";
+    List<string> days = new List<string>() { "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday" };
+    HttpRequests r = new HttpRequests();
+    List<openingTimes> times = await r.GetOpenTimesAsync(Convert.ToInt32(RouteData.Values["id"]), BaseController.GetToken());
+}
+
+<div class="loginDiv" style="text-align:center">
+    <h2>Add new Opening Times</h2>
+    <form action="" method="POST">
+        @for (int i = 0; i < days.Count; i++)
+        {
+            string opN = "Time_Open" + i; string clN = "Time_Close" + i;
+            if (times.Where((t) => t.Day == i).ToList().Count == 0)
+            {
+                <label>@days[i]: </label>
+                <div class="times">
+                    <label for="@opN">open: </label><input name="@opN" type="time" /> <label for="@clN">close: </label><input name="@clN"  type="time" />
+                </div>
+                <br />
+            }
+        }
+        <input type="submit" class="btnNewP" style="border: none;color: white;padding: 6px 20px;
+            text-align: center;margin-top: 10px;background-color: #555555;cursor: pointer;margin-left:20px" asp-page-handler="" value="Create new Opening Times">
+    </form>
+</div>

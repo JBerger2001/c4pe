@@ -14,6 +14,7 @@ namespace FeedbackWebApp
         public string Country { get; set; }
         public string Name { get; set; }
         public bool IsVerified { get; set; }
+        public bool UserIsOwner { get; set; }
         public float Rating { get; set; }
         public int ReviewCount { get; set; }
         public PlaceType PlaceType { get; set; }
