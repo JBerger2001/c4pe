@@ -22,10 +22,10 @@ namespace FeedbackWebApp
             path2 = path + "api/places/" + placeId;
             return await path2.WithOAuthBearerToken(token).GetJsonAsync<Place>();
         }
-        public async Task<string> GetPlaceTypeAsync(int typeId, string token)
+        public async Task<PlaceType> GetPlaceTypeAsync(int typeId, string token)
         {
-            path2 = path + "api/placetype/" + typeId;
-            return (await path2.WithOAuthBearerToken(token).GetJsonAsync<PlaceType>()).Name;
+            path2 = path + "api/placetypes/" + typeId;
+            return (await path2.WithOAuthBearerToken(token).GetJsonAsync<PlaceType>());
         }
         public async Task<List<PlaceType>> GetPlaceTypesAsync(string token)
         {

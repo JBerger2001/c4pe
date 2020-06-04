@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - FeedbackWebApp</title>
+    <title>@ViewData["Title"] - Feedback WebApp</title>
 
     <environment include="Development">
         <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
@@ -29,11 +29,11 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a asp-page="/Overview" class="navbar-brand">FeedbackWebApp</a>
+                <a asp-page="/Overview" asp-route-id="1" class="navbar-brand">Feedback WebApp</a>
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li><a asp-page="/Overview" onclick="">Overview</a></li>
+                    <li><a asp-page="/Overview" asp-route-id="1">Overview</a></li>
                     <li><a asp-page="/PlaceTypeSite">All Types of Places</a></li>
                     <li><a asp-page="/About">About</a></li>
                     @if (BaseController.GetToken() == "")
@@ -62,6 +62,7 @@
     </div>
 
     <environment include="Development">
+        <link rel="stylesheet" href="~/css/myCSS.css" />
         <script src="~/lib/jquery/dist/jquery.js"></script>
         <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
         <script src="~/js/site.js" asp-append-version="true"></script>

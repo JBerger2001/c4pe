@@ -30,7 +30,7 @@ namespace FeedbackWebApp.Pages
         {
             HttpRequests req = new HttpRequests();
             HttpStatusCode c = await req.DeletePlaceAsync(Convert.ToInt32(RouteData.Values["id"]), BaseController.GetToken());
-            return RedirectToPage("/Overview");
+            return RedirectToPage("/Overview", new { id =1 });
         }
         public async Task<IActionResult> OnPostDeleteReview()
         {

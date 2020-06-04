@@ -4,7 +4,6 @@
     ViewData["Title"] = "All Types of Places";
     HttpRequests req = new HttpRequests();
     List<PlaceType> types = await req.GetPlaceTypesAsync(BaseController.GetToken());
-    //BaseController.GetUser().Role = "Admin";    // Nur zum Testen
 }
 <h1>@Model.ViewData["Title"]</h1>
 <div class="container">

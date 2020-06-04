@@ -22,7 +22,6 @@ namespace FeedbackWebApp.Pages
         {
             HttpRequests req = new HttpRequests();
             Object r = new { rating = Rating, text = reviewContent };
-            //await req.UpdateReview(r, Convert.ToInt32(RouteData.Values["id"]), BaseController.GetreviewID(), BaseController.GetToken());
             HttpStatusCode c = await req.UpdateReview(r, Convert.ToInt32(RouteData.Values["id"]), BaseController.GetreviewID(), BaseController.GetToken());
             if (c == HttpStatusCode.NoContent)
             {

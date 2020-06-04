@@ -37,25 +37,12 @@
             }
         </select>
         <br />
-        <label class="labelMargin">Upload Image of the place: </label>
+        @*<label class="labelMargin">Upload Image of the place: </label>
         <br />
         <input type="file" asp-for="Upload" />
-        @*<br />
-        <label class="labelMargin">Opening Times: </label>
-        <br />
-        <div style="text-align:center">
-            @for (int i = 0; i < days.Count; i++)
-            {
-                string opN = "Open" + i; string clN = "Close" + i;
-                <label>@days[i]: </label>
-                <div class="times">
-                    <label for="OpeningTimes_Open">open: </label><input name="OpeningTimes_Open" value="@i" type="time" /> <label for="OpeningTimes_Close">close: </label><input name="OpeningTimes_Close" value="@i" type="time" />
-                </div>
-                <br />
-            } *@
+        *@
         <input type="submit" class="btnNewP" style="border: none;color: white;padding: 6px 20px;
             text-align: center;margin-top: 10px;background-color: #555555;cursor: pointer;margin-left:20px" asp-page-handler="" value="Create new place">
-        @*</div> *@
     </form>
 
 </div>

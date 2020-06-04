@@ -6,6 +6,24 @@
     //await req.GetPagesAsync(BaseController.GetToken());
     Model.places = await req.GetPlacesAsync(Convert.ToInt32(RouteData.Values["id"]), BaseController.GetToken()); 
 }
+<style>
+    .pagination {
+        display: inline-block;
+    }
+    .pagination a {
+        color: black;
+        float: left;
+        padding: 8px 16px; 
+        text-decoration: none;
+    }
+    .pagination a.active {
+        background-color: #4A4A4A;
+        color: white;
+    }
+    .pagination a:hover:not(.active) {
+        background-color: #ddd;
+    }
+</style>
 
 <h1>Overview</h1>
 <div class="container">
@@ -65,15 +83,14 @@
             </div>
         </div>
     }
-    <div class="pagination">
-        <a href="#">&laquo;</a>
-        <a class="active" asp-page="/Overview" asp-route-id="1">1</a>
-        <a asp-page="/Overview" asp-route-id="2">2</a>
-        <a asp-page="/Overview" asp-route-id="3">3</a>
-        <a href="#">4</a>
-        <a href="#">5</a>
-        <a href="#">6</a>
-        <a href="#">&raquo;</a>
+    <div style="text-align:center">
+        <div class="pagination">
+            <a>&laquo;</a>
+            <a class="active" asp-page="/Overview" asp-route-id="1">1</a>
+            <a asp-page="/Overview" asp-route-id="2">2</a>
+            <a asp-page="/Overview" asp-route-id="3">3</a>
+            <a>&raquo;</a>
+    </div>
     </div>
 </div>
 

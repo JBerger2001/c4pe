@@ -23,8 +23,8 @@ namespace FeedbackWebApp.Pages
         public string City { get; set; }
         [BindProperty]
         public int Placetype { get; set; }
-        [BindProperty]
-        public IFormFile Upload { get; set; }
+        //[BindProperty]
+        //public IFormFile Upload { get; set; }
         public void OnGet()
         {
 
