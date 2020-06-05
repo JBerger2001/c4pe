@@ -15,8 +15,7 @@
                 @if (BaseController.GetUser().Role == "Admin")
                 { 
                     <a asp-page="/UpdatePlaceType" asp-route-id="@t.Id">
-                        <input type="submit" class="btnNewP" style="border: none;color: white;padding: 6px 20px;
-                     text-align: center;margin-bottom: 10px;float: right;background-color: #555555;cursor: pointer;margin-right:3px; margin-top:12px" asp-page="" name="editBtn" value="Edit / Delete Type">
+                        <input type="submit" class="myB" style="padding: 6px 20px;float:right;background-color: white;margin:12px 3px 0 0;border-radius:10px; color:black;" asp-page="" name="editBtn" value="Edit / Delete Type">
                     </a>
                 }
 

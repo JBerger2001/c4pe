@@ -9,16 +9,19 @@
 <style>
     .pagination {
         display: inline-block;
+        
     }
     .pagination a {
         color: black;
         float: left;
         padding: 8px 16px; 
         text-decoration: none;
+        border-radius:10px;
     }
     .pagination a.active {
-        background-color: #4A4A4A;
-        color: white;
+        background-color: white;
+        color: black;
+        border: 2px solid #4A4A4A
     }
     .pagination a:hover:not(.active) {
         background-color: #ddd;
@@ -27,27 +30,24 @@
 
 <h1>Overview</h1>
 <div class="container">
-    <div style="height:50px">
+    <div style="height:40px">
         @if (BaseController.GetUser().Role == "User" || BaseController.GetUser().Role == "Admin")
         {
-
             <a asp-page="/AddPlace">
-                <input type="submit" class="btnNewP" style="border: none;color: white;padding: 6px 20px;text-align: center;margin-bottom: 10px;float: right;
-        background-color: #555555;cursor: pointer;margin-left:3px;margin-top:12px;display:inline-block" value="Add Place">
+                <input type="submit" class="myB" style="padding: 6px 20px;margin-left:10px;float: right;display:inline-block;color:black;background-color:white;border-radius:10px" value="Add Place">
             </a>
         }
         @if (BaseController.GetUser().Role == "Admin")
         { 
         <a asp-page="/AddPlaceType">
-            <input type="submit" class="btnNewP" style="border: none;color: white;padding: 6px 20px;
-                     text-align: center;margin-bottom: 10px;float: right;background-color: #555555;cursor: pointer;margin-top:12px;display:inline-block" value="Add PlaceType">
+            <input type="submit" class="myB" style="padding: 6px 20px;float: right;display:inline-block;color:black;background-color:white;border-radius:10px" value="Add PlaceType">
         </a>
         }
-    </div>
+    </div> 
     @foreach (Place p in Model.places)
     {
-        <div class="panel panel-default">
-            <div class="panel-body">
+        <div class="panel panel-default" style="margin-top:5px">
+            <div class="panel-body" >
                 @if (p.Images.Count == 0)
                 {
                     <img src="https://via.placeholder.com/180" alt="Bild" style="float: left" />

@@ -10,6 +10,9 @@
         <link rel="stylesheet" href="~/css/site.css" />
         <link rel="stylesheet" href="~/css/myCSS.css" />
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
         <script src="~/js/site.js"></script>
     </environment>
     <environment exclude="Development">
@@ -32,18 +35,28 @@
                 <a asp-page="/Overview" asp-route-id="1" class="navbar-brand">Feedback WebApp</a>
             </div>
             <div class="navbar-collapse collapse">
-                <ul class="nav navbar-nav">
-                    <li><a asp-page="/Overview" asp-route-id="1">Overview</a></li>
-                    <li><a asp-page="/PlaceTypeSite">All Types of Places</a></li>
-                    <li><a asp-page="/About">About</a></li>
+                <ul class="nav navbar-nav" style="width: 80%">
+                    <li><a asp-page="/Overview" asp-route-id="1">Browse Places</a></li>
+                    <li><a asp-page="/PlaceTypeSite">Browse Types of Places</a></li>
+                    @*<li><a asp-page="/About">About</a></li> *@
                     @if (BaseController.GetToken() == "")
                     {
-                        <li><a asp-page="/Index" style="float: right; display:inline-block">Log In/Sign up</a></li>
+                        <li style="float: right; display:inline-block"><a asp-page="/Index">Log In/Sign up</a></li>
                     }
                     else
                     {
-                        <li><a asp-page="/UserSite" style="float: right; display:inline-block">User Information</a></li>
-                        <li><a asp-page="/Index" style="float: right; display:inline-block">Logout</a></li>
+                        <li style="float:right;display:inline-block;"><a asp-page="/Index" style="float: right; display:inline-block;padding-left:0px">(Logout)</a></li>
+                        <li style="float:right;display:inline-block;">
+                            <a asp-page="/UserSite" style="padding-left:5px;padding-right:5px">@BaseController.GetUser().Username</a>
+                        </li>
+                        <li style="float:right;display:inline-block;padding-top:5px">
+                            @if (@BaseController.GetUser().AvatarURI != null)
+                            {
+                                string path = "http://77.244.251.110/" + @BaseController.GetUser().AvatarURI;
+                                <img src="@path" alt="Avatar" height="40" width="40" style="border-radius:20px" /> }
+                            else
+                            { <img src="https://avatars.dicebear.com/api/avataaars/example2.svg" alt="Avatar" height="40" width="40" style="border-radius:20px" />}
+                        </li>
                     }
 
                 </ul>

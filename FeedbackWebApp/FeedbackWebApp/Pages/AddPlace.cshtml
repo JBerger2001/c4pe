@@ -4,9 +4,8 @@
     ViewData["Title"] = "Add new Place";
     HttpRequests req = new HttpRequests();
     List<PlaceType> types = await req.GetPlaceTypesAsync(BaseController.GetToken());
-    List<string> days = new List<string>() { "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday" };
 }
-<div class="loginDiv">
+<div class="loginDiv" style="width:30%;">
     <h2>Add new Place</h2>
     <form method="POST">
         <label class="labelMargin" for="Name">Name of the place: </label>
@@ -41,8 +40,7 @@
         <br />
         <input type="file" asp-for="Upload" />
         *@
-        <input type="submit" class="btnNewP" style="border: none;color: white;padding: 6px 20px;
-            text-align: center;margin-top: 10px;background-color: #555555;cursor: pointer;margin-left:20px" asp-page-handler="" value="Create new place">
+        <input type="submit" class="myB" style="padding: 6px 20px; background-color: white;border-radius:10px;width:100%;margin-top:10px" asp-page-handler="" value="Create new place">
     </form>
 
 </div>

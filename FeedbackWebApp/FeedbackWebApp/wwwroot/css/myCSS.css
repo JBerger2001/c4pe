@@ -2,21 +2,17 @@
     text-align: center;
 }
 
-.loginDiv{
+.loginDiv {
     margin-left: auto;
     margin-right: auto;
-    width: 50%;
+    width: 35%;
+    margin-bottom: 50px
 }
 
 .textBLogin {
     width: 100%;
     margin-bottom:10px;
-}
-
-.btnLogin {
-    margin-left: auto;
-    margin-right: auto;
-    width: auto;
+    border-radius: 20px;
 }
 .rating .glyphicon{
     font-size: 20px;
@@ -75,3 +71,15 @@
             background: #666;
             padding: 10px;
             text-align: right;}
+
+.myB {
+    margin-left: auto;
+    margin-right: auto;
+    width: auto;
+    background-color: #FFFFFF;
+    color: black;
+    border: 2px solid #4A4A4A;
+    text-align: center;
+    cursor: pointer;
+    border-radius: 20px;
+}

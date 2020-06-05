@@ -5,45 +5,56 @@
     User u = BaseController.GetUser();
 }
 
-<div class="loginDiv">
+<div style="margin-bottom:50px;">
     <h1>User Information</h1>
-    <form method="POST">
-        <label>Username: <b>@u.Username</b></label>
-        <br />
-        <label for="Firstname">Firstname:</label>
-        <br />
-        <input class="textBLogin" type="text" name="Firstname" value="@u.FirstName" />
-        <br />
-        <label for="Lastname">Lastname:</label>
-        <br />
-        <input class="textBLogin" type="text" name="Lastname" value="@u.LastName" />
-        <br />
-        <label for="Description">Description:</label>
-        <br />
-        <textarea class="textBLogin" name="Description" cols="35" rows="4">@u.Description</textarea>
-        <br />
-        <label class="labelMargin" for="Street">Street & Number: </label>
-        <br />
-        <input class="textBLogin" type="text" name="Street" value="@u.Street" />
-        <br />
-        <label class="labelMargin" for="ZipCode">ZipCode: </label>
-        <br />
-        <input class="textBLogin" type="text" name="ZipCode" value="@u.ZipCode" />
-        <br />
-        <label class="labelMargin" for="City">City: </label>
-        <br />
-        <input class="textBLogin" type="text" name="City" value="@u.City" />
-        <br />
-        <label class="labelMargin" for="Country">Country: </label>
-        <br />
-        <input class="textBLogin" type="text" name="Country" value="@u.Country" />
-        <br />
-        <br />
-        <input type="submit" class="btnNewP" style="border: none;color: white;padding: 6px 20px;
-            text-align: center;background-color: #555555;cursor: pointer; margin-bottom: 3px" asp-page-handler="Del" value="Delete my user">
-        <input type="hidden" name="_METHOD" value="PUT" />
-        <input type="submit" class="btnNewP" style="border: none;color: white;padding: 6px 20px;
-            text-align: center;background-color: #555555;cursor: pointer" asp-page-handler="" value="Save Changes">
-    </form>
+    <div style="display:inline-block;height:400px;width:25%;float:left">
+        @if (@BaseController.GetUser().AvatarURI != null)
+        {
+            string path = "http://77.244.251.110/" + @BaseController.GetUser().AvatarURI;
+            <img src="@path" alt="Avatar" height="250" width="250" style="border-radius:300px" /> }
+        else
+        { <img src="https://avatars.dicebear.com/api/avataaars/example2.svg" alt="Avatar" height="250" width="250" style="border-radius:300px;border:2px solid black" />}
+    </div>
+    <div style="display:inline-block;width:74%">
+        <form method="POST">
+            <div style="display:inline-block;margin-right:70px;float:none">
+                @*<label>Username: <b>@u.Username</b></label>
+                <br /> 
+                <br /> *@
+                <label for="Firstname">Firstname:</label>
+                <br />
+                <input class="textBLogin" type="text" name="Firstname" value="@u.FirstName" />
+                <br />
+                <label for="Lastname">Lastname:</label>
+                <br />
+                <input class="textBLogin" type="text" name="Lastname" value="@u.LastName" />
+                <br />
+                <label for="Description">Description:</label>
+                <br />
+                <textarea class="textBLogin" name="Description" cols="35" rows="4">@u.Description</textarea>
+            </div>
+            <div style="display:inline-block">
+                <label class="labelMargin" for="Street" style="margin-top:7px">Street & Number: </label>
+                <br />
+                <input class="textBLogin" type="text" name="Street" value="@u.Street" />
+                <br />
+                <label class="labelMargin" for="ZipCode"  style="margin-top:7px">ZipCode: </label>
+                <br />
+                <input class="textBLogin" type="text" name="ZipCode" value="@u.ZipCode" />
+                <br />
+                <label class="labelMargin" for="City" style="margin-top:7px">City: </label>
+                <br />
+                <input class="textBLogin" type="text" name="City" value="@u.City" />
+                <br />
+                <label class="labelMargin" for="Country" style="margin-top:7px">Country: </label>
+                <br />
+                <input class="textBLogin" type="text" name="Country" value="@u.Country" />
+            </div>
+            <div style="margin-top:20px">
+                <input type="submit" class="myB" style="padding: 6px 20px;background-color: white;border-radius:10px; margin-bottom: 3px;width:49%" asp-page-handler="Del" value="Delete my user">
+                <input type="submit" class="myB" style="padding: 6px 20px;background-color: white;border-radius:10px;width:49%" asp-page-handler="" value="Save Changes">
+            </div>
+        </form>
+    </div>
 </div>
 

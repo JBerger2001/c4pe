@@ -6,7 +6,7 @@
 }
 
 <h1>Login</h1>
-<div class="loginDiv">
+<div class="loginDiv" style="width:30%">
     <form method="POST">
         <label for="Username">username: </label>
         <br />
@@ -17,10 +17,8 @@
         <input class="textBLogin" type="password" name="Password" value="" />
         <br />
         <br />
-        <input type="submit" class="btnNewP" style="border: none;color: white;padding: 6px 20px; margin-bottom: 3px;
-            text-align: center;background-color: #555555;cursor: pointer" asp-page-handler="LogIn" value="Log In">
-        <input type="submit" class="btnNewP" style="border: none;color: white;padding: 6px 20px;
-            text-align: center;background-color: #555555;cursor: pointer" asp-page-handler="Guest" value="Log In As Guest">
+        <input type="submit" class="myB" style="padding: 6px 20px;width:100%;background-color:white;border-radius:10px" asp-page-handler="LogIn" value="Log In">
+            @*<input type="submit" class="myB" style="padding: 6px 20px;" asp-page-handler="Guest" value="Log In As Guest">*@
     </form>
 </div>
 <br />

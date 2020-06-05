@@ -7,7 +7,7 @@
     Place place = await req.GetPlaceAsync(Convert.ToInt32(RouteData.Values["id"]), BaseController.GetToken());
     List<string> days = new List<string>() { "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday" };
 }
-<div class="loginDiv">
+<div class="loginDiv" style="width:35%">
     <h2>Update Place: </h2>
     <form method="POST">
         <label class="labelMargin" for="Name">Name of the place: </label>
@@ -65,10 +65,8 @@
                     }
                 }
             }
-            <input type="submit" class="btnNewP" style="border: none;color: white;padding: 6px 20px;
-            text-align: center;margin-top: 10px;background-color: #555555;cursor: pointer;margin-left:20px" asp-page-handler="Cancel" value="Cancel">
-            <input type="submit" class="btnNewP" style="border: none;color: white;padding: 6px 20px;
-            text-align: center;margin-top: 10px;background-color: #555555;cursor: pointer;margin-left:20px" asp-page-handler="" value="Update this place">
+            <input type="submit" class="mB" style="padding: 6px 20px;margin-top: 10px;background-color: white;border-radius:10px;width:49%" asp-page-handler="Cancel" value="Cancel">
+            <input type="submit" class="btnNewP" style="padding: 6px 20px;margin-top: 10px;background-color: white;border-radius:10px;width:49%" asp-page-handler="" value="Update this place">
         </div>
     </form>
 
