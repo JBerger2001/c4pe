@@ -1,0 +1,17 @@
+﻿@page
+@model FeedbackWebApp.Pages.AddPlaceTypeModel
+@{
+    ViewData["Title"] = "Add new PlaceType";
+}
+
+<div class="loginDiv" style="width:30%;">
+    <h2>Add new PlaceType</h2>
+    <form action="" method="POST">
+        <label class="labelMargin" for="placetypeName">Name of PlaceType: </label>
+        <br />
+        <input class="textBLogin" type="text" name="placetypeName" value="" />
+        <br />
+        <input type="submit" class="myB" style="padding: 6px 20px;background-color: white;border-radius:10px;width:100%;margin-top:10px" asp-page-handler="" value="Create a new one">
+    </form>
+</div>
+

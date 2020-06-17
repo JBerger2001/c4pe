@@ -1,0 +1,48 @@
+﻿@page
+@model FeedbackWebApp.Pages.AddPlaceModel
+@{
+    ViewData["Title"] = "Add new Place";
+    HttpRequests req = new HttpRequests();
+    List<PlaceType> types = await req.GetPlaceTypesAsync(BaseController.GetToken());
+}
+<div class="loginDiv" style="width:30%;">
+    <h2>Add new Place</h2>
+    <form method="POST">
+        <label class="labelMargin" for="Name">Name of the place: </label>
+        <br />
+        <input class="textBLogin" type="text" name="Name" value="" />
+        <br />
+        <label class="labelMargin" for="Street">Street & Number: </label>
+        <br />
+        <input class="textBLogin" type="text" name="Street" value="" />
+        <br />
+        <label class="labelMargin" for="ZipCode">ZipCode: </label>
+        <br />
+        <input class="textBLogin" type="text" name="ZipCode" value="" />
+        <br />
+        <label class="labelMargin" for="City">City: </label>
+        <br />
+        <input class="textBLogin" type="text" name="City" value="" />
+        <br />
+        <label class="labelMargin" for="Country">Country: </label>
+        <br />
+        <input class="textBLogin" type="text" name="Country" value="" />
+        <br />
+        <label class="labelMargin">Type of place: </label>
+        <select class="textBLogin" name="Placetype">
+            @foreach (PlaceType t in types)
+            {
+                <option value="@t.Id">@t.Name</option>
+            }
+        </select>
+        <br />
+        @*<label class="labelMargin">Upload Image of the place: </label>
+        <br />
+        <input type="file" asp-for="Upload" />
+        *@
+        <input type="submit" class="myB" style="padding: 6px 20px; background-color: white;border-radius:10px;width:100%;margin-top:10px" asp-page-handler="" value="Create new place">
+    </form>
+
+</div>
+
+

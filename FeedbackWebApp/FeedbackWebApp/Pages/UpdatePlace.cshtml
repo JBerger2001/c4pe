@@ -1,0 +1,74 @@
+﻿@page "{id:int}"
+@model FeedbackWebApp.Pages.UpdatePlaceModel
+@{
+    ViewData["Title"] = "Update Place";
+    HttpRequests req = new HttpRequests();
+    List<PlaceType> types = await req.GetPlaceTypesAsync(BaseController.GetToken());
+    Place place = await req.GetPlaceAsync(Convert.ToInt32(RouteData.Values["id"]), BaseController.GetToken());
+    List<string> days = new List<string>() { "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday" };
+}
+<div class="loginDiv" style="width:35%">
+    <h2>Update Place: </h2>
+    <form method="POST">
+        <label class="labelMargin" for="Name">Name of the place: </label>
+        <br />
+        <input class="textBLogin" type="text" name="Name" value="@place.Name" />
+        <br />
+        <label class="labelMargin" for="Street">Street & Number: </label>
+        <br />
+        <input class="textBLogin" type="text" name="Street" value="@place.Street" />
+        <br />
+        <label class="labelMargin" for="ZipCode">ZipCode: </label>
+        <br />
+        <input class="textBLogin" type="text" name="ZipCode" value="@place.ZipCode" />
+        <br />
+        <label class="labelMargin" for="City">City: </label>
+        <br />
+        <input class="textBLogin" type="text" name="City" value="@place.City" />
+        <br />
+        <label class="labelMargin" for="Country">Country: </label>
+        <br />
+        <input class="textBLogin" type="text" name="Country" value="@place.Country" />
+        <br />
+        <label class="labelMargin">Type of place: </label>
+        <select class="textBLogin" name="placetype">
+            @foreach (PlaceType t in types)
+            {
+                if (t.Name == place.PlaceType.Name)
+                {
+                    <option value="@t.Id" selected>@t.Name</option>
+                }
+                else
+                {
+                    <option value="@t.Id">@t.Name</option>
+                }
+            }
+        </select>
+        <br />
+        <label class="labelMargin">Opening Times: </label>
+        <br />
+        <div style="text-align:center">
+            @for (int i = 0; i < days.Count; i++)
+            {
+                List<openingTimes> o = place.OpeningTimes.Where((op) => op.Day == i).ToList();
+                if (o.Count() != 0)
+                {
+                    foreach (openingTimes op in o)
+                    {
+                        string op_n = "Open" + i;
+                        string cl_n = "Close" + i;
+                        <label>@days[i]: </label>
+                        <div class="times">
+                            <label>open: </label><input name=@op_n type="time" value="@op.Open" /> <label>close: </label><input name=@cl_n type="time" value="@op.Close" />
+                        </div>
+                        <br />
+                    }
+                }
+            }
+            <input type="submit" class="mB" style="padding: 6px 20px;margin-top: 10px;background-color: white;border-radius:10px;width:49%" asp-page-handler="Cancel" value="Cancel">
+            <input type="submit" class="btnNewP" style="padding: 6px 20px;margin-top: 10px;background-color: white;border-radius:10px;width:49%" asp-page-handler="" value="Update this place">
+        </div>
+    </form>
+
+</div>
+

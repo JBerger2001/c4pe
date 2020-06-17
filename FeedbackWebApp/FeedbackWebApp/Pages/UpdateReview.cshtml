@@ -1,0 +1,29 @@
+﻿@page "{id:int}"
+@model FeedbackWebApp.Pages.UpdateReviewModel
+@{
+    ViewData["Title"] = "Update Review";
+    string placeName = (string)RouteData.Values["name"];    // funkt nicht
+    HttpRequests req = new HttpRequests();
+    List<Review> r = (await req.GetReviews(Convert.ToInt32(RouteData.Values["id"]), BaseController.GetToken())).Where((re)=> re.User.Username==BaseController.GetUser().Username).ToList();
+    BaseController.SetreviewID(Convert.ToInt32(r[0].Id));
+}
+
+<div class="loginDiv">
+    <h2>Update Review</h2>
+    <form action="" method="POST">
+        <label class="labelMargin">ID of Review: <i>@r[0].Id</i></label>
+        <br />
+        <label class="labelMargin" for="rating">How many stars would you give this place?(Update)</label>
+        <br />
+        <input type="number" min="0" max="5" step="1" name="rating" value="@r[0].Rating">
+        <br />
+        <label class="labelMargin" for="reviewContent">Your Review:</label>
+        <br />
+        <textarea class="textBLogin" name="reviewContent" cols="35" rows="4">@r[0].Text</textarea>
+        <br />
+        <input type="hidden" name="_METHOD" value="PUT" />
+        <input type="submit" class="btnNewP" style="border: none;color: white;padding: 6px 20px;
+        text-align: center;background-color: #555555;cursor: pointer" asp-page-handler="" value="Update the old one"> 
+    </form>
+</div>
+

@@ -1,0 +1,51 @@
+﻿@page
+@model FeedbackWebApp.Pages.SignUpModel
+@{
+    ViewData["Title"] = "SignUp";
+}
+
+<div class="loginDiv" style="width:35%">
+    <h1>SignUp</h1>
+    <form method="POST">
+        <label for="Username">Username:*</label>
+        <br />
+        <input class="textBLogin" type="text" name="Username" value="" />
+        <br />
+        <label for="Firstname">Firstname:*</label>
+        <br />
+        <input class="textBLogin" type="text" name="Firstname" value="" />
+        <br />
+        <label for="Lastname">Lastname:*</label>
+        <br />
+        <input class="textBLogin" type="text" name="Lastname" value="" />
+        <br />
+        <label for="Password">Password:*</label>
+        <br />
+        <input class="textBLogin" type="password" name="Password" value="" />
+        <br />
+        <label for="Description">Description</label>
+        <br />
+        <input class="textBLogin" type="text" name="Description" value="" />
+        <br />
+        <label class="labelMargin" for="Street">Street & Number: </label>
+        <br />
+        <input class="textBLogin" type="text" name="Street" value="" />
+        <br />
+        <label class="labelMargin" for="ZipCode">ZipCode: </label>
+        <br />
+        <input class="textBLogin" type="text" name="ZipCode" value="" />
+        <br />
+        <label class="labelMargin" for="City">City: </label>
+        <br />
+        <input class="textBLogin" type="text" name="City" value="" />
+        <br />
+        <label class="labelMargin" for="Country">Country: </label>
+        <br />
+        <input class="textBLogin" type="text" name="Country" value="" />
+        <br />
+        @*<input type="checkbox" name="check" />
+        <p name="check" style="display:inline-block">I agree and have read the <a>privacy policy</a></p>
+        <br />*@
+        <input type="submit" class="mB" style="padding: 6px 20px;background-color: white;border-radius:10px;width:100%;margin-top:10px" asp-page-handler="" value="Sign Up">
+    </form>
+</div>

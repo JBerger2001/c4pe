@@ -1,0 +1,24 @@
+﻿@page "{id:int}"
+@model FeedbackWebApp.Pages.AddReviewModel
+@{
+    ViewData["Title"] = "Add Review";
+    string placeName = (string)RouteData.Values["name"];    // funkt nicht
+}
+
+<div class="loginDiv">
+    <h2>Add review to </h2>
+    <form action="" method="POST">
+        <label class="labelMargin">Name of Place: <i>@placeName</i></label>        
+        <br />
+        <label class="labelMargin" for="rating">How many stars would you give this place?</label>
+        <br />
+        <input type="number" min="0" max="5" step="1" name="rating">
+        <br />
+        <label class="labelMargin" for="reviewContent">Your Review:</label>
+        <br />
+        <textarea class="textBLogin" name="reviewContent" cols="35" rows="4"></textarea>
+        <br />
+        <input type="submit" class="btnNewP" style="border: none;color: white;padding: 6px 20px;
+            text-align: center;background-color: #555555;cursor: pointer" asp-page-handler="" value="Create a new one">
+    </form>
+</div>
