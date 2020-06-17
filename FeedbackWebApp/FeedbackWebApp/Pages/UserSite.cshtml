@@ -11,13 +11,13 @@
         @if (@BaseController.GetUser().AvatarURI != null)
         {
             string path = "http://77.244.251.110/" + @BaseController.GetUser().AvatarURI;
-            <img src="@path" alt="Avatar" height="250" width="250" style="border-radius:300px" /> }
+            <img src="@path" alt="Avatar" height="250" width="250" style="border-radius:300px;border:2px solid black" /> }
         else
         { <img src="https://avatars.dicebear.com/api/avataaars/example2.svg" alt="Avatar" height="250" width="250" style="border-radius:300px;border:2px solid black" />}
     </div>
     <div style="display:inline-block;width:74%">
         <form method="POST">
-            <div style="display:inline-block;margin-right:70px;float:none">
+            <div style="display:inline-block;margin-right:70px;float:none;width:41%">
                 @*<label>Username: <b>@u.Username</b></label>
                 <br /> 
                 <br /> *@
@@ -31,9 +31,9 @@
                 <br />
                 <label for="Description">Description:</label>
                 <br />
-                <textarea class="textBLogin" name="Description" cols="35" rows="4">@u.Description</textarea>
+                <textarea class="textA" name="Description" cols="35" rows="4">@u.Description</textarea>
             </div>
-            <div style="display:inline-block">
+            <div style="display:inline-block;width:41%">
                 <label class="labelMargin" for="Street" style="margin-top:7px">Street & Number: </label>
                 <br />
                 <input class="textBLogin" type="text" name="Street" value="@u.Street" />
@@ -51,8 +51,8 @@
                 <input class="textBLogin" type="text" name="Country" value="@u.Country" />
             </div>
             <div style="margin-top:20px">
-                <input type="submit" class="myB" style="padding: 6px 20px;background-color: white;border-radius:10px; margin-bottom: 3px;width:49%" asp-page-handler="Del" value="Delete my user">
                 <input type="submit" class="myB" style="padding: 6px 20px;background-color: white;border-radius:10px;width:49%" asp-page-handler="" value="Save Changes">
+                <input type="submit" class="myB" style="padding: 6px 20px;background-color: white;border-radius:10px; margin-bottom: 3px;width:49%" asp-page-handler="Del" value="Delete my user">
             </div>
         </form>
     </div>

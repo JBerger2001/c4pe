@@ -23,7 +23,7 @@ namespace FeedbackWebApp.Pages
             {
                 // Zeig Fehler an
             }
-            return RedirectToPage("/Overview");
+            return RedirectToPage("/PlacetypeSite");
         }
     }
 }

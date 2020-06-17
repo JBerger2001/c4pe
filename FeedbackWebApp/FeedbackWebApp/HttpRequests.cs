@@ -99,7 +99,7 @@ namespace FeedbackWebApp
             if (resp == HttpStatusCode.OK)
                 return await path2.PostJsonAsync(user).ReceiveJson<LogIn>();
             else
-                return new LogIn() { Token = "", userId = 0 };
+                return null;
         }
         #endregion POST Requests
 

@@ -24,7 +24,14 @@ namespace FeedbackWebApp.Pages
             if (Username != "" & Password != "")
             {
                 object u = new { username = Username, password = Password };
-                x = await r.LoginUser(u);
+                try
+                {
+                    x = await r.LoginUser(u);
+                }
+                catch (Exception)
+                {
+                    x = new LogIn() { userId = 0, Token = "" };
+                }
             }
             if (x.Token != "" && x.userId!=0)
             {

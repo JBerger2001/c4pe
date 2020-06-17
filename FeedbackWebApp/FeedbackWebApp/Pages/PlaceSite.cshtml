@@ -66,21 +66,23 @@
                     else
                     { <p style="margin: 0"><b>@days[i]</b>: no data</p> }
                 }
+                @if (place.UserIsOwner || BaseController.GetUser().Role == "admin")
+                {
+                    <a asp-page="/AddOpenTimes" asp-route-id="@place.ID">Add Opening Times</a>
+                    <br />
+                    <a asp-page="/DeleteOpenTime" asp-route-id="@place.ID">Delete Opening Times</a>
+                }
             </div>
-            @if (place.UserIsOwner || BaseController.GetUser().Role == "admin")
-            {
-                <a asp-page="/AddOpenTimes" asp-route-id="@place.ID">Add Opening Times</a>
-                <a asp-page="/DeleteOpenTime" asp-route-id="@place.ID">Delete Opening Times</a>
-            }
+            
             <h4><b>Address:</b></h4>
             <div style="margin-left: 20px;">
-                <p style="margin: 0"> @place.Street</pstyle="margin:>
+                <p style="margin: 0"> @place.Street</p>
                 <p style="margin: 0">@place.ZipCode @place.City , @place.Country</p>
             </div>
         </div>
     </div>
     <div style="width:100%;float:left">
-        @if (reviews.Count((r) => r.User.Username == BaseController.GetUser().Username) == 0)
+        @if (reviews.Count((r) => r.User.Username == BaseController.GetUser().Username) == 0 && BaseController.GetToken()!="")
         {
             <form action="" method="post" style="margin-top:15px">
                 <input type="submit" class="myB" style="padding: 6px 20px;float: right;background-color: white;border-radius:10px" asp-page-handler="Review" value="Write a Review" />
