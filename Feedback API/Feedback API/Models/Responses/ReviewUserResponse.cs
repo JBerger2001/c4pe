@@ -2,7 +2,7 @@
 
 namespace Feedback_API.Models.Responses
 {
-    public class ReviewResponse
+    public class ReviewUserResponse
     {
         public long ID { get; set; }
         public int Rating { get; set; }
@@ -12,6 +12,6 @@ namespace Feedback_API.Models.Responses
         public int PositiveReactions { get; set; }
         public int NegativeReactions { get; set; }
         public bool? UserReactionIsHelpful { get; set; }
-        public UserPublicResponse User { get; set; }
+        public PlaceResponse Place { get; set; }
     }
 }

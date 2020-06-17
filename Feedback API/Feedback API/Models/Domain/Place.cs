@@ -12,7 +12,10 @@ namespace Feedback_API.Models.Domain
     {
         public long ID { get; set; }
         [Required]
-        public string Address { get; set; }
+        public string Street { get; set; }
+        public string City { get; set; }
+        public string ZipCode { get; set; }
+        public string Country { get; set; }
         [Required]
         public string Name { get; set; }
         public bool IsVerified { get; set; }
@@ -23,5 +26,7 @@ namespace Feedback_API.Models.Domain
 
         public ICollection<OpeningTime> OpeningTimes { get; set; }
         public ICollection<Review> Reviews { get; set; }
+        public ICollection<PlaceOwner> Owners { get; set; }
+        public ICollection<PlaceImage> Images { get; set; }
     }
 }

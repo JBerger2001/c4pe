@@ -15,6 +15,10 @@ using Microsoft.EntityFrameworkCore;
 using Feedback_API.Configuration;
 using Microsoft.OpenApi.Models;
 using AutoMapper;
+using Feedback_API.Services;
+using System.Text;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
 
 namespace Feedback_API
 {
@@ -42,7 +46,8 @@ namespace Feedback_API
                 });
             });
 
-            var connectionString = Configuration["ConnectionString"];
+            //var connectionString = Configuration["ConnectionString"];
+            var connectionString = Configuration.GetConnectionString("FeedbackDB");
             services.AddDbContext<FeedbackContext>(opt => opt.UseMySql(connectionString));
 
             services.AddAutoMapper(typeof(Startup));
@@ -51,9 +56,53 @@ namespace Feedback_API
                     .AddJsonOptions(options =>
                         options.JsonSerializerOptions.Converters.Add(new TimeSpanToStringConverter()));
 
+            services.AddScoped<IAuthService, AuthService>();
+
+            services.AddScoped<IImageUploadService, ImageUploadService>();
+
+            var key = Encoding.ASCII.GetBytes(Configuration.GetSection("AppSettings:Token").Value);
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
+            {
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(key),
+                    ValidateIssuer = false,
+                    ValidateAudience = false
+                };
+            });
+
+
             services.AddSwaggerGen(x =>
             {
-                x.SwaggerDoc("v1", new OpenApiInfo { Title = "Feedback API", Version = "v1" });
+                x.SwaggerDoc("v1", new OpenApiInfo
+                {
+                    Title = "Feedback API",
+                    Version = "v1"
+                });
+
+                x.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+                {
+                    In = ParameterLocation.Header,
+                    Description = "JWT Bearer Token",
+                    Name = "Authorization",
+                    Type = SecuritySchemeType.ApiKey
+                });
+
+                x.AddSecurityRequirement(new OpenApiSecurityRequirement
+                {
+                    {
+                        new OpenApiSecurityScheme
+                        {
+                            Reference = new OpenApiReference
+                            {
+                                Type = ReferenceType.SecurityScheme,
+                                Id = "Bearer"
+                            }
+                        },
+                        new string[] { }
+                    }
+                });
             });
         }
 
@@ -63,6 +112,14 @@ namespace Feedback_API
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+            }
+
+            using (var scope = app.ApplicationServices.CreateScope())
+            {
+                using (var context = scope.ServiceProvider.GetService<FeedbackContext>())
+                {
+                    context.Database.Migrate();
+                }
             }
 
             var swaggerConfig = new SwaggerConfig();
@@ -75,6 +132,10 @@ namespace Feedback_API
             //app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            app.UseAuthentication();
+
+            app.UseAuthorization();
 
             app.UseCors(AllowAllOrigins);
 

@@ -25,14 +25,26 @@ namespace Feedback_API.MappingProfiles
                 .ForMember(dest => dest.PlaceType, opt => opt.Ignore());
             CreateMap<PlaceRequest, Place>();
 
+            CreateMap<PlaceTypeResponse, PlaceType>();
+            CreateMap<PlaceTypeRequest, PlaceType>();
+
+            CreateMap<PlaceOwnerFullResponse, PlaceOwner>();
+            CreateMap<PlaceOwnerRequest, PlaceOwner>();
+
             CreateMap<OpeningTimeResponse, OpeningTime>();
             CreateMap<OpeningTimeRequest, OpeningTime>();
 
-            CreateMap<UserResponse, User>();
-            CreateMap<UserRequest, User>();
+            CreateMap<UserPrivateResponse, User>();
+            CreateMap<UserPublicResponse, User>();
+            CreateMap<UserRegisterRequest, User>();
+            CreateMap<UserUpdateRequest, User>();
+            CreateMap<UserFullUpdateRequest, User>();
 
             CreateMap<ReviewResponse, Review>();
             CreateMap<ReviewRequest, Review>();
+
+            CreateMap<ReactionResponse, Reaction>();
+            CreateMap<ReactionRequest, Reaction>();
         }
     }
 }

@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <RootNamespace>Feedback_API</RootNamespace>
@@ -39,11 +39,48 @@
     <Compile Remove="Migrations\20200109101408_UpdatedEntityProperties.Designer.cs" />
     <Compile Remove="Migrations\20200112195722_LowercaseTableNames.cs" />
     <Compile Remove="Migrations\20200112195722_LowercaseTableNames.Designer.cs" />
+    <Compile Remove="Migrations\20200113174640_InitialMigration.cs" />
+    <Compile Remove="Migrations\20200113174640_InitialMigration.Designer.cs" />
+    <Compile Remove="Migrations\20200220130917_Initial.cs" />
+    <Compile Remove="Migrations\20200220130917_Initial.Designer.cs" />
+    <Compile Remove="Migrations\20200225122616_SplitAddressProperty.cs" />
+    <Compile Remove="Migrations\20200225122616_SplitAddressProperty.Designer.cs" />
+    <Compile Remove="Migrations\20200225123651_Initial.cs" />
+    <Compile Remove="Migrations\20200225123651_Initial.Designer.cs" />
+    <Compile Remove="Migrations\20200227132817_initial.cs" />
+    <Compile Remove="Migrations\20200227132817_initial.Designer.cs" />
+    <Compile Remove="Migrations\20200227132940_inital.cs" />
+    <Compile Remove="Migrations\20200227132940_inital.Designer.cs" />
+    <Compile Remove="Migrations\20200304163618_Initial.cs" />
+    <Compile Remove="Migrations\20200304163618_Initial.Designer.cs" />
+    <Compile Remove="Migrations\20200422101509_Initial.cs" />
+    <Compile Remove="Migrations\20200422101509_Initial.Designer.cs" />
+    <Compile Remove="Migrations\20200428173447_Initial.cs" />
+    <Compile Remove="Migrations\20200428173447_Initial.Designer.cs" />
+    <Compile Remove="Migrations\20200501090607_LastEdited.cs" />
+    <Compile Remove="Migrations\20200501090607_LastEdited.Designer.cs" />
+    <Compile Remove="Migrations\20200501090852_LastEdited2.cs" />
+    <Compile Remove="Migrations\20200501090852_LastEdited2.Designer.cs" />
+    <Compile Remove="Migrations\20200501091142_Initial.cs" />
+    <Compile Remove="Migrations\20200501091142_Initial.Designer.cs" />
+    <Compile Remove="Migrations\20200501091832_Initial.cs" />
+    <Compile Remove="Migrations\20200501091832_Initial.Designer.cs" />
+    <Compile Remove="Migrations\20200501142025_RemoveReactionID.cs" />
+    <Compile Remove="Migrations\20200501142025_RemoveReactionID.Designer.cs" />
+    <Compile Remove="Migrations\20200501142142_Initial.cs" />
+    <Compile Remove="Migrations\20200501142142_Initial.Designer.cs" />
+    <Compile Remove="Migrations\20200501151129_Initial.cs" />
+    <Compile Remove="Migrations\20200501151129_Initial.Designer.cs" />
+    <Compile Remove="Migrations\20200501160143_Initial.cs" />
+    <Compile Remove="Migrations\20200501160143_Initial.Designer.cs" />
+    <Compile Remove="Migrations\20200501163430_Initial.cs" />
+    <Compile Remove="Migrations\20200501163430_Initial.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="9.0.0" />
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="7.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="3.1.2" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="3.1.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="3.1.0" />
@@ -53,10 +90,13 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="3.1.0" />
-    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.0" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.2" />
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="3.1.0" />
     <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="3.1.0" />
+    <PackageReference Include="SixLabors.ImageSharp" Version="1.0.0-rc0001" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="5.0.0-rc4" />
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="5.6.0" />
+    <PackageReference Include="System.Linq.Dynamic.Core" Version="1.1.0" />
   </ItemGroup>
 
 

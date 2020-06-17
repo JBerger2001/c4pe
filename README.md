@@ -14,8 +14,29 @@ Grant the user 'feedback' all permissions on the feedback database:
 
 `GRANT ALL PRIVILEGES ON FeedbackDB.* TO 'feedback'@'localhost';`
 
-Additionally you need to save the MariaDB connection string in the environment variable `FeedbackDB_ConnectionString`:
+This is how your `appsettings.json` should look like. If it doesn't exist yet, create it and copy the JSON below. You need to replace the placeholders marked with `<...>`, e.g. with your secret JWT token and your database user password.
 
-`Server=localhost;Database=FeedbackDB;Uid=feedback;Pwd=<password>;`
+```json
+{
+  "AppSettings": {
+    "Token": "<secret token>"
+  },
+  "ConnectionStrings": {
+    "FeedbackDB": "Server=localhost;Database=FeedbackDB;Uid=feedback;Pwd=<password>;"
+  },
+  "SwaggerConfig": {
+    "JsonRoute": "swagger/{documentName}/swagger.json",
+    "Description": "Feedback API",
+    "UIEndpoint": "v1/swagger.json"
+  },
+  "Logging": {
+    "LogLevel": {
+      "Default": "Information",
+      "Microsoft": "Warning",
+      "Microsoft.Hosting.Lifetime": "Information"
+    }
+  }
+}
+```
 
 When the project is run it will create the database if it doesn't exist yet.

@@ -11,11 +11,12 @@ namespace Feedback_API.Models.Domain
     [Table("reactions")]
     public class Reaction
     {
-        public long ID { get; set; }
-        [Required]
-        public long UserID { get; set; }
-        [Required]
+        [Key]
+        [Column(Order = 0)]
         public long ReviewID { get; set; }
+        [Key]
+        [Column(Order = 1)]
+        public long UserID { get; set; }
         [Required]
         public bool IsHelpful { get; set; }
 
