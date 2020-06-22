@@ -56,7 +56,7 @@ namespace Feedback_API.Controllers
                             .Include(p => p.Images)
                             .ToListAsync();
 
-            var placesFiltered = places.Where(p => MatchesFilter(p, parameters));
+            var placesFiltered = places.Where(p => MatchesPlaceFilter(p, parameters));
 
             var placeResponses = _mapper.Map<List<PlaceResponse>>(placesFiltered);
 
@@ -220,7 +220,7 @@ namespace Feedback_API.Controllers
             return _context.PlaceOwners.Any(po => po.UserID == CurrentUserId && po.PlaceID == placeId);
         }
 
-        private bool MatchesFilter(Place p, PlacesParameters parameters)
+        private bool MatchesPlaceFilter(Place p, PlacesParameters parameters)
         {
             bool matchingCity = string.IsNullOrEmpty(parameters.City)
                 ? true
@@ -242,7 +242,7 @@ namespace Feedback_API.Controllers
 
             bool matchingName = string.IsNullOrEmpty(parameters.Name)
                 ? true
-                : p.Name.Equals(parameters.Name, StringComparison.OrdinalIgnoreCase);
+                : parameters.Name.Split(' ').All(s => p.Name.Contains(s, StringComparison.OrdinalIgnoreCase));
 
             if (!matchingName) return false;
 
