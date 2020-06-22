@@ -2,23 +2,24 @@
 @model IndexModel
 @{
     ViewData["Title"] = "Login";
+    HttpRequests req = new HttpRequests();
 }
 
 <h1>Login</h1>
-<div class="loginDiv">
-    <form action="/" method="post">
-        <label>username: </label>
+<div class="loginDiv" style="width:30%">
+    <form method="POST">
+        <label for="Username">username: </label>
         <br />
-        <input class="textBLogin" type="text" name="username" value="" />
+        <input class="textBLogin" type="text" name="Username" value="" />
         <br />
-        <label>password: </label>
+        <label for="Password">password: </label>
         <br />
-        <input class="textBLogin" type="password" name="pwd" value="" />
+        <input class="textBLogin" type="password" name="Password" value="" />
         <br />
         <br />
-        <button class="btnLogin" onclick="LogIn()">Log In</button>
-        <button class="btnLogin">Log In As Guest</button>
+        <input type="submit" class="myB" style="padding: 6px 20px;width:100%;background-color:white;border-radius:10px" asp-page-handler="LogIn" value="Log In">
+            @*<input type="submit" class="myB" style="padding: 6px 20px;" asp-page-handler="Guest" value="Log In As Guest">*@
     </form>
-
 </div>
+<br />
 <p>Or <a asp-page="/SignUp">sign up</a> if you don't have an account already</p>

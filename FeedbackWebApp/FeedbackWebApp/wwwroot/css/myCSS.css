@@ -5,21 +5,50 @@
 .loginDiv {
     margin-left: auto;
     margin-right: auto;
-    width: 30%;
+    width: 35%;
+    margin-bottom: 50px
 }
 
 .textBLogin {
     width: 100%;
+    margin-bottom:10px;
+    border-radius: 5px;
 }
-
-.btnLogin {
-    margin-left: auto;
-    margin-right: auto;
-    width: auto;
+.textA {
+    width: 100%;
+    margin-bottom: 10px;
+    border-radius: 5px;
 }
 .rating .glyphicon{
     font-size: 20px;
 }
 .iStar {
     font-size: 18px;
+}
+.labelMargin{
+    margin-top: 10px;
+}
+#btnAdPlace {
+    border: none;
+    color: white;
+    padding: 6px 20px;
+    text-align: center;
+    margin-bottom: 10px;
+    float: right;
+    background-color: #555555;
+    cursor: pointer;
+}
+.myB {
+    margin-left: auto;
+    margin-right: auto;
+    width: auto;
+    background-color: #FFFFFF;
+    color: black;
+    border: 2px solid #4A4A4A;
+    text-align: center;
+    cursor: pointer;
+    border-radius: 20px;
+}
+.myB:hover{
+    background-color: #808080;
 }

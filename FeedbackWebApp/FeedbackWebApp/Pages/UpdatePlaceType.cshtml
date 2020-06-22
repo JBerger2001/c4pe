@@ -1,0 +1,18 @@
+﻿@page "{id:int}"
+@model FeedbackWebApp.Pages.UpdatePlaceTypeModel
+@{
+    ViewData["Title"] = "Update the PlaceType";
+    HttpRequests r = new HttpRequests();
+    PlaceType t = await r.GetPlaceTypeAsync(Convert.ToInt32(RouteData.Values["id"]), BaseController.GetToken());
+}
+<div class="loginDiv" style="width:30%;">
+    <h2>Update the PlaceType</h2>
+    <form action="" method="POST">
+        <label class="labelMargin" for="placetypeName">Name of PlaceType: </label>
+        <br />
+        <input class="textBLogin" type="text" name="placetypeName" value="@t.Name" />
+        <br />
+        <input type="submit" class="myB" style="padding: 6px 20px;background-color: white;border-radius:10px;width:49%" asp-page-handler="Up" value="Update the old one">
+        <input type="submit" class="btnNewP" style="padding: 6px 20px;background-color: white;border-radius:10px;width:49%" asp-page-handler="Del" value="Delete this placetype">
+    </form>
+</div>

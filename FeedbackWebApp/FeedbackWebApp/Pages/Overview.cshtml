@@ -1,44 +1,96 @@
-﻿@page
+﻿@page "{id:int}"
 @model FeedbackWebApp.Pages.OverviewModel
 @{
-    ViewData["Title"] = "Overview";
+    ViewData["Title"] = "Overview"; //"{id:int}"
+    HttpRequests req = new HttpRequests();
+    //await req.GetPagesAsync(BaseController.GetToken());
+    Model.places = await req.GetPlacesAsync(Convert.ToInt32(RouteData.Values["id"]), BaseController.GetToken()); 
 }
+<style>
+    .pagination {
+        display: inline-block;
+        
+    }
+    .pagination a {
+        color: black;
+        float: left;
+        padding: 8px 16px; 
+        text-decoration: none;
+        border-radius:10px;
+    }
+    .pagination a.active {
+        background-color: white;
+        color: black;
+        border: 2px solid #4A4A4A
+    }
+    .pagination a:hover:not(.active) {
+        background-color: #ddd;
+    }
+</style>
 
 <h1>Overview</h1>
 <div class="container">
-    @{ 
-        List<Place> places = new List<Place>();
-        HttpRequests req = new HttpRequests();
-        places = await req.GetProductsAsync("http://77.244.251.110/api/Places");
-        Place newP = new Place() { Address="3483 Feuersbrunn, Weinstrasse 11", Name="Gasthaus zum goldenen Kreuz", IsVerified=true, Type= "Restaurant",
-            OpenTimes = new openingTimes() { day = new TimeSpan(), open = new TimeSpan(10, 0, 0), close = new TimeSpan(18, 0, 0) } };
-        //await req.CreateProductAsync(newP);
-    }
-    @foreach(Place p in places)
+    <div style="height:40px">
+        @if (BaseController.GetUser().Role == "User" || BaseController.GetUser().Role == "Admin")
+        {
+            <a asp-page="/AddPlace">
+                <input type="submit" class="myB" style="padding: 6px 20px;margin-left:10px;float: right;display:inline-block;color:black;background-color:white;border-radius:10px" value="Add Place">
+            </a>
+        }
+        @if (BaseController.GetUser().Role == "Admin")
+        { 
+        <a asp-page="/AddPlaceType">
+            <input type="submit" class="myB" style="padding: 6px 20px;float: right;display:inline-block;color:black;background-color:white;border-radius:10px" value="Add PlaceType">
+        </a>
+        }
+    </div> 
+    @foreach (Place p in Model.places)
     {
-    <div class="panel panel-default">
-        <div class="panel-body">
-            <img src="https://via.placeholder.com/180" alt="Bild" style="float: left" />
-            <div style="float:left; margin-left: 5%">
-                <a asp-page="/PlaceSite"><h3>@p.Name</h3></a>
-                <h4>@p.Type</h4>
-                <p>Opening time: </p>
-                @*    @p.OpenTimes.day.Days , opens at @p.OpenTimes.open, closes at @p.OpenTimes.close*@
-                <p>address: @p.Address</p>
-                <a href="#">See on Google Maps</a>
-            </div>
-            <div class="rating" style="float:right; margin-right: 5%; margin-top: 2%; text-align: right">
-
-                <span class="glyphicon glyphicon-star iStar"></span>
-                <span class="glyphicon glyphicon-star iStar"></span>
-                <span class="glyphicon glyphicon-star iStar"></span>
-                <span class="glyphicon glyphicon-star-empty iStar"></span>
-                <span class="glyphicon glyphicon-star-empty iStar"></span>
-                <p>User rating: x / 5</p>
+        <div class="panel panel-default" style="margin-top:5px">
+            <div class="panel-body" >
+                @if (p.Images.Count == 0)
+                {
+                    <img src="https://via.placeholder.com/180" alt="Bild" style="float: left" />
+                }
+                else
+                { string path = "http://77.244.251.110/" + @p.Images[0].URI; 
+                <img src="@path" alt="Picture" style="float: left" width="180" height="180" />
+                }
+                <div style="float:left; margin-left: 5%">
+                    <a onclick="" asp-page="/PlaceSite" asp-route-id="@p.ID"><h3>@p.Name</h3></a>
+                    <h4> @p.PlaceType.Name</h4>
+                    @if (p.OpeningTimes.Count != 0)
+                    {
+                        <p>Opening time:  @p.OpeningTimes[0].Day , opens at @p.OpeningTimes[0].Open, closes at @p.OpeningTimes[0].Close</p>
+                    }
+                    <p>address: @p.Street, @p.ZipCode @p.City , @p.Country</p>
+                    <a href="#">See on Google Maps</a>
+                </div>
+                <div class="rating" style="float:right; margin-right: 5%; margin-top: 2%; text-align: right">
+                    @{
+                        int r = Convert.ToInt32(p.Rating);
+                    }
+                    @for (int i = 0; i < r; i++)
+                    {
+                        <span class="glyphicon glyphicon-star iStar"></span>
+                    }
+                    @for (int j = 0; j < 5 - r; j++)
+                    {
+                        <span class="glyphicon glyphicon-star-empty iStar"></span>
+                    }
+                    <p>User rating: @p.Rating / 5</p>
+                </div>
             </div>
         </div>
-    </div>
     }
-
+    <div style="text-align:center">
+        <div class="pagination">
+            <a>&laquo;</a>
+            <a class="active" asp-page="/Overview" asp-route-id="1">1</a>
+            <a asp-page="/Overview" asp-route-id="2">2</a>
+            <a asp-page="/Overview" asp-route-id="3">3</a>
+            <a>&raquo;</a>
+    </div>
+    </div>
 </div>
 
