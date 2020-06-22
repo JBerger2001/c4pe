@@ -97,6 +97,11 @@ namespace Feedback_API.Controllers
                 return BadRequest(ModelState);
             }
 
+            if (_context.PlaceTypes.Any(pt => pt.Name == placeTypeDTO.Name))
+            {
+                return BadRequest("A PlaceType with this name already exists.");
+            }
+
             var placeType = _mapper.Map<PlaceType>(placeTypeDTO);
             _context.PlaceTypes.Add(placeType);
             await _context.SaveChangesAsync();
