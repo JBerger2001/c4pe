@@ -525,7 +525,11 @@ namespace Feedback_API.Controllers
                 .Include(r => r.Reactions)
                 .Where(r => r.PlaceID == id)
                 .Where(r => r.Rating >= parameters.MinRating)
-                .Where(r => r.Rating <= parameters.MaxRating);
+                .Where(r => r.Rating <= parameters.MaxRating)
+                .Where(r =>
+                    r.LastEdited.HasValue
+                        ? (r.LastEdited >= parameters.From && r.LastEdited <= parameters.To)
+                        : r.Time >= parameters.From && r.Time <= parameters.To);
 
             var pagedReviews = PagedList<Review>.ToPagedList(reviews, parameters.PageNumber, parameters.PageSize);
 

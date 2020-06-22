@@ -19,6 +19,8 @@ using Microsoft.IdentityModel.Tokens;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using System.IO;
+using Feedback_API.Parameters;
+using Newtonsoft.Json;
 
 namespace Feedback_API.Controllers
 {
@@ -105,34 +107,57 @@ namespace Feedback_API.Controllers
 
         [AllowAnonymous]
         [HttpGet("{id}/reviews")]
-        public async Task<ActionResult<IEnumerable<ReviewUserResponse>>> GetUserReviews(long id)
+        public async Task<ActionResult<IEnumerable<ReviewUserResponse>>> GetUserReviews([FromQuery]ReviewParameters parameters, long id)
         {
-            List<Review> reviews = await _context.Reviews
+            var reviews = _context.Reviews
                 .Include(r => r.User)
                 .Include(r => r.Place)
                 .Include(r => r.Place.OpeningTimes)
                 .Include(r => r.Place.PlaceType)
                 .Include(r => r.Reactions)
-                .Where(r => r.UserID == id).ToListAsync();
+                .Where(r => r.UserID == id)
+                .Where(r => r.Rating >= parameters.MinRating)
+                .Where(r => r.Rating <= parameters.MaxRating)
+                .Where(r =>
+                    r.LastEdited.HasValue
+                        ? (r.LastEdited >= parameters.From && r.LastEdited <= parameters.To)
+                        : r.Time >= parameters.From && r.Time <= parameters.To);
 
-            var response = _mapper.Map<List<ReviewUserResponse>>(reviews);
+
+            var pagedReviews = PagedList<Review>.ToPagedList(reviews, parameters.PageNumber, parameters.PageSize);
+
+            Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(pagedReviews.Metadata));
+
+            var response = _mapper.Map<List<ReviewUserResponse>>(pagedReviews);
             AddUserReactionIsHelpful(response);
 
             return response;
         }
 
         [HttpGet("me/reviews")]
-        public async Task<ActionResult<IEnumerable<ReviewUserResponse>>> GetCurrentUserReviews()
+        public async Task<ActionResult<IEnumerable<ReviewUserResponse>>> GetCurrentUserReviews([FromQuery]ReviewParameters parameters)
         {
-            List<Review> reviews = await _context.Reviews
+            var reviews = _context.Reviews
                 .Include(r => r.User)
                 .Include(r => r.Place)
                 .Include(r => r.Place.OpeningTimes)
                 .Include(r => r.Place.PlaceType)
                 .Include(r => r.Reactions)
-                .Where(r => r.UserID == CurrentUserId).ToListAsync();
+                .Where(r => r.UserID == CurrentUserId)
+                .Where(r => r.Rating >= parameters.MinRating)
+                .Where(r => r.Rating <= parameters.MaxRating)
+                .Where(r =>
+                    r.LastEdited.HasValue
+                        ? (r.LastEdited >= parameters.From 
+                            && r.LastEdited <= parameters.To)
+                        : r.Time >= parameters.From 
+                            && r.Time <= parameters.To);
 
-            var response = _mapper.Map<List<ReviewUserResponse>>(reviews);
+            var pagedReviews = PagedList<Review>.ToPagedList(reviews, parameters.PageNumber, parameters.PageSize);
+
+            Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(pagedReviews.Metadata));
+
+            var response = _mapper.Map<List<ReviewUserResponse>>(pagedReviews);
             AddUserReactionIsHelpful(response);
 
             return response;
@@ -148,7 +173,7 @@ namespace Feedback_API.Controllers
                 return BadRequest(ModelState);
             }
 
-            if (userDTO.Role != Role.Admin && userDTO.Role != Role.Admin)
+            if (userDTO.Role != Role.Admin && userDTO.Role != Role.User)
             {
                 return BadRequest("Invalid role.");
             }
@@ -329,6 +354,28 @@ namespace Feedback_API.Controllers
             _imageUploadService.RemoveImage(user.AvatarURI);
 
             user.AvatarURI = null;
+
+            await _context.SaveChangesAsync();
+
+            return NoContent();
+        }
+
+        // DELETE: api/Users/:id/avatar
+        [HttpDelete("{id}/avatar")]
+        [Authorize(Roles = Role.Admin)]
+        public async Task<IActionResult> DeleteUserAvatar(long id)
+        {
+            var user = await _context.Users.FindAsync(id);
+            if (user == null || user?.AvatarURI == null)
+            {
+                return NotFound();
+            }
+
+            _imageUploadService.RemoveImage(user.AvatarURI);
+
+            user.AvatarURI = null;
+
+            await _context.SaveChangesAsync();
 
             return NoContent();
         }
